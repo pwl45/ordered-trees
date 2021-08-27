@@ -104,11 +104,3 @@ if __name__ == '__main__':
         print(line,end="")
 
     exit(0)
-    degree_sequence = [int(a) for a in input]
-    print(degree_sequence)
-
-
-
-    preorder(root)
-    print(latex(root))
-    print(len(node_stack))
