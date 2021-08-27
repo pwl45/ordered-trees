@@ -357,6 +357,9 @@ useful for outputting results to files as most text editors will not render term
 Doesn't output time results or whether or not the permutations are being generated via filter
 Useful for testing with diffs so that diffs between -f and not -f can be nothing if correct
 
+-l latex mode
+Outputs permutations as \otree{[permutation]} to facilitate use with latex
+
 -h: help
 prints this help menu and exits'''
     print(usage_string)
