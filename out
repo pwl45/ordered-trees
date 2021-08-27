@@ -1,0 +1,30 @@
+\documentclass{article}
+
+\usepackage{tikz}
+
+\begin{document}
+
+\section{Trees}
+
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}}child{node{}child{node{}child{node{}child{node{}}}}}child{node{}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}}child{node{}child{node{}child{node{}}}}child{node{}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}}}child{node{}child{node{}child{node{}}}}child{node{}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}}}child{node{}child{node{}}}child{node{}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}}child{node{}child{node{}}}child{node{}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}}}}child{node{}child{node{}}}child{node{}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}}child{node{}child{node{}child{node{}}}}child{node{}child{node{}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}}child{node{}child{node{}}}child{node{}child{node{}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}}}child{node{}child{node{}}}child{node{}child{node{}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}}child{node{}child{node{}}}child{node{}child{node{}child{node{}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}}child{node{}}child{node{}child{node{}child{node{}child{node{}}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}}child{node{}}child{node{}child{node{}child{node{}}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}}}child{node{}}child{node{}child{node{}child{node{}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}}}child{node{}}child{node{}child{node{}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}}child{node{}}child{node{}child{node{}}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}}}}child{node{}}child{node{}child{node{}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}child{node{}}}}child{node{}}child{node{}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}child{node{}}}child{node{}}child{node{}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}child{node{}}child{node{}}child{node{}}}}};\end{tikzpicture}
+\begin{tikzpicture}[every node/.style={circle,draw=black}]\node{}child{node{}child{node{}child{node{}child{node{}}}}}child{node{}}child{node{}};\end{tikzpicture}
+
+\end{document}
