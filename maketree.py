@@ -102,5 +102,3 @@ if __name__ == '__main__':
             # print(tikz_tree)
             line = line[:start] + tikz_tree + line[end:]
         print(line,end="")
-
-    exit(0)
