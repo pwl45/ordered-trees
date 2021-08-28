@@ -32,6 +32,7 @@ color_dict = {
         "RESET": "\033[0m",
         "BRIGHT_BLACK": "\033[30;1m",
         "BRIGHT_RED": "\033[31;1m",
+        "BRIGHT_RED_UL": "\033[31;1;4m",
         "BRIGHT_GREEN": "\033[32;1m",
         "BRIGHT_YELLOW": "\033[33;1m",
         "BRIGHT_BLUE": "\033[34;1m",

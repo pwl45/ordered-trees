@@ -12,7 +12,9 @@ declare -a tests=(
 "10,3,0,1,1,1"
 "7,5,2,2"
 "8,3,3,2"
-# "12,2,2,1,1,1" # this one works, but takes sort of a while
+"12,2,2,1,1,1"
+"13,0,0,0,1,1,1"
+"202,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1"
 )
 
 ret=0
@@ -20,7 +22,7 @@ for test in "${tests[@]}"
 do 
 	echo "Testing $test..."
 	./$1 $test -dp > outfile1
-	./$1 $test -fdp > outfile2
+	./$1 $test -sdp > outfile2
 	diff outfile1 outfile2 > difffile
 	if [ $? -ne 0 ]; then
 		echo "Test results differ. Diff:"

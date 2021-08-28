@@ -2,6 +2,7 @@
 import sys
 from termcolors import *
 from datetime import datetime,timedelta
+increase_colors = ["bright_red_ul", "green", "blue", "yellow", "magenta", "cyan"]
 
 def balanced(ms):
     sum = 0
@@ -75,9 +76,120 @@ def balanced_left_shift(ms,first_inc,is_tight):
 
     # Return the index that was left shifted since that seems like a useful thing to know
     return (shift_index, insert_index, need_scan)
+
+def append_ms(ms, results):
+    results.append(ms.copy())
+
+def cool_balanced_stack(ms, visit):
+    ms.sort(reverse=True)
+    results = []
+    incs = []
+
+    # ITERATION ONE: 
+    # we start in non-decreasing order, so we know the whole multiset is non-decreasing. 
+    # so we use the left pointing triangle function on ms[len(ms)-1]
+    # list is sorted, so we know that the first shift will be shifting a zero at the end of the list to index 1
+    ms.insert(1, ms.pop(len(ms)-1))
+    # after this, we know that the first increase is at index 2 if it exists
+    prefix_sum = ms[0]
+    if ms[1] < ms[2]:
+        # first_inc = 2
+        incs.append(2)
+    # else:
+        # This actually means we're done - the list is all zeroes except for the first value. 
+        # Could just return here, but it's handled elswhere for now
+        # first_inc = len(ms) -1 
+        # incs.append(len(ms) -1 )
+    insert_index = 1
+    need_scan = False
+    # reference_incs = print_ms(ms)
+    # print(ms)
+    visit(ms,results)
+    while(True):
+        if len(incs) == 0:
+            # print(results)
+            return results
+        # else:
+        #     print(reference_incs)
+        #     print(incs)
+        #     if reference_incs != incs:
+        #         print("BAD")
+        #         return
+        first_inc = incs.pop()
+        is_tight = first_inc == prefix_sum
+
+        # CASE 0
+        if first_inc == len(ms)-1:
+            # We don't create an increase by shifting here: it's the end of the list
+
+            shift_index = len(ms)-1
+            # this is first inc, so we know that it's positive. shift it to the front. 
+            insert_index = 0
+        # CASE 1: ms[i+1] > ms[i-1]
+        elif ms[first_inc+1] > ms[first_inc-1]:
+            # first check if we're removing an increase by shifting this left
+            if ms[first_inc+1] > ms[first_inc]:
+                incs.pop()
+            # We create an increase by shifting here: push first_inc+1 to stack
+            incs.append(first_inc+1)
+
+            shift_index = first_inc
+            # we know the number being shifted is positive since it's the first inc
+            insert_index = 0
+
+        # CASE 2: ms[i+1] <= ms[i-1]
+        else:
+
+            # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
+            if not is_tight or ms[first_inc+1] > 0:
+                # We move the previous first_inc further down the list here: push first_inc+1
+                # Check if we removed an increase 
+                if first_inc < len(ms) - 2 and ms[first_inc+2] > ms[first_inc+1] and ms[first_inc+2] <= ms[first_inc]:
+                    incs.pop()
+                shift_index = first_inc+1
+
+                if ms[shift_index] > 0:
+                    insert_index = 0
+                else:
+                    insert_index = 1
+
+                incs.append(first_inc+1)
+
+            # CASE 2.2.2: ms[i+1] == 0 and tight
+            else:
+                # We don't create an increase by shifting here
+                if ms[first_inc+1] > ms[i]:
+                    incs.pop()
+                shift_index = first_inc
+                # we're shifting first inc, so it goes to the front
+                insert_index = 0
+
+
+        # if ms[shift_index] > 0:
+        #     insert_index = 0
+        # else:
+        #     insert_index = 1
+
+        # print(insert_index,shift_index)
+        # print("first inc:",first_inc)
+        # print("prefix sum:",prefix_sum)
+        # print(insert_index,shift_index)
+
+        ms.insert(insert_index, ms.pop(shift_index))
+        # In every case we want to check if we just created an inc at the front
+        # except for if we inserted 
+        if ms[insert_index] < ms[insert_index+1]:
+            prefix_sum = ms[0]
+            if len(incs) == 0 or incs[len(incs)-1] != insert_index+1:
+                incs.append(insert_index+1)
+        else:
+            prefix_sum += ms[insert_index]
+        # print(ms)
+        visit(ms,results)
+        # reference_incs = print_ms(ms)
             
             
-def cool_balanced(ms):
+def cool_balanced(ms,visit):
     ms.sort(reverse=True)
     results = []
 
@@ -95,9 +207,9 @@ def cool_balanced(ms):
         # Could just return here, but it's handled elswhere for now
         first_inc = len(ms) -1 
     insert_index = 1
-    need_scan = False
 
     while(True):
+        # print(ms)
         # print_ms(ms,True)
         if ms[insert_index] < ms[insert_index+1]:
             # if a non-zero value is inserted, it will always be inserted at index zero
@@ -110,28 +222,25 @@ def cool_balanced(ms):
             prefix_sum = ms[0]
             first_inc = insert_index+1 
         elif first_inc == len(ms)-1:
-            results.append(ms.copy())
+            visit(ms,results)
             return results
         elif not need_scan:
             # Add the most recently inserted value to the prefix sum
             prefix_sum += ms[insert_index]
             first_inc+=1
         else:
-            # print("NEED SCAN")
             prefix_sum += ms[insert_index]
             for i in range(first_inc+1,len(ms)):
                 if ms[i] > ms[i-1]:
-                    # print("Length of scan: ",i-first_inc)
                     first_inc = i
                     break
             else:
-                # print(ms)
-                results.append(ms.copy())
+                visit(ms,results)
                 return results
 
         # if balanced(ms):
         # print(ms)
-        results.append(ms.copy())
+        visit(ms,results)
         # print_ms(ms)
 
         # # not necessary for now
@@ -143,76 +252,7 @@ def cool_balanced(ms):
         # print(prefix_sum,first_inc)
         (shift_index, insert_index,need_scan) = balanced_left_shift(ms,first_inc,prefix_sum==first_inc)
 
-# having this as a separate function is probably unnecessary and bad for maintenance
-def cool_balanced_print(ms):
-    ms.sort(reverse=True)
-    results = []
-
-    # ITERATION ONE: 
-    # we start in non-decreasing order, so we know the whole multiset is non-decreasing. 
-    # so we use the left pointing triangle function on ms[len(ms)-1]
-    # list is sorted, so we know that the first shift will be shifting a zero at the end of the list to index 1
-    ms.insert(1, ms.pop(len(ms)-1))
-    # after this, we know that the first increase is at index 2 if it exists
-    prefix_sum = ms[0]
-    if ms[1] < ms[2]:
-        first_inc = 2
-    else:
-        # This actually means we're done - the list is all zeroes except for the first value. 
-        # Could just return here, but it's handled elswhere for now
-        first_inc = len(ms) -1 
-    insert_index = 1
-    need_scan = False
-
-    while(True):
-        # print_ms(ms,True)
-        if ms[insert_index] < ms[insert_index+1]:
-            # if a non-zero value is inserted, it will always be inserted at index zero
-            # being inside the if means that there is an increase between 0 and 1,
-            # thus making the prefix sum just ms[0]
-            # conveniently, if a zero is inserted, it will always be inserted at index 1
-            # this guarantees that the non-increasing prefix is the first value and then some number of zeroes
-            # since any positive number following a zero is an increase
-            # which will have
-            prefix_sum = ms[0]
-            first_inc = insert_index+1 
-        elif first_inc == len(ms)-1:
-            print(ms)
-            # results.append(ms.copy())
-            return results
-        elif not need_scan:
-            # Add the most recently inserted value to the prefix sum
-            prefix_sum += ms[insert_index]
-            first_inc+=1
-        else:
-            # print("NEED SCAN")
-            prefix_sum += ms[insert_index]
-            for i in range(first_inc+1,len(ms)):
-                if ms[i] > ms[i-1]:
-                    # print("Length of scan: ",i-first_inc)
-                    first_inc = i
-                    break
-            else:
-                print(ms)
-                # results.append(ms.copy())
-                return results
-
-        # if balanced(ms):
-        print(ms)
-        # results.append(ms.copy())
-        # print_ms(ms)
-
-        # # not necessary for now
-        # prefix_sum_reference=calc_prefix_sum(ms)
-        # if prefix_sum != prefix_sum_reference:
-        #     print("bad: prefix sum is being calculated wrong")
-        #     exit(1)
-
-        # this return value isn't currently used, but it may be useful later so keeping it for now
-        # print(prefix_sum,first_inc)
-        (shift_index, insert_index,need_scan) = balanced_left_shift(ms,first_inc,prefix_sum==first_inc)
-
-def cool_lex_print(ms):
+def cool_balanced_filter(ms,visit):
 
     # get the list into non-decreasing order first
     ms.sort(reverse=True)
@@ -228,49 +268,22 @@ def cool_lex_print(ms):
         if ms[0] < ms[1]:
             first_inc = 1
         elif first_inc == len(ms)-1:
-            print(ms)
-            return
-            # results.append(ms.copy())
-            # return results
-        else:
-            first_inc+=1
-
-        if balanced(ms):
-            print(ms)
-            # results.append(ms.copy())
-
-        # this return value isn't currently used, but it may be useful later so keeping it for now
-        last_shift = left_shift(ms, first_inc)
-
-def cool_lex(ms):
-
-    # get the list into non-decreasing order first
-    ms.sort(reverse=True)
-    results = []
-
-    # ITERATION ONE: 
-    # we start in non-decreasing order, so we know the whole multiset is non-decreasing. 
-    # so we use the left pointing triangle function on ms[len(ms)-1]
-    first_inc = len(ms)-1
-    last_shift = left_shift(ms,first_inc)
-
-    while(True):
-        if ms[0] < ms[1]:
-            first_inc = 1
-        elif first_inc == len(ms)-1:
-            results.append(ms.copy())
+            visit(ms,results)
             return results
         else:
             first_inc+=1
 
         if balanced(ms):
-            results.append(ms.copy())
-        # results.append(ms.copy())
+            visit(ms,results)
 
         # this return value isn't currently used, but it may be useful later so keeping it for now
         last_shift = left_shift(ms, first_inc)
 
-def multiset_from_frequencies(freqdict):
+def multiset_from_frequencies(freqs):
+    freqdict = {}
+    for i in range(0, len(freqs)):
+        freqdict[i] = freqs[i]
+    print(freqdict)
     ms = []
     for key in freqdict:
         ms += [int(key)] * int(freqdict[key])
@@ -303,31 +316,40 @@ def str_ms(ms, color=True):
     result += "]"
     return result
 
-def print_ms(ms,color=True):
+def print_ms_visit(ms,results):
+    # print("here")
+    print(ms)
+
+def pretty_print_ms_visit(ms,results):
+    pretty_print_ms(ms)
+
+# needs to be refactored: 
+# make getting the list of incs separate from printing the list
+def pretty_print_ms(ms,color=True):
     result = "["
     found = 0
-    returnval = 0
+    incs = []
     for i in range(0, len(ms)):
         if i != 0:
             result += ", "
-        if i > 0 and found < 2 and ms[i] > ms[i-1]:
-            # result += str(ms[i])
-            if found == 0:
-                if color:
-                    result += TERM_RED(str(ms[i]))
+        if i > 0 and ms[i] > ms[i-1]:
+            incs.append(i)
+            if color:
+                if found < len(increase_colors):
+                    color = increase_colors[found]
                 else:
-                    result += str(ms[i])
-                returnval = i
-            elif found == 1:
-                # result += TERM_GREEN(str(ms[i]))
+                    color="red"
+                result += color_string(str(ms[i]),color)
+                found += 1
+            else:
                 result += str(ms[i])
-            found += 1
         else:
             result += str(ms[i])
 
     result += "]"
     print(result)
-    return returnval
+    incs.reverse() 
+    return incs
 
 def print_usage():
     usage_string ='''Usage: ./balanced_permutations.py [options] frequencies
@@ -365,7 +387,10 @@ prints this help menu and exits'''
     print(usage_string)
     return
 
-def print_details(permutations, color):
+
+# really should be refactored, but it works
+# should also make it not print colors if color=False
+def print_debug(permutations, color):
         # stuff for printing the strings
         for i in range(0, len(permutations)):
             perm = permutations[i]
@@ -413,18 +438,24 @@ def print_details(permutations, color):
                     exit(0)
 
                 print()
-            red_index=print_ms(perm, color)
+            incs = pretty_print_ms(perm, color)
+            if len(incs) > 0:
+                red_index = incs.pop()
+            else:
+                red_index = len(ms)-1
 
-def print_simple(permutations,color):
+def print_perms(permutations,color):
+    # print(permutations)
     if color:
         for perm in permutations:
-            print_ms(perm,color)
+            pretty_print_ms(perm,color)
         return
     else:
         for perm in permutations:
             print(perm)
 
-def print_otrees(permutations):
+# color parameter is not used, but there for compatibility
+def print_otrees(permutations,color):
     for perm in permutations:
         print("\\otree{" + str(perm[0]),end="")
         for val in perm[1:]:
@@ -442,18 +473,20 @@ def formatted_timedelta(delta):
     return delta_str[index:]
 
 
-
 if __name__ == "__main__":
     if len( sys.argv ) < 2:
         print_usage()
     else:
+        generate_perms=cool_balanced
         filter = False
         verbose = False
         debug = False
         color = True
         print_only = False
-        quiet = False
+        quiet=False
         latex_mode = False
+        visit = append_ms
+        output = print_perms
         # you can now do something like -gfn instead of -g -f -n
         # this would mean debug output, generate permutations via filter, and print with no color
         for i in range(1, len(sys.argv)):
@@ -466,76 +499,62 @@ if __name__ == "__main__":
                         print_usage()
                         exit(0)
                     elif argchar == 'g':
-                        debug=True
+                        output=print_debug
                     elif argchar == 'f':
-                        filter = True
+                        generate_perms=cool_balanced_filter
                     elif argchar == 'n':
                         color=False
                     elif argchar == 'p':
                         print_only = True
-                        debug = False
-                        quiet = True
                     elif argchar == 'q':
                         quiet = True
+                    elif argchar == 's':
+                        generate_perms=cool_balanced_stack
                     elif argchar == 'd':
                         diff_mode = True
                     elif argchar == 'l':
-                        latex_mode = True
-                        diff_mode = False
-                        debuge=False
-                        print_only=False
+                        output=print_otrees
                     else:
                         print("Invalid argument: -", argchar,sep="")
                         exit(1)
             else:
                 freqs=arg.split(',')
 
-        # ms as shorthand for multiset
+        if print_only:
+            if color:
+                visit=pretty_print_ms_visit
+            else:
+                visit=print_ms_visit
+
         start_time = datetime.now()
-        freqdict = {}
-        for i in range(0, len(freqs)):
-            freqdict[i] = freqs[i]
-        ms = multiset_from_frequencies(freqdict)
+        ms = multiset_from_frequencies(freqs)
         if not diff_mode and not latex_mode:
-            print(freqdict)
             # Sum must be equal to len-1
             print("SUM:",sum(ms), "LEN:",len(ms))
         if sum(ms) != len(ms) - 1:
             exit(1)
 
-        if filter:
-            if not diff_mode:
-                print("generating all and filtering")
-            if print_only:
-                permutations = cool_lex_print(ms)
-            else:
-                permutations = cool_lex(ms)
-        else:
-            if not diff_mode and not latex_mode:
-                print("doing balanced directly")
-            if print_only:
-                permutations = cool_balanced_print(ms)
-            else:
-                permutations = cool_balanced(ms)
+        if not diff_mode:
+            print("Generating using",generate_perms.__name__)
+
+        permutations = generate_perms(ms,visit)
+
         end_time = datetime.now()
-        gen_diff = end_time-start_time
+        time_to_generate = end_time-start_time
         # print(end_time)
         # delta = timedelta(start_time,end_time)
         # print(delta)
-        if debug:
-            print_details(permutations,color)
-        elif latex_mode:
-            print_otrees(permutations)
-        elif not quiet:
-            print_simple(permutations,color)
-        post_print_time = datetime.now()
-        print_diff = post_print_time - end_time
-        total_diff = post_print_time - start_time
+        if visit == append_ms and not quiet:
+            output(permutations,color)
+
+        post_print = datetime.now()
+        print_time = post_print - end_time
+        total_time = post_print - start_time
         if not diff_mode and not latex_mode:
-            print("Time spent generating:",formatted_timedelta(gen_diff))
-            if not print_only:
-                print("Time spent printing:",formatted_timedelta(print_diff))
+            print("Time spent generating:",formatted_timedelta(time_to_generate))
+            if visit == append_ms and not quiet:
+                print("Time spent printing:",formatted_timedelta(print_time))
                 print("Permutations generated:",len(permutations))
                 # print("Permutations per second, excluding prints:",len(permutations))
-            print("Total time:",formatted_timedelta(total_diff))
+            print("Total time:",formatted_timedelta(total_time))
 
