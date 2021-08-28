@@ -283,7 +283,7 @@ def multiset_from_frequencies(freqs):
     freqdict = {}
     for i in range(0, len(freqs)):
         freqdict[i] = freqs[i]
-    print(freqdict)
+    # print(freqdict)
     ms = []
     for key in freqdict:
         ms += [int(key)] * int(freqdict[key])
@@ -356,24 +356,28 @@ def print_usage():
 Frequencies is a list of comma separated frequencies with no spaces
 
 Options:
--g: (d)ebu(g) mode
-shows a visualization of the shift, tells whether it was the ith or i+1st element that was shifted, and whether or not the i+1st element was zero 
+-s: (s)tack mode
+Utilizes a stack to attain loopless generation of balanced multiset permutations
+Without this flag, generation is technically not loopless. 
 
 -f: (f)ilter mode
-generates all permutations of the multiset and filters to only output the balanced ones. 
-Normal behavior generates the balanced permutations directly without filtering
+Generates all permutations of the multiset and filters to only output the balanced ones. 
+Default behavior generates the balanced permutations directly without filtering
+-g: (d)ebu(g) mode
+Shows a visualization of the shift, tells whether it was the ith or i+1st element that was shifted, and whether or not the i+1st element was zero 
+
 
 -p: (p)rint-only mode
 prints the multisets without storing them in memory
-disables debug mode since debug mode requires looking back at the previous permutation to visualize the shifts
-necessary for processing large multisets without using up unreasonable amounts of ram
+Disables debug mode since debug mode requires looking back at the previous permutation to visualize the shifts
+Necessary for processing large multisets without using up unreasonable amounts of ram
 
 -q: (q)uiet-mode
 not especially useful, but fast
 
 -n: (n)o-color mode
-prints multisets without coloring the first increase
-useful for outputting results to files as most text editors will not render terminal escape sequences as colors
+Prints multisets without coloring the first increase
+Useful for outputting results to files as most text editors will not render terminal escape sequences as colors
 
 -d: diff mode
 Doesn't output time results or whether or not the permutations are being generated via filter
@@ -381,9 +385,10 @@ Useful for testing with diffs so that diffs between -f and not -f can be nothing
 
 -l latex mode
 Outputs permutations as \otree{[permutation]} to facilitate use with latex
+Works well with -d flag to get the \otree{...} output without anything else before or after
 
 -h: help
-prints this help menu and exits'''
+Prints this help menu and exits'''
     print(usage_string)
     return
 
@@ -484,7 +489,6 @@ if __name__ == "__main__":
         color = True
         print_only = False
         quiet=False
-        latex_mode = False
         visit = append_ms
         output = print_perms
         # you can now do something like -gfn instead of -g -f -n
@@ -516,6 +520,7 @@ if __name__ == "__main__":
                         output=print_otrees
                     else:
                         print("Invalid argument: -", argchar,sep="")
+                        print("Run ./balanced_permutations.py -h to see a list of options and their behaviors.")
                         exit(1)
             else:
                 freqs=arg.split(',')
@@ -528,13 +533,14 @@ if __name__ == "__main__":
 
         start_time = datetime.now()
         ms = multiset_from_frequencies(freqs)
-        if not diff_mode and not latex_mode:
+        if not diff_mode:
             # Sum must be equal to len-1
             print("SUM:",sum(ms), "LEN:",len(ms))
         if sum(ms) != len(ms) - 1:
             exit(1)
 
         if not diff_mode:
+            print("Initial multiset:",ms)
             print("Generating using",generate_perms.__name__)
 
         permutations = generate_perms(ms,visit)
@@ -550,7 +556,7 @@ if __name__ == "__main__":
         post_print = datetime.now()
         print_time = post_print - end_time
         total_time = post_print - start_time
-        if not diff_mode and not latex_mode:
+        if not diff_mode:
             print("Time spent generating:",formatted_timedelta(time_to_generate))
             if visit == append_ms and not quiet:
                 print("Time spent printing:",formatted_timedelta(print_time))
