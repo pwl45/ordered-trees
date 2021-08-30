@@ -84,49 +84,21 @@ def cool_balanced_stack(ms, visit):
     ms.sort(reverse=True)
     results = []
     incs = []
-
-    # ITERATION ONE: 
-    # we start in non-decreasing order, so we know the whole multiset is non-decreasing. 
-    # so we use the left pointing triangle function on ms[len(ms)-1]
-    # list is sorted, so we know that the first shift will be shifting a zero at the end of the list to index 1
     ms.insert(1, ms.pop(len(ms)-1))
     # after this, we know that the first increase is at index 2 if it exists
     prefix_sum = ms[0]
     if ms[1] < ms[2]:
-        # first_inc = 2
         incs.append(2)
-    # else:
-        # This actually means we're done - the list is all zeroes except for the first value. 
-        # Could just return here, but it's handled elswhere for now
-        # first_inc = len(ms) -1 
-        # incs.append(len(ms) -1 )
     insert_index = 1
-    need_scan = False
-    # reference_incs = print_ms(ms)
-    # print(ms)
     visit(ms,results)
     while(True):
         if len(incs) == 0:
-            # print(results)
             return results
-        # else:
-        #     print(reference_incs)
-        #     print(incs)
-        #     if reference_incs != incs:
-        #         print("BAD")
-        #         return
         first_inc = incs.pop()
         is_tight = first_inc == prefix_sum
 
-        # CASE 0
-        if first_inc == len(ms)-1:
-            # We don't create an increase by shifting here: it's the end of the list
-
-            shift_index = len(ms)-1
-            # this is first inc, so we know that it's positive. shift it to the front. 
-            insert_index = 0
         # CASE 1: ms[i+1] > ms[i-1]
-        elif ms[first_inc+1] > ms[first_inc-1]:
+        if ms[first_inc+1] > ms[first_inc-1]:
             # first check if we're removing an increase by shifting this left
             if ms[first_inc+1] > ms[first_inc]:
                 incs.pop()
@@ -139,10 +111,8 @@ def cool_balanced_stack(ms, visit):
 
         # CASE 2: ms[i+1] <= ms[i-1]
         else:
-
             # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
             if not is_tight or ms[first_inc+1] > 0:
-                # We move the previous first_inc further down the list here: push first_inc+1
                 # Check if we removed an increase 
                 if first_inc < len(ms) - 2 and ms[first_inc+2] > ms[first_inc+1] and ms[first_inc+2] <= ms[first_inc]:
                     incs.pop()
@@ -153,6 +123,7 @@ def cool_balanced_stack(ms, visit):
                 else:
                     insert_index = 1
 
+                # We move the previous first_inc further down the list here: push first_inc+1
                 incs.append(first_inc+1)
 
             # CASE 2.2.2: ms[i+1] == 0 and tight
@@ -164,29 +135,17 @@ def cool_balanced_stack(ms, visit):
                 # we're shifting first inc, so it goes to the front
                 insert_index = 0
 
-
-        # if ms[shift_index] > 0:
-        #     insert_index = 0
-        # else:
-        #     insert_index = 1
-
-        # print(insert_index,shift_index)
-        # print("first inc:",first_inc)
-        # print("prefix sum:",prefix_sum)
-        # print(insert_index,shift_index)
-
         ms.insert(insert_index, ms.pop(shift_index))
         # In every case we want to check if we just created an inc at the front
         # except for if we inserted 
         if ms[insert_index] < ms[insert_index+1]:
             prefix_sum = ms[0]
-            if len(incs) == 0 or incs[len(incs)-1] != insert_index+1:
+            # We already checked for an increase at first_inc; don't double count
+            if insert_index != first_inc:
                 incs.append(insert_index+1)
         else:
             prefix_sum += ms[insert_index]
-        # print(ms)
         visit(ms,results)
-        # reference_incs = print_ms(ms)
             
             
 def cool_balanced(ms,visit):
