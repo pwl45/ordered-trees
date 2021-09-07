@@ -23,7 +23,8 @@ def calc_prefix_sum(ms):
             break
     return sum
 
-def is_shift(pre, post):
+
+def find_left_shift(pre, post):
     pairs = []
     if len(pre) != len(post):
         return False
@@ -35,8 +36,61 @@ def is_shift(pre, post):
                 pairs.append((i,j))
     if len(pairs) == 0:
         print("Something went wrong: No shift gray code between consecutive permutations")
+        pretty_print_ms(pre)
+        pretty_print_ms(post)
         exit(1)
     return pairs
+
+def find_right_shift(pre, post):
+    pairs = []
+    if len(pre) != len(post):
+        return False
+    for i in range(0, len(pre)):
+        for j in range(i+1, len(pre)):
+            precp = pre.copy()
+            precp.insert(j,precp.pop(i))
+            if precp == post:
+                pairs.append((i,j))
+    if len(pairs) == 0:
+        print("Something went wrong: No shift gray code between consecutive permutations")
+        pretty_print_ms(pre)
+        pretty_print_ms(post)
+        exit(1)
+    return pairs
+
+def right_shift(ms, index):
+    if index == 0:
+        shift_index = 0
+    elif ms[index+1] > ms[index - 1]:
+        shift_index = index
+    else:
+        shift_index = index-1
+    ms.insert(len(ms), ms.pop(shift_index))
+
+    return shift_index
+
+def lex_cool(ms,visit):
+    ms.sort(reverse=True)
+    results = []
+    n = len(ms)-1
+    first_dec = 0
+    last_shift = right_shift(ms,first_dec)
+
+    while(True):
+        if ms[n] > ms[n-1]:
+            first_dec = n-1 
+        elif last_shift == 0:
+            if first_dec == 0:
+                visit(ms,results)
+                return results
+            else:
+                first_dec-=1
+        else:
+            first_dec-=1
+        if balanced(ms):
+            visit(ms,results)
+
+        last_shift = right_shift(ms, first_dec)
 
 def left_shift(ms, index):
     if index >= len(ms)-1:
@@ -310,6 +364,43 @@ def pretty_print_ms(ms,color=True):
     incs.reverse() 
     return incs
 
+def pretty_print_ms_decs(ms,color=True):
+    result = "["
+    found = 0
+    value_colors = [-1] * len(ms)
+    decs = []
+    for i in range(1, len(ms)):
+        index = len(ms)-1-i
+        if ms[index] < ms[index+1]:
+            value_colors[index] = found
+            decs.append(index)
+            found +=1
+        
+    
+    for i in range(0, len(ms)):
+        index = len(ms)-1-i
+        if i != 0:
+            result += ", "
+        if value_colors[i] >= 0:
+            # incs.append(i)
+            if color:
+                if value_colors[i] < len(increase_colors):
+                    color = increase_colors[value_colors[i]]
+                else:
+                    color="red"
+                result += color_string(str(ms[i]),color)
+                found += 1
+            else:
+                result += str(ms[i])
+        else:
+            result += str(ms[i])
+
+    result += "]"
+    print(result)
+    return decs
+    # incs.reverse() 
+    # return incs
+
 def print_usage():
     usage_string ='''Usage: ./balanced_permutations.py [options] frequencies
 Frequencies is a list of comma separated frequencies with no spaces
@@ -359,7 +450,7 @@ def print_debug(permutations, color):
         for i in range(0, len(permutations)):
             perm = permutations[i]
             if i > 0:
-                candidate_shifts = is_shift(permutations[i-1],perm)
+                candidate_shifts = find_left_shift(permutations[i-1],perm)
                 arrow_indices = candidate_shifts[0]
                 arrow_string=""
                 for j in range(0, arrow_indices[1] * 3 + 1):
@@ -407,6 +498,96 @@ def print_debug(permutations, color):
                 red_index = incs.pop()
             else:
                 red_index = len(ms)-1
+
+def consec_zeroes(ms):
+    i = len(ms)-1
+    while ms[i] == 0:
+        i-=1
+    return len(ms)-1-i
+
+# def free_zeroes(ms,dec):
+#     for i in range(dec, len(ms)):
+#         if ms[i] == 0:
+#             free_zeroes+=1
+#         else:
+#             pass
+
+
+def print_debug_right(permutations, color):
+        # stuff for printing the strings
+        decs = []
+        for i in range(0, len(permutations)):
+            perm = permutations[i]
+            prevperm = permutations[i-1]
+            if i > 0:
+                candidate_shifts = find_right_shift(prevperm,perm)
+                arrow_indices = candidate_shifts[len(candidate_shifts)-1]
+                arrow_string=""
+                for j in range(0, arrow_indices[1] * 3):
+                    if j < arrow_indices[0] * 3 + 1:
+                        arrow_string += " "
+                    elif j == arrow_indices[0] * 3 + 1:
+                        arrow_string += "|"
+                    # elif j == arrow_indices[1] * 3: 
+                    #     arrow_string += ">"
+                    else:
+                        arrow_string += "-"
+                arrow_string += ">|"
+                print(arrow_string)
+                ind_diff = arrow_indices[0]-decs[0]
+                dest_diff = len(perm)-1 - arrow_indices[1]
+                if ind_diff != -1 and ind_diff != 0:
+                    print("unexpected: difference between shifted index and first (from the right) decrease wasn't -0 or -1")
+                    print("pre and post:")
+                    print(prevperm)
+                    print(perm)
+                    # print(ind_diff)
+                    exit(0)
+                
+                print("SHIFTED VAL AND DISTANCE FROM END:",prevperm[arrow_indices[0]],dest_diff)
+                if dest_diff != prevperm[arrow_indices[0]]:
+                    print("unexpected: ms[i] wasn't shifted to index len(ms)-1-ms[i]")
+                    print("pre and post:")
+                    print(prevperm)
+                    print(perm)
+                    exit(0)
+
+                preval = prevperm[decs[0]-1]
+                postval = prevperm[decs[0]+1]
+                if ind_diff == 0:
+                    print("i",end="\t")
+                    red = True
+                else:
+                    print("i-1",end="\t")
+                    red = False
+
+                if postval <= preval:
+                    print("LE",end="\t")
+                    le = True
+                else:
+                    print("G",end="\t")
+                    le = False
+            
+                print()
+                if postval <= preval and ind_diff != -1:
+                    looseness = len(prevperm[decs[0]:]) - sum(prevperm[decs[0]:])
+                    if looseness > prevperm[decs[0]-1]:
+                        print("This should never happen")
+                        exit(0)
+                    # print(len(prevperm[decs[0]:]))
+                    # print(sum(prevperm[decs[0]:]))
+
+
+
+                if postval > preval and ind_diff != 0:
+                    print("This should never happen")
+                    exit(0)
+
+                print()
+            decs = pretty_print_ms_decs(perm, color)
+
+
+
 
 def print_perms(permutations,color):
     # print(permutations)
@@ -462,7 +643,10 @@ if __name__ == "__main__":
                         print_usage()
                         exit(0)
                     elif argchar == 'g':
-                        output=print_debug
+                        if generate_perms==lex_cool:
+                            output = print_debug_right
+                        else:
+                            generate_perms=print_debug
                     elif argchar == 'f':
                         generate_perms=cool_balanced_filter
                     elif argchar == 'n':
@@ -473,6 +657,8 @@ if __name__ == "__main__":
                         quiet = True
                     elif argchar == 's':
                         generate_perms=cool_balanced_stack
+                    elif argchar == 'r':
+                        generate_perms=lex_cool
                     elif argchar == 'd':
                         diff_mode = True
                     elif argchar == 'l':
