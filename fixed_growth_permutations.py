@@ -127,9 +127,10 @@ def find_right_shift(pre, post):
                 pairs.append((i,j))
     if len(pairs) == 0:
         print("Something went wrong: No shift gray code between consecutive permutations")
-        pretty_print_ms(pre)
-        pretty_print_ms(post)
-        exit(1)
+        # pretty_print_ms_rightincs(post)
+        input()
+        # pretty_print_ms_rightincs(pre)
+        # exit(1)
     return pairs
 
 def pretty_print_ms_rightincs(ms,color=True):
@@ -175,54 +176,58 @@ def print_debug_right(permutations, color):
             prevperm = permutations[i-1]
             if i > 0:
                 candidate_shifts = find_right_shift(prevperm,perm)
-                arrow_indices = candidate_shifts[len(candidate_shifts)-1]
-                arrow_string=""
-                for j in range(0, arrow_indices[1] * 3):
-                    if j < arrow_indices[0] * 3 + 1:
-                        arrow_string += " "
-                    elif j == arrow_indices[0] * 3 + 1:
-                        arrow_string += "|"
-                    # elif j == arrow_indices[1] * 3: 
-                    #     arrow_string += ">"
+                if len(candidate_shifts) > 0:
+                    arrow_indices = candidate_shifts[len(candidate_shifts)-1]
+                    arrow_string=""
+                    for j in range(0, arrow_indices[1] * 3):
+                        if j < arrow_indices[0] * 3 + 1:
+                            arrow_string += " "
+                        elif j == arrow_indices[0] * 3 + 1:
+                            arrow_string += "|"
+                        # elif j == arrow_indices[1] * 3: 
+                        #     arrow_string += ">"
+                        else:
+                            arrow_string += "-"
+                    arrow_string += ">|"
+                    print(arrow_string)
+                    ind_diff = arrow_indices[0]-decs[0]
+                    dest_diff = len(perm)-1 - arrow_indices[1]
+                    if ind_diff != -1 and ind_diff != 0:
+                        print("unexpected: difference between shifted index and first (from the right) decrease wasn't -0 or -1")
+                        print("pre and post:")
+                        print(prevperm)
+                        print(perm)
+                        print(ind_diff)
+                        exit(0)
+                    # if dest_diff != 0:
+                    #     print("unexpected: value not shifted to end")
+                    #     exit(0)
+                    
+                    # print("SHIFTED VAL AND DISTANCE FROM END:",prevperm[arrow_indices[0]],dest_diff)
+                    # if dest_diff != prevperm[arrow_indices[0]]:
+                    #     print("unexpected: ms[i] wasn't shifted to index len(ms)-1-ms[i]")
+                    #     print("pre and post:")
+                    #     print(prevperm)
+                    #     print(perm)
+                    #     exit(0)
+
+                    preval = prevperm[decs[0]-1]
+                    postval = prevperm[decs[0]+1]
+                    if ind_diff == 0:
+                        print("i",end="\t")
+                        red = True
                     else:
-                        arrow_string += "-"
-                arrow_string += ">|"
-                print(arrow_string)
-                ind_diff = arrow_indices[0]-decs[0]
-                dest_diff = len(perm)-1 - arrow_indices[1]
-                # if ind_diff != -1 and ind_diff != 0:
-                #     print("unexpected: difference between shifted index and first (from the right) decrease wasn't -0 or -1")
-                #     print("pre and post:")
-                #     print(prevperm)
-                #     print(perm)
-                #     # print(ind_diff)
-                #     exit(0)
+                        print("i-1",end="\t")
+                        red = False
+
+                    if preval <= postval:
+                        print("LE",end="\t")
+                        le = True
+                    else:
+                        print("G",end="\t")
+                        le = False
                 
-                # print("SHIFTED VAL AND DISTANCE FROM END:",prevperm[arrow_indices[0]],dest_diff)
-                # if dest_diff != prevperm[arrow_indices[0]]:
-                #     print("unexpected: ms[i] wasn't shifted to index len(ms)-1-ms[i]")
-                #     print("pre and post:")
-                #     print(prevperm)
-                #     print(perm)
-                #     exit(0)
-
-                preval = prevperm[decs[0]-1]
-                postval = prevperm[decs[0]+1]
-                if ind_diff == 0:
-                    print("i",end="\t")
-                    red = True
-                else:
-                    print("i-1",end="\t")
-                    red = False
-
-                if preval <= postval:
-                    print("LE",end="\t")
-                    le = True
-                else:
-                    print("G",end="\t")
-                    le = False
-            
-                print()
+                    print()
                 # if postval <= preval and ind_diff != -1:
                 #     looseness = len(prevperm[decs[0]:]) - sum(prevperm[decs[0]:])
                 #     if looseness > prevperm[decs[0]-1]:
