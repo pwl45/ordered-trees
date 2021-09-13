@@ -13,6 +13,22 @@ def balanced(ms):
             return False
     return ms[len(ms)-1] == 0
 
+def fixed_growth(ms):
+    # This could be changed to zero if the first partition should be one
+    maxval=-1
+    for m in ms:
+        diff = m-maxval
+        if diff > 1:
+            return False
+        else:
+            maxval = max(maxval,m)
+    return True
+
+def append_ms(ms, results):
+    results.append(ms.copy())
+
+
+
 def calc_prefix_sum(ms):
     sum = ms[0]
     for i in range(1, len(ms)):
@@ -69,7 +85,7 @@ def right_shift(ms, index):
 
     return shift_index
 
-def lex_cool(ms,visit):
+def lex_cool_filter(ms,visit):
     ms.sort(reverse=True)
     results = []
     n = len(ms)-1
@@ -91,6 +107,100 @@ def lex_cool(ms,visit):
             visit(ms,results)
 
         last_shift = right_shift(ms, first_dec)
+
+def is_suffix_tight(ms,first_dec,suffix_sum):
+    suffix_len = len(ms)-1-first_dec
+    total_sum = suffix_sum + ms[first_dec] + ms[first_dec-1] + 1
+    # print("len:",suffix_len,end='\t')
+    # print("sum:",suffix_sum)
+    return suffix_len+2 == total_sum
+ 
+def ref_suf_sum(ms):
+    i=len(ms)-1
+    total=0
+    while i>=0:
+        if i == len(ms)-1:
+            total += ms[i]
+        else:
+            if ms[i] < ms[i+1]:
+                return total
+            else:
+                total += ms[i]
+        i -= 1
+    return total
+
+def right_shift_index(ms,shift_index):
+    shift_val = ms.pop(shift_index)
+    insert_index = len(ms)-shift_val
+    ms.insert(insert_index,shift_val)
+    return (shift_val,insert_index)
+
+def lex_cool_direct(ms,visit):
+    ms.sort(reverse=True)
+    results = []
+    decs = []
+    shift_val,insert_index=right_shift_index(ms,0)
+
+    if insert_index > 0 and ms[insert_index-1] < ms[insert_index]:
+        decs.append(insert_index-1)
+    suffix_sum = shift_val
+    visit(ms, results)
+
+    while(True):
+        if len(decs) == 0:
+            return results
+
+        first_dec = decs.pop()
+
+        if first_dec == 0:
+            shift_index = first_dec
+        # CASE 1: ms[i+1] > ms[i-1]
+        # shift i 
+        elif ms[first_dec+1] > ms[first_dec-1]:
+            # first check if we're removing a decrease by shifting this right
+            if first_dec > 0 and ms[first_dec-1] < ms[first_dec]:
+                decs.pop() 
+            decs.append(first_dec-1)
+            shift_index = first_dec
+            # calculate insert index at the end
+        
+        # CASE 2: ms[i+1] <= ms[i-1]
+        else:
+            # CASE 2.1: ms[i] != 0 and CASE 2.2.1 (ms[i] == 0 and not tight)
+            # shift i - 1
+            if not is_suffix_tight(ms,first_dec,suffix_sum) or ms[first_dec] > 0:
+                # Check if we removed an increase
+                if first_dec > 1 and ms[first_dec-2] < ms[first_dec-1] and ms[first_dec-2] >= ms[first_dec]:
+                    decs.pop() 
+                shift_index = first_dec-1
+                # calculate insert index at the end
+                decs.append(first_dec-1)
+
+            # CASE 2.2.1 ms[i] == 0 and tight
+            # shift i 
+            else:
+                # We don't create an increase by shifting here
+                shift_index = first_dec
+                suffix_sum += ms[first_dec-1]
+        shift_val,insert_index = right_shift_index(ms,shift_index)
+
+        if shift_val > 0:
+            if shift_val > ms[insert_index-1]:
+                decs.append(insert_index-1)
+                suffix_sum = shift_val
+            else:
+                suffix_sum += shift_val
+        else:
+            # if we shift a zero, it must be the first decrease (index i)
+            # because we only shift i-1 when ms[i+1] <= ms[i-1]; we know ms[i-1] > 0 since ms[i] was a decrease
+            # the decrease is maintained
+            pass
+            # this seems almost too good to be true
+
+        visit(ms, results)
+            
+
+    return results
 
 def left_shift(ms, index):
     if index >= len(ms)-1:
@@ -183,8 +293,10 @@ def cool_balanced_stack(ms, visit):
             # CASE 2.2.2: ms[i+1] == 0 and tight
             else:
                 # We don't create an increase by shifting here
-                if ms[first_inc+1] > ms[i]:
-                    incs.pop()
+
+                # this can't happen: ms[first_inc+1] is zero, can't be greater than anything
+                # if ms[first_inc+1] > ms[first_inc]:
+                #     incs.pop()
                 shift_index = first_inc
                 # we're shifting first inc, so it goes to the front
                 insert_index = 0
@@ -397,9 +509,8 @@ def pretty_print_ms_decs(ms,color=True):
 
     result += "]"
     print(result)
+    decs.reverse()
     return decs
-    # incs.reverse() 
-    # return incs
 
 def print_usage():
     usage_string ='''Usage: ./balanced_permutations.py [options] frequencies
@@ -413,6 +524,7 @@ Without this flag, generation is technically not loopless.
 -f: (f)ilter mode
 Generates all permutations of the multiset and filters to only output the balanced ones. 
 Default behavior generates the balanced permutations directly without filtering
+
 -g: (d)ebu(g) mode
 Shows a visualization of the shift, tells whether it was the ith or i+1st element that was shifted, and whether or not the i+1st element was zero 
 
@@ -433,7 +545,7 @@ Useful for outputting results to files as most text editors will not render term
 Doesn't output time results or whether or not the permutations are being generated via filter
 Useful for testing with diffs so that diffs between -f and not -f can be nothing if correct
 
--l latex mode
+-x latex mode
 Outputs permutations as \otree{[permutation]} to facilitate use with latex
 Works well with -d flag to get the \otree{...} output without anything else before or after
 
@@ -505,14 +617,6 @@ def consec_zeroes(ms):
         i-=1
     return len(ms)-1-i
 
-# def free_zeroes(ms,dec):
-#     for i in range(dec, len(ms)):
-#         if ms[i] == 0:
-#             free_zeroes+=1
-#         else:
-#             pass
-
-
 def print_debug_right(permutations, color):
         # stuff for printing the strings
         decs = []
@@ -534,15 +638,15 @@ def print_debug_right(permutations, color):
                         arrow_string += "-"
                 arrow_string += ">|"
                 print(arrow_string)
-                ind_diff = arrow_indices[0]-decs[0]
+                ind_diff = arrow_indices[0]-decs[len(decs)-1]
                 dest_diff = len(perm)-1 - arrow_indices[1]
                 if ind_diff != -1 and ind_diff != 0:
                     print("unexpected: difference between shifted index and first (from the right) decrease wasn't -0 or -1")
                     print("pre and post:")
                     print(prevperm)
                     print(perm)
-                    # print(ind_diff)
-                    exit(0)
+                    print(ind_diff)
+                    # exit(0)
                 
                 print("SHIFTED VAL AND DISTANCE FROM END:",prevperm[arrow_indices[0]],dest_diff)
                 if dest_diff != prevperm[arrow_indices[0]]:
@@ -552,8 +656,8 @@ def print_debug_right(permutations, color):
                     print(perm)
                     exit(0)
 
-                preval = prevperm[decs[0]-1]
-                postval = prevperm[decs[0]+1]
+                preval = prevperm[decs[len(decs)-1]-1]
+                postval = prevperm[decs[len(decs)-1]+1]
                 if ind_diff == 0:
                     print("i",end="\t")
                     red = True
@@ -570,8 +674,8 @@ def print_debug_right(permutations, color):
             
                 print()
                 if postval <= preval and ind_diff != -1:
-                    looseness = len(prevperm[decs[0]:]) - sum(prevperm[decs[0]:])
-                    if looseness > prevperm[decs[0]-1]:
+                    looseness = len(prevperm[decs[len(decs)-1]:]) - sum(prevperm[decs[len(decs)-1]:])
+                    if looseness > prevperm[decs[len(decs)-1]-1]:
                         print("This should never happen")
                         exit(0)
                     # print(len(prevperm[decs[0]:]))
@@ -643,10 +747,10 @@ if __name__ == "__main__":
                         print_usage()
                         exit(0)
                     elif argchar == 'g':
-                        if generate_perms==lex_cool:
+                        if generate_perms==lex_cool_direct or generate_perms == lex_cool_filter:
                             output = print_debug_right
                         else:
-                            generate_perms=print_debug
+                            output=print_debug
                     elif argchar == 'f':
                         generate_perms=cool_balanced_filter
                     elif argchar == 'n':
@@ -655,13 +759,15 @@ if __name__ == "__main__":
                         print_only = True
                     elif argchar == 'q':
                         quiet = True
-                    elif argchar == 's':
+                    elif argchar == 'l':
                         generate_perms=cool_balanced_stack
                     elif argchar == 'r':
-                        generate_perms=lex_cool
+                        generate_perms=lex_cool_direct
+                    elif argchar == 'b':
+                        generate_perms=lex_cool_filter
                     elif argchar == 'd':
                         diff_mode = True
-                    elif argchar == 'l':
+                    elif argchar == 'x':
                         output=print_otrees
                     else:
                         print("Invalid argument: -", argchar,sep="")
