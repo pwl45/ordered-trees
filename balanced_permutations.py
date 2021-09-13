@@ -517,13 +517,17 @@ def print_usage():
 Frequencies is a list of comma separated frequencies with no spaces
 
 Options:
--s: (s)tack mode
-Utilizes a stack to attain loopless generation of balanced multiset permutations
-Without this flag, generation is technically not loopless. 
+-l: (l)eft shifts
+Generates balanced permutation looplessly using left shifts
+
+-r: (r)ight shifts
+Generates balanced permutation looplessly using right shifts
 
 -f: (f)ilter mode
-Generates all permutations of the multiset and filters to only output the balanced ones. 
+Generates all permutations of the multiset using left and filters to only output the balanced ones. 
 Default behavior generates the balanced permutations directly without filtering
+
+-b: filter mode, but using right shifts. badly named option, should be changed
 
 -g: (d)ebu(g) mode
 Shows a visualization of the shift, tells whether it was the ith or i+1st element that was shifted, and whether or not the i+1st element was zero 
