@@ -13,21 +13,9 @@ def balanced(ms):
             return False
     return ms[len(ms)-1] == 0
 
-def fixed_growth(ms):
-    # This could be changed to zero if the first partition should be one
-    maxval=-1
-    for m in ms:
-        diff = m-maxval
-        if diff > 1:
-            return False
-        else:
-            maxval = max(maxval,m)
-    return True
 
 def append_ms(ms, results):
     results.append(ms.copy())
-
-
 
 def calc_prefix_sum(ms):
     sum = ms[0]
@@ -244,20 +232,94 @@ def balanced_left_shift(ms,first_inc,is_tight):
 def append_ms(ms, results):
     results.append(ms.copy())
 
+def cool_balanced_concise(ms, visit):
+    ms.sort(reverse=True)
+    results = []
+    prefix_len=len(ms)
+    prefix_sum=prefix_len-1
+    incs=[]
+    if ms[0] == 1:
+        visit(ms,results)
+        return results
+    while(True):
+        is_tight = prefix_len == prefix_sum
+        # CASE 0:
+        if prefix_len == len(ms):
+            insert_index=1
+            shift_index=len(ms)-1
+        # CASE 1: ms[i+1] > ms[i-1]
+        elif ms[prefix_len+1] > ms[prefix_len-1]:
+            # first check if we're removing an increase by shifting this left
+            if ms[prefix_len+1] > ms[prefix_len]:
+                incs.pop()
+            # We create an increase by shifting here: push prefix_len+1 to stack
+            incs.append(prefix_len+1)
+
+            shift_index = prefix_len
+            # we know the number being shifted is positive since it's the first inc
+            insert_index = 0
+
+        # CASE 2: ms[i+1] <= ms[i-1]
+        else:
+            # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
+            if prefix_sum > prefix_len or ms[prefix_len+1] > 0:
+                # Check if we removed an increase 
+                if ms[prefix_len+2] > ms[prefix_len+1] and ms[prefix_len+2] <= ms[prefix_len]:
+                    incs.pop()
+                shift_index = prefix_len+1
+
+                if ms[shift_index] > 0:
+                    insert_index = 0
+                else:
+                    insert_index = 1
+
+                # We move the previous prefix_len further down the list here: push prefix_len+1
+                incs.append(prefix_len+1)
+
+            # CASE 2.2.2: ms[i+1] == 0 and tight
+            else:
+                # We don't create an increase by shifting here
+
+                # this can't happen: ms[prefix_len+1] is zero, can't be greater than anything
+                # if ms[prefix_len+1] > ms[prefix_len]:
+                #     incs.pop()
+                shift_index = prefix_len
+                # we're shifting first inc, so it goes to the front
+                insert_index = 0
+
+        ms.insert(insert_index, ms.pop(shift_index))
+        # In every case we want to check if we just created an inc at the front
+        # except for if we inserted 
+        if ms[insert_index] < ms[insert_index+1]:
+            prefix_sum = ms[0]
+            # We already checked for an increase at prefix_len; don't double count
+            if insert_index != prefix_len:
+                incs.append(insert_index+1)
+        else:
+            prefix_sum += ms[insert_index]
+        visit(ms,results)
+        if(len(incs) == 0):
+            return results
+        else:
+            prefix_len=incs.pop()
+
 def cool_balanced_stack(ms, visit):
     ms.sort(reverse=True)
     results = []
+    if ms[0] == 1:
+        visit(ms,results)
+        return results
     incs = []
-    ms.insert(1, ms.pop(len(ms)-1))
+    insert_index = 1
+    shift_index = len(ms)-1
+    ms.insert(insert_index, ms.pop(shift_index))
+    # ms.insert(1, ms.pop(len(ms)-1))
     # after this, we know that the first increase is at index 2 if it exists
     prefix_sum = ms[0]
     if ms[1] < ms[2]:
         incs.append(2)
-    insert_index = 1
     visit(ms,results)
-    while(True):
-        if len(incs) == 0:
-            return results
+    while(len(incs) > 0):
         first_inc = incs.pop()
         is_tight = first_inc == prefix_sum
 
@@ -580,35 +642,35 @@ def print_debug(permutations, color):
                         arrow_string += "-"
                 arrow_string += "|"
                 print(arrow_string)
-                ind_diff = red_index-candidate_shifts[0][1]
-                preval = permutations[i-1][red_index-1]
-                postval = permutations[i-1][red_index+1]
-                if ind_diff == 0:
-                    print("i",end="\t")
-                    red = True
-                else:
-                    print("i+1",end="\t")
-                    red = False
+                # ind_diff = red_index-candidate_shifts[0][1]
+                # preval = permutations[i-1][red_index-1]
+                # postval = permutations[i-1][red_index+1]
+                # if ind_diff == 0:
+                #     print("i",end="\t")
+                #     red = True
+                # else:
+                #     print("i+1",end="\t")
+                #     red = False
 
-                if postval <= preval:
-                    print("LE",end="\t")
-                    le = True
-                else:
-                    print("G",end="\t")
-                    le = False
+                # if postval <= preval:
+                #     print("LE",end="\t")
+                #     le = True
+                # else:
+                #     print("G",end="\t")
+                #     le = False
 
-                if postval == 0:
-                    print("Z")
-                    z = True
-                else:
-                    print("NZ")
-                    z = False
+                # if postval == 0:
+                #     print("Z")
+                #     z = True
+                # else:
+                #     print("NZ")
+                #     z = False
                 
-                if le == False and red == False:
-                    print("This should never occur")
-                    exit(0)
+                # if le == False and red == False:
+                #     print("This should never occur")
+                #     exit(0)
 
-                print()
+                # print()
             incs = pretty_print_ms(perm, color)
             if len(incs) > 0:
                 red_index = incs.pop()
@@ -642,56 +704,56 @@ def print_debug_right(permutations, color):
                         arrow_string += "-"
                 arrow_string += ">|"
                 print(arrow_string)
-                ind_diff = arrow_indices[0]-decs[len(decs)-1]
-                dest_diff = len(perm)-1 - arrow_indices[1]
-                if ind_diff != -1 and ind_diff != 0:
-                    print("unexpected: difference between shifted index and first (from the right) decrease wasn't -0 or -1")
-                    print("pre and post:")
-                    print(prevperm)
-                    print(perm)
-                    print(ind_diff)
-                    # exit(0)
+                # ind_diff = arrow_indices[0]-decs[len(decs)-1]
+                # dest_diff = len(perm)-1 - arrow_indices[1]
+                # if ind_diff != -1 and ind_diff != 0:
+                #     print("unexpected: difference between shifted index and first (from the right) decrease wasn't -0 or -1")
+                #     print("pre and post:")
+                #     print(prevperm)
+                #     print(perm)
+                #     print(ind_diff)
+                #     # exit(0)
                 
-                print("SHIFTED VAL AND DISTANCE FROM END:",prevperm[arrow_indices[0]],dest_diff)
-                if dest_diff != prevperm[arrow_indices[0]]:
-                    print("unexpected: ms[i] wasn't shifted to index len(ms)-1-ms[i]")
-                    print("pre and post:")
-                    print(prevperm)
-                    print(perm)
-                    exit(0)
+                # print("SHIFTED VAL AND DISTANCE FROM END:",prevperm[arrow_indices[0]],dest_diff)
+                # if dest_diff != prevperm[arrow_indices[0]]:
+                #     print("unexpected: ms[i] wasn't shifted to index len(ms)-1-ms[i]")
+                #     print("pre and post:")
+                #     print(prevperm)
+                #     print(perm)
+                #     exit(0)
 
-                preval = prevperm[decs[len(decs)-1]-1]
-                postval = prevperm[decs[len(decs)-1]+1]
-                if ind_diff == 0:
-                    print("i",end="\t")
-                    red = True
-                else:
-                    print("i-1",end="\t")
-                    red = False
+                # preval = prevperm[decs[len(decs)-1]-1]
+                # postval = prevperm[decs[len(decs)-1]+1]
+                # if ind_diff == 0:
+                #     print("i",end="\t")
+                #     red = True
+                # else:
+                #     print("i-1",end="\t")
+                #     red = False
 
-                if postval <= preval:
-                    print("LE",end="\t")
-                    le = True
-                else:
-                    print("G",end="\t")
-                    le = False
+                # if postval <= preval:
+                #     print("LE",end="\t")
+                #     le = True
+                # else:
+                #     print("G",end="\t")
+                #     le = False
             
-                print()
-                if postval <= preval and ind_diff != -1:
-                    looseness = len(prevperm[decs[len(decs)-1]:]) - sum(prevperm[decs[len(decs)-1]:])
-                    if looseness > prevperm[decs[len(decs)-1]-1]:
-                        print("This should never happen")
-                        exit(0)
-                    # print(len(prevperm[decs[0]:]))
-                    # print(sum(prevperm[decs[0]:]))
+                # print()
+                # if postval <= preval and ind_diff != -1:
+                #     looseness = len(prevperm[decs[len(decs)-1]:]) - sum(prevperm[decs[len(decs)-1]:])
+                #     if looseness > prevperm[decs[len(decs)-1]-1]:
+                #         print("This should never happen")
+                #         exit(0)
+                #     # print(len(prevperm[decs[0]:]))
+                #     # print(sum(prevperm[decs[0]:]))
 
 
 
-                if postval > preval and ind_diff != 0:
-                    print("This should never happen")
-                    exit(0)
+                # if postval > preval and ind_diff != 0:
+                #     print("This should never happen")
+                #     exit(0)
 
-                print()
+                # print()
             decs = pretty_print_ms_decs(perm, color)
 
 
@@ -725,12 +787,19 @@ def formatted_timedelta(delta):
 
     return delta_str[index:]
 
+def print_debug_reverse(permutations,color):
+    permutations.reverse()
+    if generate_perms==lex_cool_direct or generate_perms == lex_cool_filter:
+        print_debug(permutations,color)
+    else:
+        print_debug_right(permutations,color)
+
 
 if __name__ == "__main__":
     if len( sys.argv ) < 2:
         print_usage()
     else:
-        generate_perms=cool_balanced
+        generate_perms=cool_balanced_concise
         filter = False
         verbose = False
         debug = False
@@ -755,6 +824,8 @@ if __name__ == "__main__":
                             output = print_debug_right
                         else:
                             output=print_debug
+                    elif argchar == 'i':
+                        output=print_debug_reverse
                     elif argchar == 'f':
                         generate_perms=cool_balanced_filter
                     elif argchar == 'n':
@@ -764,7 +835,7 @@ if __name__ == "__main__":
                     elif argchar == 'q':
                         quiet = True
                     elif argchar == 'l':
-                        generate_perms=cool_balanced_stack
+                        generate_perms=cool_balanced_concise
                     elif argchar == 'r':
                         generate_perms=lex_cool_direct
                     elif argchar == 'b':
@@ -816,6 +887,6 @@ if __name__ == "__main__":
             if visit == append_ms and not quiet:
                 print("Time spent printing:",formatted_timedelta(print_time))
                 print("Permutations generated:",len(permutations))
-                # print("Permutations per second, excluding prints:",len(permutations))
+                # print("Permutations per second, excluding prints:",len(permutations)/total_time)
             print("Total time:",formatted_timedelta(total_time))
 
