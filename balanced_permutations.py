@@ -73,7 +73,7 @@ def right_shift(ms, index):
 
     return shift_index
 
-def lex_cool_filter(ms,visit):
+def prefix_filter(ms,visit):
     ms.sort(reverse=True)
     results = []
     n = len(ms)-1
@@ -123,30 +123,29 @@ def right_shift_index(ms,shift_index):
     ms.insert(insert_index,shift_val)
     return (shift_val,insert_index)
 
-def lex_cool_direct(ms,visit):
+def prefix_direct(ms,visit):
     ms.sort(reverse=True)
     results = []
     decs = []
-    shift_val,insert_index=right_shift_index(ms,0)
+    # shift_val,insert_index=right_shift_index(ms,0)
 
-    if insert_index > 0 and ms[insert_index-1] < ms[insert_index]:
-        decs.append(insert_index-1)
-    suffix_sum = shift_val
-    visit(ms, results)
-
+    # if insert_index > 0 and ms[insert_index-1] < ms[insert_index]:
+    #     decs.append(insert_index-1)
+    # suffix_sum = shift_val
+    # visit(ms, results)
+    first_dec = 0
+    suffix_sum = len(ms) - 1
     while(True):
-        if len(decs) == 0:
-            return results
-
-        first_dec = decs.pop()
-
+        # print(ms)
+        # print(decs)
+        # print()
         if first_dec == 0:
             shift_index = first_dec
         # CASE 1: ms[i+1] > ms[i-1]
         # shift i 
         elif ms[first_dec+1] > ms[first_dec-1]:
             # first check if we're removing a decrease by shifting this right
-            if first_dec > 0 and ms[first_dec-1] < ms[first_dec]:
+            if ms[first_dec-1] < ms[first_dec]:
                 decs.pop() 
             decs.append(first_dec-1)
             shift_index = first_dec
@@ -172,20 +171,25 @@ def lex_cool_direct(ms,visit):
                 suffix_sum += ms[first_dec-1]
         shift_val,insert_index = right_shift_index(ms,shift_index)
 
-        if shift_val > 0:
+        if shift_val > 0 and insert_index > 0:
             if shift_val > ms[insert_index-1]:
                 decs.append(insert_index-1)
                 suffix_sum = shift_val
             else:
                 suffix_sum += shift_val
-        else:
-            # if we shift a zero, it must be the first decrease (index i)
-            # because we only shift i-1 when ms[i+1] <= ms[i-1]; we know ms[i-1] > 0 since ms[i] was a decrease
-            # the decrease is maintained
-            pass
-            # this seems almost too good to be true
+        # else:
+        #     # if we shift a zero, it must be the first decrease (index i)
+        #     # because we only shift i-1 when ms[i+1] <= ms[i-1]; we know ms[i-1] > 0 since ms[i] was a decrease
+        #     # the decrease is maintained
+        #     pass
+        #     # this seems almost too good to be true
 
         visit(ms, results)
+        if len(decs) == 0:
+            return results
+        else:
+            first_dec = decs.pop()
+
             
 
     return results
@@ -232,7 +236,7 @@ def balanced_left_shift(ms,first_inc,is_tight):
 def append_ms(ms, results):
     results.append(ms.copy())
 
-def cool_balanced_concise(ms, visit):
+def prefix_direct(ms, visit):
     ms.sort(reverse=True)
     results = []
     prefix_len=len(ms)
@@ -439,7 +443,7 @@ def cool_balanced(ms,visit):
         # print(prefix_sum,first_inc)
         (shift_index, insert_index,need_scan) = balanced_left_shift(ms,first_inc,prefix_sum==first_inc)
 
-def cool_balanced_filter(ms,visit):
+def prefix_filter(ms,visit):
 
     # get the list into non-decreasing order first
     ms.sort(reverse=True)
@@ -789,7 +793,7 @@ def formatted_timedelta(delta):
 
 def print_debug_reverse(permutations,color):
     permutations.reverse()
-    if generate_perms==lex_cool_direct or generate_perms == lex_cool_filter:
+    if generate_perms==prefix_direct or generate_perms == prefix_filter:
         print_debug(permutations,color)
     else:
         print_debug_right(permutations,color)
@@ -799,7 +803,7 @@ if __name__ == "__main__":
     if len( sys.argv ) < 2:
         print_usage()
     else:
-        generate_perms=cool_balanced_concise
+        generate_perms=prefix_direct
         filter = False
         verbose = False
         debug = False
@@ -820,14 +824,14 @@ if __name__ == "__main__":
                         print_usage()
                         exit(0)
                     elif argchar == 'g':
-                        if generate_perms==lex_cool_direct or generate_perms == lex_cool_filter:
+                        if generate_perms==prefix_direct or generate_perms == prefix_filter:
                             output = print_debug_right
                         else:
                             output=print_debug
                     elif argchar == 'i':
                         output=print_debug_reverse
                     elif argchar == 'f':
-                        generate_perms=cool_balanced_filter
+                        generate_perms=prefix_filter
                     elif argchar == 'n':
                         color=False
                     elif argchar == 'p':
@@ -835,11 +839,11 @@ if __name__ == "__main__":
                     elif argchar == 'q':
                         quiet = True
                     elif argchar == 'l':
-                        generate_perms=cool_balanced_concise
+                        generate_perms=prefix_direct
                     elif argchar == 'r':
-                        generate_perms=lex_cool_direct
+                        generate_perms=prefix_direct
                     elif argchar == 'b':
-                        generate_perms=lex_cool_filter
+                        generate_perms=prefix_filter
                     elif argchar == 'd':
                         diff_mode = True
                     elif argchar == 'x':
