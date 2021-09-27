@@ -73,7 +73,7 @@ def right_shift(ms, index):
 
     return shift_index
 
-def prefix_filter(ms,visit):
+def suffix_filter(ms,visit):
     ms.sort(reverse=True)
     results = []
     n = len(ms)-1
@@ -123,7 +123,183 @@ def right_shift_index(ms,shift_index):
     ms.insert(insert_index,shift_val)
     return (shift_val,insert_index)
 
-def prefix_direct(ms,visit):
+def pd_concise(ms, visit):
+    ms.sort(reverse=True)
+    results = []
+    prefix_len=len(ms)
+    prefix_sum=prefix_len-1
+    incs=[]
+    if ms[0] == 1:
+        visit(ms,results)
+        return results
+    while(True):
+        print(ms)
+        print(prefix_len)
+        is_tight = prefix_len == prefix_sum
+        # CASE 0:
+        if prefix_len == len(ms):
+            insert_index=1
+            shift_index=len(ms)-1
+        elif ms[prefix_len+1] == 0:
+            if prefix_sum > prefix_len:
+                shift_index = prefix_len+1
+                insert_index = 1
+                # We move the previous prefix_len further down the list here: push prefix_len+1
+                incs.append(prefix_len+1)
+            else:
+                if ms[prefix_len+2] > ms[prefix_len+1] and ms[prefix_len+2] <= ms[prefix_len]:
+                    incs.pop()
+                shift_index = prefix_len
+                # we're shifting first inc, so it goes to the front
+                insert_index = 0
+        # CASE 1: ms[i+1] > ms[i-1]
+        elif ms[prefix_len+1] > ms[prefix_len-1]:
+            # first check if we're removing an increase by shifting this left
+            if ms[prefix_len+1] > ms[prefix_len]:
+                incs.pop()
+            # We create an increase by shifting here: push prefix_len+1 to stack
+            incs.append(prefix_len+1)
+
+            shift_index = prefix_len
+            # we know the number being shifted is positive since it's the first inc
+            insert_index = 0
+        # CASE 2: ms[i+1] <= ms[i-1]
+        else:
+            # Check if we removed an increase 
+            if ms[prefix_len+2] > ms[prefix_len+1] and ms[prefix_len+2] <= ms[prefix_len]:
+                incs.pop()
+            shift_index = prefix_len+1
+
+            insert_index = 0
+            # We move the previous prefix_len further down the list here: push prefix_len+1
+            incs.append(prefix_len+1)
+
+        ms.insert(insert_index, ms.pop(shift_index))
+
+        # In every case we want to check if we just created an inc at the front
+        # except for if we inserted 
+        if ms[insert_index] < ms[insert_index+1]:
+            prefix_sum = ms[0]
+            # We already checked for an increase at prefix_len; don't double count
+            if insert_index != prefix_len:
+                incs.append(insert_index+1)
+        else:
+            prefix_sum += ms[insert_index]
+
+        visit(ms,results)
+        if(len(incs) == 0):
+            return results
+        else:
+            prefix_len=incs.pop()
+
+def left_shift_motzkin(ms,insert_index, shift_index, prefix_len,last_prefix_occurrences):
+    ms[insert_index] = ms[shift_index]
+    if shift_index == prefix_len + 1:
+        ms[prefix_len+1] = ms[prefix_len]
+
+    for i in range(0,3):
+        index = last_prefix_occurrences[i] 
+        if index >= insert_index and index < shift_index:
+            ms[index+1] = i
+
+def prefix_motzkin(ms, visit):
+    ms.sort(reverse=True)
+    results = []
+    prefix_len=len(ms)
+    new_prefix_len=prefix_len
+    prefix_sum=prefix_len-1
+    if ms[0] == 1 or len(ms) == 3:
+        visit(ms,results)
+        return results
+
+    #can be simplified for (s,t) input type
+    last_prefix_occurrences = [-1,-1,-1]
+    for i in range(0,prefix_len):
+        last_prefix_occurrences[ms[i]] = i
+
+    # TODO: keep track of number of 2s and number of zeroes in sum
+    while(True):
+        is_tight = prefix_len == prefix_sum
+        # CASE 0:
+        insert_index = 0
+        if prefix_len == len(ms):
+            insert_index=1
+            shift_index=len(ms)-1
+        # CASE 1: ms[i+1] > ms[i-1]
+        elif ms[prefix_len+1] > ms[prefix_len-1]:
+            shift_index = prefix_len
+            new_prefix_len = prefix_len+1
+
+        # CASE 2: ms[i+1] <= ms[i-1]
+        else:
+            # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
+            if prefix_sum > prefix_len or ms[prefix_len+1] > 0:
+                shift_index = prefix_len+1
+                if ms[shift_index] == 0:
+                    insert_index = 1
+                new_prefix_len = prefix_len+1
+            # CASE 2.2.2: ms[i+1] == 0 and tight
+            else:
+                shift_index = prefix_len
+                if prefix_len == len(ms) - 3:
+                    new_prefix_len = len(ms)
+                else:
+                    new_prefix_len = prefix_len+2
+
+        shift_val = ms[shift_index]
+        left_shift_motzkin(ms,insert_index, shift_index,prefix_len,last_prefix_occurrences)
+
+
+        if shift_val == 0:
+            prefix_sum = 2
+            prefix_len = 2
+            # could also set each individually, not sure if this creates a new list in a bad way
+            last_prefix_occurrences = [1,-1,0]
+        elif shift_val == 1 and ms[1] == 2:
+            prefix_sum = 1
+            prefix_len = 1
+            last_prefix_occurrences = [-1,0,-1]
+        else: 
+            for i in range(3):
+                if last_prefix_occurrences[i] >= 0:
+                    last_prefix_occurrences[i]+=1
+                elif i == ms[insert_index]:
+                    last_prefix_occurrences[i] = insert_index
+            # WEIRD CASE: when you shift a 2 to the front instead of a zero because the list is tight,
+            # the last zero is now further along
+            # there's now a new zero at the end of the string
+            if new_prefix_len==prefix_len + 2:
+                last_prefix_occurrences[0] = prefix_len+1
+            prefix_len = new_prefix_len
+            prefix_sum += ms[insert_index]
+
+        # this also works instead of the above block, but is more lukasiewicz-y than motzkin
+        # if ms[insert_index] < ms[insert_index+1]:
+        #     prefix_sum = ms[0]
+        #     # if we create an increase at the front, reset all of them to -1
+        #     for i in range(3):
+        #         last_prefix_occurrences[i] = -1
+        #     # and update the stuff at/around the insert index
+        #     if insert_index == 1:
+        #         last_prefix_occurrences[ms[0]] = 0
+        #     last_prefix_occurrences[ms[insert_index]] = insert_index
+        #     prefix_len = insert_index+1
+        # else:
+        #     # increment all prefix if we shift to the front and don't create an increase
+        #     for i in range(3):
+        #         if last_prefix_occurrences[i] >= 0:
+        #             last_prefix_occurrences[i]+=1
+        #         elif ms[insert_index] == i:
+        #             last_prefix_occurrences[i] = insert_index
+        #     prefix_len = new_prefix_len
+        #     prefix_sum += ms[insert_index]
+
+        visit(ms,results)
+
+        if(prefix_len == len(ms)):
+            return results
+
+def suffix_direct(ms,visit):
     ms.sort(reverse=True)
     results = []
     decs = []
@@ -781,6 +957,26 @@ def print_otrees(permutations,color):
             print(", " + str(val),end="")
         print("}")
 
+def print_ul(perm,scut_ind):
+    for i in range(len(perm)):
+        p = perm[i]
+        if i == scut_ind:
+            print("\\underline{",end="")
+        print(p,end="")
+        if i < len(ms) - 1:
+            print(",",end='')
+    print("}\\\\")
+
+
+def print_scuts(permutations,color):
+    reference=permutations[len(permutations)-1]
+    # print(reference)
+    for perm in permutations:
+        scut_ind = len(perm)
+        while(scut_ind > 0 and reference[scut_ind-1] == perm[scut_ind - 1]):
+            scut_ind -= 1
+        print_ul(perm,scut_ind)
+
 def formatted_timedelta(delta):
     delta_str = str(delta)
     index = 0
@@ -824,26 +1020,32 @@ if __name__ == "__main__":
                         print_usage()
                         exit(0)
                     elif argchar == 'g':
-                        if generate_perms==prefix_direct or generate_perms == prefix_filter:
+                        if generate_perms==suffix_direct or generate_perms == suffix_filter:
                             output = print_debug_right
                         else:
                             output=print_debug
                     elif argchar == 'i':
                         output=print_debug_reverse
+                    elif argchar == 's':
+                        output=print_scuts
                     elif argchar == 'f':
                         generate_perms=prefix_filter
+                    elif argchar == 'm':
+                        generate_perms=prefix_motzkin
                     elif argchar == 'n':
                         color=False
                     elif argchar == 'p':
                         print_only = True
                     elif argchar == 'q':
                         quiet = True
+                    elif argchar == 'c':
+                        generate_perms=pd_concise
                     elif argchar == 'l':
                         generate_perms=prefix_direct
                     elif argchar == 'r':
-                        generate_perms=prefix_direct
+                        generate_perms=suffix_direct
                     elif argchar == 'b':
-                        generate_perms=prefix_filter
+                        generate_perms=suffix_filter
                     elif argchar == 'd':
                         diff_mode = True
                     elif argchar == 'x':
