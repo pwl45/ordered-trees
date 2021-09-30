@@ -58,7 +58,7 @@ def coolMotzkin(t, s, visitFn):
             r1 = b[x+1]
         else:
             r1 = q
-        print("z:",z,"y:",y,"x:",x,"\nq:",q,"r:",r,"r1:",r1)
+        # print("z:",z,"y:",y,"x:",x,"\nq:",q,"r:",r,"r1:",r1)
         b[x] = b[x-1] # try equals 0?
         b[y] = b[y-1] # try equals 1?
         b[z] = b[z-1] # try equals 2?
@@ -78,7 +78,7 @@ def coolMotzkin(t, s, visitFn):
             # print("test vars:",z,y,x,q,r,s)
 
             if r1 == 0 and z-2 > (x-y):
-                print("shift b[x+1]=0")
+                # print("shift b[x+1]=0")
                 b[1] = 2
                 b[2] = 0
                 # really first_increase+1
@@ -87,12 +87,12 @@ def coolMotzkin(t, s, visitFn):
                 y=2
                 x=3
             else:
-                print("not doing that")
+                # print("not doing that")
                 if r1 == 0:
                     x+=1
                 # elif r1 == 1:
                 else:
-                    print(b)
+                    # print(b)
                     b[x] = r
                     b[x-1] = q
                     b[1] = r1
@@ -103,7 +103,7 @@ def coolMotzkin(t, s, visitFn):
 
         # G case
 
-        print("")
+        # print("")
         visitFn(b,x,y)    
         (x,y,z) = getxyz(b)
 def motz_wrapper(t,s,visitFn):
