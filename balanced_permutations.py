@@ -192,6 +192,26 @@ def pd_concise(ms, visit):
         else:
             prefix_len=incs.pop()
 
+def cool_dyck(ms,visit):
+    ms.sort(reverse=True)
+    results = []
+    prefix_len = len(ms)
+    # can be simplified for s,t case
+    last_prefix_occurrences = [-1,-1-1]
+    for i in range(0,len(ms)):
+        print(ms[i])
+        print(len(last_prefix_occurrences))
+        last_prefix_occurrences[ms[i]] = i
+    while(True):
+        visit(ms,results)
+        if prefix_len == len(ms):
+            print(last_prefix_occurrences[2])
+            ms[last_prefix_occurrences[2] + 1] = 2
+            ms[1] = 2
+
+        if prefix_len == len(ms):
+            return results
+
 def left_shift_motzkin(ms,insert_index, shift_index, prefix_len,last_prefix_occurrences):
     ms[insert_index] = ms[shift_index]
     if shift_index == prefix_len + 1:
@@ -217,7 +237,7 @@ def prefix_motzkin(ms, visit):
     for i in range(0,prefix_len):
         last_prefix_occurrences[ms[i]] = i
 
-    # TODO: keep track of number of 2s and number of zeroes in sum
+    # TODO: keep track of number of 2s and number of zeroes in prefix instead of sum
     while(True):
         is_tight = prefix_len == prefix_sum
         # CASE 0:
@@ -229,7 +249,6 @@ def prefix_motzkin(ms, visit):
         elif ms[prefix_len+1] > ms[prefix_len-1]:
             shift_index = prefix_len
             new_prefix_len = prefix_len+1
-
         # CASE 2: ms[i+1] <= ms[i-1]
         else:
             # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
@@ -246,10 +265,9 @@ def prefix_motzkin(ms, visit):
                 else:
                     new_prefix_len = prefix_len+2
 
-        shift_val = ms[shift_index]
         left_shift_motzkin(ms,insert_index, shift_index,prefix_len,last_prefix_occurrences)
 
-
+        shift_val = ms[insert_index]
         if shift_val == 0:
             prefix_sum = 2
             prefix_len = 2
@@ -273,27 +291,6 @@ def prefix_motzkin(ms, visit):
             prefix_len = new_prefix_len
             prefix_sum += ms[insert_index]
 
-        # this also works instead of the above block, but is more lukasiewicz-y than motzkin
-        # if ms[insert_index] < ms[insert_index+1]:
-        #     prefix_sum = ms[0]
-        #     # if we create an increase at the front, reset all of them to -1
-        #     for i in range(3):
-        #         last_prefix_occurrences[i] = -1
-        #     # and update the stuff at/around the insert index
-        #     if insert_index == 1:
-        #         last_prefix_occurrences[ms[0]] = 0
-        #     last_prefix_occurrences[ms[insert_index]] = insert_index
-        #     prefix_len = insert_index+1
-        # else:
-        #     # increment all prefix if we shift to the front and don't create an increase
-        #     for i in range(3):
-        #         if last_prefix_occurrences[i] >= 0:
-        #             last_prefix_occurrences[i]+=1
-        #         elif ms[insert_index] == i:
-        #             last_prefix_occurrences[i] = insert_index
-        #     prefix_len = new_prefix_len
-        #     prefix_sum += ms[insert_index]
-
         visit(ms,results)
 
         if(prefix_len == len(ms)):
@@ -303,18 +300,10 @@ def suffix_direct(ms,visit):
     ms.sort(reverse=True)
     results = []
     decs = []
-    # shift_val,insert_index=right_shift_index(ms,0)
 
-    # if insert_index > 0 and ms[insert_index-1] < ms[insert_index]:
-    #     decs.append(insert_index-1)
-    # suffix_sum = shift_val
-    # visit(ms, results)
     first_dec = 0
     suffix_sum = len(ms) - 1
     while(True):
-        # print(ms)
-        # print(decs)
-        # print()
         if first_dec == 0:
             shift_index = first_dec
         # CASE 1: ms[i+1] > ms[i-1]
@@ -325,7 +314,6 @@ def suffix_direct(ms,visit):
                 decs.pop() 
             decs.append(first_dec-1)
             shift_index = first_dec
-            # calculate insert index at the end
         
         # CASE 2: ms[i+1] <= ms[i-1]
         else:
@@ -1044,6 +1032,8 @@ if __name__ == "__main__":
                         generate_perms=prefix_direct
                     elif argchar == 'r':
                         generate_perms=suffix_direct
+                    elif argchar == 'y':
+                        generate_perms=cool_dyck
                     elif argchar == 'b':
                         generate_perms=suffix_filter
                     elif argchar == 'd':
