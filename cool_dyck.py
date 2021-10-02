@@ -102,10 +102,11 @@ def coolMotzkin(t, s, visitFn):
             pass
         else:
             printv("LE")
-            # BIG NOTE: The LE case (b[x+1] <= b[x-1] always means creating an increase at the front
+            # NOTE: The case where (b[x+1] <= b[x-1] always means creating an increase at the front
             # (with the exception of the =0 and tight case)
-            # This is because we're shiftin i+1.  and x+1 is less than or equal to x-1.  and x > x-1.  so x > x+1. 
+            # This is because we're shifting i+1.  and x+1 is less than or equal to x-1.  and x > x-1.  so x > x+1. 
             # thus, x+1 cannot be two because nothing is bigger than two. 
+            # so if we check the zero case first, we know we're shifting a one if it's not the zero case
 
 
             # z-2: number of zeroes; x-y: number of ones (both have beein incremented; cancels out)
@@ -124,6 +125,8 @@ def coolMotzkin(t, s, visitFn):
                     y=2
                     x=3
                 else:
+                    # shift b[x] - we know b[x] was 2 the prefix was tight and the b[x+1] was zero
+                    # so we don't need to check for creating an increase at the front.  
                     x+=1
             else:
                 # we're shifting index i+1
