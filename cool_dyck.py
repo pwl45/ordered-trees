@@ -30,7 +30,8 @@ def getxyz(b):
         elif b[i] == 1:
             y = i+1
     if z == 0:
-        pass
+        z = 1
+        # pass
     if y == 0:
         y = z
     if x == 0:
@@ -44,68 +45,110 @@ def getxyz(b):
     # print("")
     return (x,y,z)
 
+# uncomment the return here and you get some debug output
+def printv(*args):
+    return
+    print(*args)
 def coolMotzkin(t, s, visitFn):
     n = 2*s + t
+    # safe to assume s >= 1???
+    # if string is all ones, that'll break this because b[y] will give index out of bounds
     b = [-1] + [2]*s + [1]*t + [0]*s  # 1-based indexing
-    x = s+t+1 # very temporary: should be first increase but there is none
+    x = s+t # very temporary: should be first increase but there is none
     y = s+t+1 # first 0 (actually first past 1's)
     z = s+1 # first 1 (actually first past 2's)
-    visitFn(b,x,y)
+            
+    # visitFn(b,x,y)
+    printv(b[1:])
     while x <= n:  # 1's can be in the last position, but not 2's ... ?
         q = b[x-1]
         r = b[x]  # Will we need to remember b[x] before overwriting it?
+        # really would like something better than this
         if x < n:
             r1 = b[x+1]
         else:
-            r1 = q
-        # print("z:",z,"y:",y,"x:",x,"\nq:",q,"r:",r,"r1:",r1)
+            r1 = r
+        printv("z:",z,"y:",y,"x:",x,"\nq:",q,"r:",r,"r1:",r1)
         b[x] = b[x-1] # try equals 0?
         b[y] = b[y-1] # try equals 1?
         b[z] = b[z-1] # try equals 2?
         b[1] = r
-        # print(b)
+        # printv(b)
         y += 1
         z += 1
         x += 1
         # Does the above make sense for initial instructions?
         # Garbage below.
-        if x < n and q < r1:
+        # don't think we need to check x<n here, but if something breaks putting that back could fix it
+        # q < r1:
+        #     note q can only be 0 or 1
+        #     r1 can be 1 or 2
+        #     r1 == 0 implies q >= r1
+        #     after handling r1==0, if r1 is not zero, we know that if it's the le case, r1=1,q-1,r=2. we shift 1
+        #     if it's the g case, r1=1 is the special case
+        #     SO, IF r1==1
+
+        if q < r1:
+            # merge with case where it's tight
+            # this means that the first increase is 1
+            # so there must have been a zero preceding it
+            # No prefix can start with all ones and zeroes (like a close without an open)
+            # so we know that there's a two at the front if r is 1, and thus we create an increase by shifting
+            if r == 1: # could be and b[2] == 2
+                y = 2
+                x = 2
+                z = 1
+            printv("G")
             pass
-            # print("G")
         else:
-            # print("LE")
+            printv("LE")
+            # BIG NOTE: The LE case (b[x+1] <= b[x-1] always means creating an increase at the front
+            # (with the exception of the =0 and tight case)
+            # This is because we're shiftin i+1.  and x+1 is less than or equal to x-1.  and x > x-1.  so x > x+1. 
+            # thus, x+1 cannot be two because nothing is bigger than two. 
+
+
             # z-2: number of zeroes; x-y: number of ones (both have beein incremented; cancels out)
-            # print("test vars:",z,y,x,q,r,s)
+            # printv("test vars:",z,y,x,q,r,s)
 
-            if r1 == 0 and z-2 > (x-y):
-                # print("shift b[x+1]=0")
-                b[1] = 2
-                b[2] = 0
-                # really first_increase+1
-                b[x] = r
-                z=2
-                y=2
-                x=3
-            else:
-                # print("not doing that")
-                if r1 == 0:
-                    x+=1
-                # elif r1 == 1:
-                else:
-                    # print(b)
+            if r1 == 0:
+                if z-2 > (x-y):
+                    # printv("shift b[x+1]=0")
+                    # position two minus r?
+                    b[1] = 2
+                    b[2] = 0
+                    # b[r1-1] = 
+                    # really first_increase+1
                     b[x] = r
-                    b[x-1] = q
-                    b[1] = r1
+                    z=2
+                    y=2
+                    x=3
+                else:
+                    x+=1
+            else:
+                # we're shifting index i+1
+                printv(r,r1)
 
-                # print("shift b[x]")
-                # b[1] = 1
-                # b
+                # TODO: maybe merge this with q < r1 case
+                # to do this: we know q isn't 2.  so q - r1 is at most 1
+                b[x] = r
+                b[x-1] = q
+                b[1] = r1
+                z = 1
+                if b[2] == 2:
+                    y = 2
+                    x = 2
 
-        # G case
 
-        # print("")
+
+        # printv("")
         visitFn(b,x,y)    
-        (x,y,z) = getxyz(b)
+        # (t,u,v) = getxyz(b)
+        # if (t,u,v) != (x,y,z):
+        #     printv(t,u,v)
+        #     printv(x,y,z)
+        #     input()
+        # (x,y,z) = (t,u,v)
 def motz_wrapper(t,s,visitFn):
     # print("here")
     ms = [2]*s + [1]*t + [0]*(s+1)  # 1-based indexing
@@ -252,8 +295,8 @@ if __name__ == '__main__':
     else:
         gen=coolMotzkin
         visit=print_onebased
-        s=0
-        t=0
+        s=-1
+        t=-1
 
         # dumb but functional way of handling arguments 
         for i in range(1, len(sys.argv)):
@@ -271,9 +314,9 @@ if __name__ == '__main__':
                         gen=coolMotzkin
                         visit=print_onebased
             else:
-                if t == 0:
+                if t == -1:
                     t=int(sys.argv[i])
-                elif s == 0:
+                elif s == -1:
                     s=int(sys.argv[i])
     print(t,s)
     gen(t,s,visit)
