@@ -58,33 +58,33 @@ def coolMotzkin(t, s, visitFn):
         #     after handling r1==0, if r1 is not zero, we know that if it's the le case, r1=1,q-1,r=2. we shift 1
         #     if it's the g case, r1=1 is the special case
         #     SO, IF r1==1
-        if q >= r1:
-            if r1 == 0:
-                if z-2 > (x-y):
-                    # printv("shift b[x+1]=0")
-                    # position two minus r?
-                    b[1] = 2
-                    b[2] = 0
-                    # b[r1-1] = 
-                    # really first_increase+1
-                    b[x] = r
-                    z=2
-                    y=2
-                    x=3
-                else:
-                    # shift b[x] - we know b[x] was 2 the prefix was tight and the b[x+1] was zero
-                    # so we don't need to check for creating an increase at the front.  
-                    x+=1
+        # r1 == r0????
+        if r1 == 0:
+            if z-2 > (x-y):
+                # printv("shift b[x+1]=0")
+                # position two minus r?
+                b[1] = 2
+                b[2] = 0
+                # b[r1-1] = 
+                # really first_increase+1
+                b[x] = r
+                z=2
+                y=2
+                x=3
             else:
-                # we're shifting index i+1
-                printv(r,r1)
+                # shift b[x] - we know b[x] was 2 the prefix was tight and the b[x+1] was zero
+                # so we don't need to check for creating an increase at the front.  
+                x+=1
+        elif q >= r1:
+            # we're shifting index i+1
+            printv(r,r1)
 
-                # TODO: maybe merge this with q < r1 case
-                # to do this: we know q isn't 2.  so q - r1 is at most 1
-                b[x] = 2
-                b[x-1] = 1
-                b[1] = 1
-                z = 1
+            # TODO: maybe merge this with q < r1 case
+            # to do this: we know q isn't 2.  so q - r1 is at most 1
+            b[x] = 2
+            b[x-1] = 1
+            b[1] = 1
+            z = 1
 
         if b[2] > b[1]: # can't start with 01. so we know this is a 12 start
             z = 1
