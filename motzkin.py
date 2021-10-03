@@ -12,7 +12,7 @@ def left_shift_motzkin(ms,insert_index, shift_index, prefix_len,last_prefix_occu
             ms[index+1] = i
 
 def print_onebased(a,x,y):
-    print(a[1:])
+    print(a[1:-1])
 def print_zerobased(a,x,y):
     print(a[:-1])
 
@@ -25,21 +25,18 @@ def coolMotzkin(t, s, visitFn):
     n = 2*s + t
     # safe to assume s >= 1???
     # if string is all ones, that'll break this because b[y] will give index out of bounds
-    b = [-1] + [2]*s + [1]*t + [0]*s  # 1-based indexing
-    x = s+t # very temporary: should be first increase but there is none
+    b = [-1] + [2]*s + [1]*t + [0]*s + [1] # 1-based indexing
+    x = n-s # very temporary: should be first increase but there is none
     y = s+t+1 # first 0 (actually first past 1's)
     z = s+1 # first 1 (actually first past 2's)
             
     # visitFn(b,x,y)
-    printv(b[1:])
+    # printv(b[1:])
     while x <= n:  # 1's can be in the last position, but not 2's ... ?
         q = b[x-1]
         r = b[x]  # Will we need to remember b[x] before overwriting it?
         # really would like something better than this
-        if x < n:
-            r1 = b[x+1]
-        else:
-            r1 = r
+        r1 = b[x+1]
         printv("z:",z,"y:",y,"x:",x,"\nq:",q,"r:",r,"r1:",r1)
         b[x] = b[x-1] # try equals 0?
         b[y] = b[y-1] # try equals 1?
@@ -50,17 +47,10 @@ def coolMotzkin(t, s, visitFn):
         z += 1
         x += 1
 
-        # don't think we need to check x<n here, but if something breaks putting that back could fix it
-        # q < r1:
-        #     note q can only be 0 or 1
-        #     r1 can be 1 or 2
-        #     r1 == 0 implies q >= r1
-        #     after handling r1==0, if r1 is not zero, we know that if it's the le case, r1=1,q-1,r=2. we shift 1
-        #     if it's the g case, r1=1 is the special case
-        #     SO, IF r1==1
-        # r1 == r0????
         if r1 == 0:
+            # print("here")
             if z-2 > (x-y):
+                # print("here")
                 # printv("shift b[x+1]=0")
                 # position two minus r?
                 b[1] = 2
@@ -86,7 +76,7 @@ def coolMotzkin(t, s, visitFn):
             b[1] = 1
             z = 1
 
-        if b[2] > b[1]: # can't start with 01. so we know this is a 12 start
+        if b[2] > b[1]:
             z = 1
             y = 2
             x = 2
@@ -94,14 +84,8 @@ def coolMotzkin(t, s, visitFn):
 
 
 
-        # printv("")
         visitFn(b,x,y)    
-        # (t,u,v) = getxyz(b)
-        # if (t,u,v) != (x,y,z):
-        #     printv(t,u,v)
-        #     printv(x,y,z)
-        #     input()
-        # (x,y,z) = (t,u,v)
+
 def motz_wrapper(t,s,visitFn):
     # print("here")
     ms = [2]*s + [1]*t + [0]*(s+1)  # 1-based indexing
