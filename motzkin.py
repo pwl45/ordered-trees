@@ -23,54 +23,37 @@ def printv(*args):
     print(*args)
 def coolMotzkin(t, s, visitFn):
     n = 2*s + t
-    # safe to assume s >= 1???
-    # if string is all ones, that'll break this because b[y] will give index out of bounds
+
     b = [-1] + [2]*s + [1]*t + [0]*s + [1] # 1-based indexing
-    x = n-s # very temporary: should be first increase but there is none
+    x = n-s # temporary value: should be first increase but there is none
     y = s+t+1 # first 0 (actually first past 1's)
     z = s+1 # first 1 (actually first past 2's)
             
-    # visitFn(b,x,y)
-    # printv(b[1:])
-    while x <= n:  # 1's can be in the last position, but not 2's ... ?
+    while x <= n:
         q = b[x-1]
-        r = b[x]  # Will we need to remember b[x] before overwriting it?
-        # really would like something better than this
+        r = b[x]
+
         r1 = b[x+1]
-        printv("z:",z,"y:",y,"x:",x,"\nq:",q,"r:",r,"r1:",r1)
-        b[x] = b[x-1] # try equals 0?
-        b[y] = b[y-1] # try equals 1?
-        b[z] = b[z-1] # try equals 2?
+        b[x] = b[x-1]
+        b[y] = b[y-1]
+        b[z] = b[z-1]
         b[1] = r
-        # printv(b)
+
         y += 1
         z += 1
         x += 1
 
         if r1 == 0:
-            # print("here")
             if z-2 > (x-y):
-                # print("here")
-                # printv("shift b[x+1]=0")
-                # position two minus r?
                 b[1] = 2
                 b[2] = 0
-                # b[r1-1] = 
-                # really first_increase+1
                 b[x] = r
                 z=2
                 y=2
                 x=3
             else:
-                # shift b[x] - we know b[x] was 2 the prefix was tight and the b[x+1] was zero
-                # so we don't need to check for creating an increase at the front.  
                 x+=1
         elif q >= r1:
-            # we're shifting index i+1
-            printv(r,r1)
-
-            # TODO: maybe merge this with q < r1 case
-            # to do this: we know q isn't 2.  so q - r1 is at most 1
             b[x] = 2
             b[x-1] = 1
             b[1] = 1
