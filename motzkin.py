@@ -32,8 +32,8 @@ def coolMotzkin(t, s, visitFn):
     while x <= n:
         q = b[x-1]
         r = b[x]
-
         r1 = b[x+1]
+
         b[x] = b[x-1]
         b[y] = b[y-1]
         b[z] = b[z-1]
@@ -63,9 +63,6 @@ def coolMotzkin(t, s, visitFn):
             z = 1
             y = 2
             x = 2
-
-
-
 
         visitFn(b,x,y)    
 
