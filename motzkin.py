@@ -24,15 +24,20 @@ def printv(*args):
 def coolMotzkin(t, s, visitFn):
     n = 2*s + t
 
-    b = [-1] + [2]*s + [1]*t + [0]*s + [1] # 1-based indexing
-    x = n-s # temporary value: should be first increase but there is none
-    y = s+t+1 # first 0 (actually first past 1's)
-    z = s+1 # first 1 (actually first past 2's)
-            
+    # b = [-1] + [2]*s + [1]*t + [0]*s + [1] # 1-based indexing
+    # x = n-1 # temporary value: should be first increase but there is none
+    # y = s+t+1 # first 0 (actually first past 1's)
+    # z = s+1 # first 1 (actually first past 2's)
+
+    b = [-1] + [2]*1 + [0] + [2]*(s-1) + [1]*t + [0]*(s-1) + [1] # 1-based indexing
+    x = 3 # first increase
+    y = 2 # first 0 (actually first past 1's)
+    z = 2 # first 1 (actually first past 2's)
+
+    visitFn(b,x,y)
     while x <= n:
         q = b[x-1]
         r = b[x]
-        r1 = b[x+1]
 
         b[x] = b[x-1]
         b[y] = b[y-1]
@@ -43,7 +48,7 @@ def coolMotzkin(t, s, visitFn):
         z += 1
         x += 1
 
-        if r1 == 0:
+        if b[x] == 0:
             if z-2 > (x-y):
                 b[1] = 2
                 b[2] = 0
@@ -53,7 +58,7 @@ def coolMotzkin(t, s, visitFn):
                 x=3
             else:
                 x+=1
-        elif q >= r1:
+        elif q >= b[x]:
             b[x] = 2
             b[x-1] = 1
             b[1] = 1
