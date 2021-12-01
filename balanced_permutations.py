@@ -14,8 +14,6 @@ def balanced(ms):
     return ms[len(ms)-1] == 0
 
 
-def append_ms(ms, results):
-    results.append(ms.copy())
 
 def calc_prefix_sum(ms):
     sum = ms[0]
@@ -399,6 +397,226 @@ def balanced_left_shift(ms,first_inc,is_tight):
 
 def append_ms(ms, results):
     results.append(ms.copy())
+
+def maxheight(ms):
+    curr=0
+    maxh=0
+    for m in ms:
+        curr += m-1
+        maxh=max(curr,maxh)
+    return maxh
+    
+#multi digit numbers do not exist as far as this function is concerned
+def basic_tostr(ms):
+    res=""
+    for m in ms:
+        res += str(m)
+
+
+    return res
+
+# 4a -> n_2
+# 4b -> m1_1
+# 4c -> m2_1
+# 4d -> m2_2
+def LukaTable(ms):
+    result="\\LukaTable["+str(maxheight(ms))+"]{" + str(ms[0])
+    for val in ms[1:]:
+        result+="," + str(val)
+    result+="}"
+    return result
+
+def lukatex(ms,results,prefix_len,shift_index,insert_index):
+    lukatable=LukaTable(ms)
+    if prefix_len >= len(ms):
+        case="n_2"
+    elif insert_index==1: # shifting a zero
+        case="m2_2"
+    elif shift_index == prefix_len:
+        case="m1_1"
+    elif shift_index == prefix_len+1:
+        case="m2_1"
+    else:
+        print("bad: no case")
+        exit(1)
+
+    # todo: change if you drop the zero at the end
+    print(lukatable,end=" & ")
+
+    print(basic_tostr(ms),end=" & ")
+
+    # prefix_len could be len(ms)+1 because of the extra zero
+    print(min(prefix_len,len(ms)),end=" & ")
+    print("\\eqref{eq:prefix_",case,"}",sep="",end=" & ")
+    print("$\\leftshift{",shift_index+1,"}{",insert_index+1,"}$",sep="",end=" & ")
+    scut_ind=get_scut_ind(ms)
+    if scut_ind == -1:
+        scut="\\epsilon"
+    else:
+        scut=basic_tostr(ms[scut_ind:])
+    print("$",scut,"$",sep="",end=" ") # scut
+    print("\\\\")
+    
+
+#4a: shifting the last thing (read: zero): should always be shift_index=len(ms)-2 and insert_index=1
+#4b: shifting something e
+#TODO: this doesn't need its own function at all, need to refactor
+def prefix_lukatex(ms, visit):
+    ms.sort(reverse=True)
+    results = []
+    prefix_len=len(ms)
+    prefix_sum=prefix_len-1
+    incs=[]
+    if ms[0] == 1:
+        # visit(ms,results)
+        return results
+    while(True):
+        is_tight = prefix_len == prefix_sum
+        # CASE 0:
+        # >= len(ms)-1 means it's either the last thing in the prefix zero or the last real zero. 
+        if prefix_len >= len(ms)-1:
+            # TODO: toggle these when you remove the extra zeroboy
+            shift_index=len(ms)-2
+            # shift_index=len(ms)-1
+            if ms[shift_index] == 0:
+                insert_index=1
+            else:
+                insert_index=0
+        # CASE 1: ms[i+1] > ms[i-1]
+        elif ms[prefix_len+1] > ms[prefix_len-1]:
+            # first check if we're removing an increase by shifting this left
+            if ms[prefix_len+1] > ms[prefix_len]:
+                incs.pop()
+            # We create an increase by shifting here: push prefix_len+1 to stack
+            incs.append(prefix_len+1)
+
+            shift_index = prefix_len
+            # we know the number being shifted is positive since it's the first inc
+            # insert to the head
+            insert_index = 0
+
+        # CASE 2: ms[i+1] <= ms[i-1]
+        else:
+            # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
+            if prefix_sum > prefix_len or ms[prefix_len+1] > 0:
+                # Check if we removed an increase 
+                if prefix_len < len(ms)-2 and ms[prefix_len+2] > ms[prefix_len+1] and ms[prefix_len+2] <= ms[prefix_len]:
+                    incs.pop()
+                shift_index = prefix_len+1
+
+                if ms[shift_index] > 0:
+                    insert_index = 0
+                else:
+                    insert_index = 1
+
+                # We move the previous prefix_len further down the list here: push prefix_len+1
+                incs.append(prefix_len+1)
+
+            # CASE 2.2.2: ms[i+1] == 0 and tight
+            else:
+                # We don't create an increase by shifting here
+
+                # this can't happen: ms[prefix_len+1] is zero, can't be greater than anything
+                # if ms[prefix_len+1] > ms[prefix_len]:
+                #     incs.pop()
+                shift_index = prefix_len
+                # we're shifting first inc, so it goes to the front
+                insert_index = 0
+
+        lukatex(ms[:len(ms)-1],results,prefix_len,shift_index,insert_index)
+        # print(prefix_len,shift_index,insert_index)
+        ms.insert(insert_index, ms.pop(shift_index))
+        # In every case we want to check if we just created an inc at the front
+        # except for if we inserted 
+        if ms[insert_index] < ms[insert_index+1]:
+            prefix_sum = ms[0]
+            # We already checked for an increase at prefix_len; don't double count
+            if insert_index != prefix_len:
+                incs.append(insert_index+1)
+        else:
+            prefix_sum += ms[insert_index]
+
+        # visit(ms,results)
+
+        if(len(incs) == 0):
+            prefix_len=len(ms)
+            return results
+        else:
+            prefix_len=incs.pop()
+
+def prefix_general(ms, visit):
+    ms.sort(reverse=True)
+    results = []
+    prefix_len=len(ms)
+    prefix_sum=prefix_len-1
+    incs=[]
+    if ms[0] == 1:
+        visit(ms,results)
+        return results
+    while(True):
+        is_tight = prefix_len == prefix_sum
+        # CASE 0:
+        if prefix_len >= len(ms)-1:
+            shift_index=len(ms)-1
+            if ms[shift_index] == 0:
+                insert_index=1
+            else:
+                insert_index=0
+        # CASE 1: ms[i+1] > ms[i-1]
+        elif ms[prefix_len+1] > ms[prefix_len-1]:
+            # first check if we're removing an increase by shifting this left
+            if ms[prefix_len+1] > ms[prefix_len]:
+                incs.pop()
+            # We create an increase by shifting here: push prefix_len+1 to stack
+            incs.append(prefix_len+1)
+
+            shift_index = prefix_len
+            # we know the number being shifted is positive since it's the first inc
+            insert_index = 0
+
+        # CASE 2: ms[i+1] <= ms[i-1]
+        else:
+            # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
+            if prefix_sum > prefix_len or ms[prefix_len+1] > 0:
+                # Check if we removed an increase 
+                if prefix_len < len(ms)-2 and ms[prefix_len+2] > ms[prefix_len+1] and ms[prefix_len+2] <= ms[prefix_len]:
+                    incs.pop()
+                shift_index = prefix_len+1
+
+                if ms[shift_index] > 0:
+                    insert_index = 0
+                else:
+                    insert_index = 1
+
+                # We move the previous prefix_len further down the list here: push prefix_len+1
+                incs.append(prefix_len+1)
+
+            # CASE 2.2.2: ms[i+1] == 0 and tight
+            else:
+                # We don't create an increase by shifting here
+
+                # this can't happen: ms[prefix_len+1] is zero, can't be greater than anything
+                # if ms[prefix_len+1] > ms[prefix_len]:
+                #     incs.pop()
+                shift_index = prefix_len
+                # we're shifting first inc, so it goes to the front
+                insert_index = 0
+
+        ms.insert(insert_index, ms.pop(shift_index))
+        # In every case we want to check if we just created an inc at the front
+        # except for if we inserted 
+        if ms[insert_index] < ms[insert_index+1]:
+            prefix_sum = ms[0]
+            # We already checked for an increase at prefix_len; don't double count
+            if insert_index != prefix_len:
+                incs.append(insert_index+1)
+        else:
+            prefix_sum += ms[insert_index]
+        visit(ms,results)
+        if(len(incs) == 0):
+            return results
+        else:
+            prefix_len=incs.pop()
 
 def prefix_direct(ms, visit):
     ms.sort(reverse=True)
@@ -810,9 +1028,9 @@ def print_debug(permutations, color):
                         arrow_string += "-"
                 arrow_string += "|"
                 print(arrow_string)
-                # ind_diff = red_index-candidate_shifts[0][1]
-                # preval = permutations[i-1][red_index-1]
-                # postval = permutations[i-1][red_index+1]
+                ind_diff = red_index-candidate_shifts[0][1]
+                preval = permutations[i-1][red_index-1]
+                postval = permutations[i-1][red_index+1]
                 # if ind_diff == 0:
                 #     print("i",end="\t")
                 #     red = True
@@ -955,6 +1173,15 @@ def print_ul(perm,scut_ind):
             print(",",end='')
     print("}\\\\")
 
+#dreadfully inefficient but functional
+def get_scut_ind(ms):
+    reference=sorted(ms,reverse=True)
+    scut_ind = len(ms)
+    while(scut_ind > 0 and reference[scut_ind-1] == ms[scut_ind - 1]):
+        scut_ind -= 1
+    scut_ind-=1
+
+    return scut_ind
 
 def print_scuts(permutations,color):
     reference=permutations[len(permutations)-1]
@@ -1036,6 +1263,10 @@ if __name__ == "__main__":
                         generate_perms=cool_dyck
                     elif argchar == 'b':
                         generate_perms=suffix_filter
+                    elif argchar == 'a':
+                        generate_perms=prefix_general
+                    elif argchar == 'e':
+                        generate_perms=prefix_lukatex
                     elif argchar == 'd':
                         diff_mode = True
                     elif argchar == 'x':
@@ -1058,8 +1289,12 @@ if __name__ == "__main__":
         if not diff_mode:
             # Sum must be equal to len-1
             print("SUM:",sum(ms), "LEN:",len(ms))
-        if sum(ms) != len(ms) - 1:
-            exit(1)
+        for m in ms:
+            if m < 0:
+                print("Error: Input must not contain negative numbers")
+
+        # if sum(ms) != len(ms) - 1:
+        #     exit(1)
 
         if not diff_mode:
             print("Initial multiset:",ms)
@@ -1074,6 +1309,7 @@ if __name__ == "__main__":
         # print(delta)
         if visit == append_ms and not quiet:
             output(permutations,color)
+
 
         post_print = datetime.now()
         print_time = post_print - end_time
