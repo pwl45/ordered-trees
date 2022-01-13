@@ -59,8 +59,6 @@ def coolMotzkin(t,s,visitFn):
     y = t+s+1 # first 0 (actually first past 1's)
     z = s+1 # first 1 (actually first past 2's)
 
-    # visitFn(b,x,y,z)
-
     while x <= n:
         q = b[x-1]
         r = b[x]
@@ -96,11 +94,6 @@ def coolMotzkin(t,s,visitFn):
             x = 2
 
         visitFn(b,x,y,z)    
-
-        # if b == og:
-        #     print(x,y,z)
-        #     print(b)
-        #     pass
 
 def oldMotzkin(t, s, visitFn):
     n = 2*s + t
