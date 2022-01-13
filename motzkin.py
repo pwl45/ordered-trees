@@ -10,9 +10,37 @@ def left_shift_motzkin(ms,insert_index, shift_index, prefix_len,last_prefix_occu
         index = last_prefix_occurrences[i] 
         if index >= insert_index and index < shift_index:
             ms[index+1] = i
-
-def print_onebased(a,x,y):
+def print_onebased_debug(a,x,y,z):
     print(a[1:-1])
+    print("-",end='')
+    for i in range(len(a)-2):
+        index = i+1
+        dashes = 0
+        if x == index:
+            print('x',end='')
+        else:
+            dashes+=1
+
+        if y == index:
+            print('y',end='')
+        else:
+            dashes+=1
+
+        if z == index:
+            print('z',end='')
+        else:
+            dashes+=1
+        
+        for i in range(dashes):
+            print('-',end='')
+
+    print()
+    print("x:",x," y:",y," z:", z,sep='')
+    print()
+
+def print_onebased(a,x,y,z):
+    print(a[1:-1])
+
 def print_zerobased(a,x,y):
     print(a[:-1])
 
@@ -21,20 +49,19 @@ def print_zerobased(a,x,y):
 def printv(*args):
     return
     print(*args)
-def coolMotzkin(t, s, visitFn):
+
+def superCoolMotzkin(t,s,visitFn):
+    # print("here")
     n = 2*s + t
 
-    # b = [-1] + [2]*s + [1]*t + [0]*s + [1] # 1-based indexing
-    # x = n-1 # temporary value: should be first increase but there is none
-    # y = s+t+1 # first 0 (actually first past 1's)
-    # z = s+1 # first 1 (actually first past 2's)
 
-    b = [-1] + [2]*1 + [0] + [2]*(s-1) + [1]*t + [0]*(s-1) + [1] # 1-based indexing
-    x = 3 # first increase
-    y = 2 # first 0 (actually first past 1's)
-    z = 2 # first 1 (actually first past 2's)
+    b = [-1]+ [2]*s + [1]*t + [0]*(s) + [0]  # 1-based indexing
+    x = n-s+1 # first increase - initial value is this just so it can trigger the b[x]==0 branch
+    y = n-s+1 # first 0 (actually first past 1's)
+    z = n-s-t+1 # first 1 (actually first past 2's)
 
-    visitFn(b,x,y)
+    # visitFn(b,x,y,z)
+
     while x <= n:
         q = b[x-1]
         r = b[x]
@@ -69,7 +96,62 @@ def coolMotzkin(t, s, visitFn):
             y = 2
             x = 2
 
-        visitFn(b,x,y)    
+        visitFn(b,x,y,z)    
+
+        # if b == og:
+        #     print(x,y,z)
+        #     print(b)
+        #     pass
+
+def coolMotzkin(t, s, visitFn):
+    n = 2*s + t
+
+    # b = [-1] + [2]*s + [1]*t + [0]*s + [1] # 1-based indexing
+    # x = n-1 # temporary value: should be first increase but there is none
+    # y = s+t+1 # first 0 (actually first past 1's)
+    # z = s+1 # first 1 (actually first past 2's)
+
+    b = [-1] + [2]*1 + [0] + [2]*(s-1) + [1]*t + [0]*(s-1) + [1] # 1-based indexing
+    x = 3 # first increase
+    y = 2 # first 0 (actually first past 1's)
+    z = 2 # first 1 (actually first past 2's)
+
+    visitFn(b,x,y,z)
+    while x <= n:
+        q = b[x-1]
+        r = b[x]
+
+        b[x] = b[x-1]
+        b[y] = b[y-1]
+        b[z] = b[z-1]
+        b[1] = r
+
+        y += 1
+        z += 1
+        x += 1
+
+        if b[x] == 0:
+            if z-2 > (x-y):
+                b[1] = 2
+                b[2] = 0
+                b[x] = r
+                z=2
+                y=2
+                x=3
+            else:
+                x+=1
+        elif q >= b[x]:
+            b[x] = 2
+            b[x-1] = 1
+            b[1] = 1
+            z = 1
+
+        if b[2] > b[1]:
+            z = 1
+            y = 2
+            x = 2
+
+        visitFn(b,x,y,z)    
 
 def motz_wrapper(t,s,visitFn):
     # print("here")
@@ -229,12 +311,18 @@ if __name__ == '__main__':
                     argchar = arg[i]
                     if argchar == 'h':
                         exit(0)
+                    if argchar == 'g':
+                        visit=print_onebased_debug
+                    elif argchar == 'n':
+                        gen=superCoolMotzkin
+                        # visit=print_onebased
+                    # reference
                     elif argchar == 'r':
                         gen=motz_wrapper
                         visit=print_zerobased
                     elif argchar == 's':
                         gen=coolMotzkin
-                        visit=print_onebased
+                        # visit=print_onebased
             else:
                 if t == -1:
                     t=int(sys.argv[i])

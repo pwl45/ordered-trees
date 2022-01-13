@@ -2,7 +2,8 @@
 
 # list of test cases
 declare -a tests=(
-# "0 1"
+"0 4"
+"0 1"
 # "2 0"
 # "4 0"
 "0 2"
