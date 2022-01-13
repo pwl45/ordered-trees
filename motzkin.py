@@ -50,15 +50,15 @@ def printv(*args):
     return
     print(*args)
 
-def superCoolMotzkin(t,s,visitFn):
+def coolMotzkin(t,s,visitFn):
     # print("here")
     n = 2*s + t
 
 
     b = [-1]+ [2]*s + [1]*t + [0]*(s) + [0]  # 1-based indexing
-    x = n-s+1 # first increase - initial value is this just so it can trigger the b[x]==0 branch
-    y = n-s+1 # first 0 (actually first past 1's)
-    z = n-s-t+1 # first 1 (actually first past 2's)
+    x = t+s+1 # first increase - initial value is this just so it can trigger the b[x]==0 branch
+    y = t+s+1 # first 0 (actually first past 1's)
+    z = s+1 # first 1 (actually first past 2's)
 
     # visitFn(b,x,y,z)
 
@@ -103,7 +103,7 @@ def superCoolMotzkin(t,s,visitFn):
         #     print(b)
         #     pass
 
-def coolMotzkin(t, s, visitFn):
+def oldMotzkin(t, s, visitFn):
     n = 2*s + t
 
     # b = [-1] + [2]*s + [1]*t + [0]*s + [1] # 1-based indexing
@@ -313,8 +313,8 @@ if __name__ == '__main__':
                         exit(0)
                     if argchar == 'g':
                         visit=print_onebased_debug
-                    elif argchar == 'n':
-                        gen=superCoolMotzkin
+                    elif argchar == 'o':
+                        gen=oldMotzkin
                         # visit=print_onebased
                     # reference
                     elif argchar == 'r':
