@@ -10,7 +10,7 @@ def left_shift_motzkin(ms,insert_index, shift_index, prefix_len,last_prefix_occu
         index = last_prefix_occurrences[i] 
         if index >= insert_index and index < shift_index:
             ms[index+1] = i
-def print_onebased_debug(a,x,y,z):
+def print_onebased_debug(a,x=None,y=None,z=None):
     print(a[1:-1])
     print("-",end='')
     for i in range(len(a)-2):
@@ -51,7 +51,6 @@ def printv(*args):
     print(*args)
 
 def coolMotzkin(t,s,visitFn):
-    # print("here")
     n = 2*s + t
 
 
@@ -329,5 +328,6 @@ if __name__ == '__main__':
                 elif s == -1:
                     s=int(sys.argv[i])
     print(t,s)
+    # print('generating using',gen)
     gen(t,s,visit)
 
