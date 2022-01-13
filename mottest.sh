@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# run with ./mottest.sh motzkin.py -r -s to test coolMotzkin against the against the more general lukasiewicz words algorithm
 
 # list of test cases
 declare -a tests=(
