@@ -11,9 +11,9 @@ def left_shift_motzkin(ms,insert_index, shift_index, prefix_len,last_prefix_occu
         if index >= insert_index and index < shift_index:
             ms[index+1] = i
 def print_onebased_debug(a,x=None,y=None,z=None):
-    print(a[1:-1])
+    print(a[1:])
     print("-",end='')
-    for i in range(len(a)-2):
+    for i in range(len(a)-1):
         index = i+1
         dashes = 0
         if x == index:
@@ -37,6 +37,9 @@ def print_onebased_debug(a,x=None,y=None,z=None):
     print()
     print("x:",x," y:",y," z:", z,sep='')
     print()
+
+def print_nosent(a,x,y,z):
+    print(a[1:])
 
 def print_onebased(a,x,y,z):
     print(a[1:-1])
@@ -149,6 +152,54 @@ def motz_wrapper(t,s,visitFn):
     # print("here")
     ms = [2]*s + [1]*t + [0]*(s+1)  # 1-based indexing
     prefix_motzkin(ms,visitFn)
+
+def nosentinelMotzkin(t, s, visitFn):
+    n = 2*s + t
+    b = [-1] + [2]*s + [1]*t + [0]*s # + [0] # 1-based indexing  # new: trying to remove sentinel
+    x = n-1 # first increase - initial value is this just so it can trigger the b[x]==0 branch
+    y = s+t+1 # first 0 (actually first past 1's)
+    z = s++1 # first 1 (actually first past 2's)
+
+    visitFn(b,x,y,z)
+    p=-1
+    while x < n-1 or b[x] < 2:  # new: previously was while x <= n
+        q = b[x-1]
+        r = b[x]
+        # new: p for post-increase; s is already taken
+        if x +1 <= n:
+            p = b[x+1] 
+
+        b[x] = b[x-1]
+        b[y] = b[y-1]
+        b[z] = b[z-1]
+        b[1] = r
+
+        y += 1
+        z += 1
+        x += 1
+
+        if p == 0:  # new: removed x <= n condition
+            if z-2 > (x-y):
+                b[1] = 2
+                b[2] = 0
+                b[x] = r
+                z=2
+                y=2
+                x=3
+            else:
+                x+=1
+        elif x <= n and q >= b[x]:  # new: added x <= n condition
+            b[x] = 2
+            b[x-1] = 1
+            b[1] = 1
+            z = 1
+
+        if b[2] > b[1]:
+            z = 1
+            y = 2
+            x = 2
+
+        visitFn(b,x,y,z)
 
 def prefix_motzkin(ms, visit):
     # print("prefix motza")
@@ -315,6 +366,9 @@ if __name__ == '__main__':
                     elif argchar == 's':
                         gen=coolMotzkin
                         # visit=print_onebased
+                    elif argchar == 'd':
+                        gen=nosentinelMotzkin
+                        visit=print_nosent
             else:
                 if t == -1:
                     t=int(sys.argv[i])
