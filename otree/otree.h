@@ -6,7 +6,6 @@ struct node {
     int nchildren;
     struct node* parent;
     struct node* left_child;
-    struct node* right_child;
     struct node* right_sibling;
 
     /* struct node* left_sibling; */
@@ -22,7 +21,6 @@ node* new_node(int data){
     n->nchildren=0;
     n->parent=NULL;
     n->left_child=NULL;
-    n->right_child=NULL;
     n->right_sibling=NULL;
     return n;
 

@@ -77,9 +77,9 @@ void shift_tree_zero(node* root, node* o){
 	// right now, the loop ends on the non-increasing string, so this case isn't necessary
 
     //get l,p,pp
-    node* l = o->parent->left_child;
-    node* p = l->parent;
-    node* pp = l->parent->parent;
+    node* p = o->parent;
+    node* l = p->left_child;
+    node* pp = p->parent;
 
     //setup p
     //new left_child is l's right sibling
@@ -90,7 +90,7 @@ void shift_tree_zero(node* root, node* o){
     //new right sibling is old parent
     //new parent is parent's parent
     l->parent=pp;
-    l->right_sibling=pp->left_child;
+    l->right_sibling=p;
     pp->left_child=l;
 
     //note: O shift must come after l shift
