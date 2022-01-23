@@ -4,69 +4,6 @@
 #include <inttypes.h>
 #include "otree.h" 
 
-int tree_to_dyck_arr(node* n, uint8_t* buf, int off){
-    if(n== NULL){
-	return 0;
-    }
-
-
-    node* child = n->left_child;
-
-    int ret = 0;
-    while(child != NULL){
-	buf[off] = 1;
-	off = tree_to_dyck_arr(child,buf,off+1);
-	child = child->right_sibling;
-	buf[off] = 0;
-	off += 1;
-    }
-
-    return off;
-}
-
-int print_tree_rec(node* n){
-    if(n== NULL){
-	return 0;
-    }
-
-    node* child = n->left_child;
-
-    while(child != NULL){
-	putchar('1');
-	/* putchar(','); */
-	print_tree_rec(child);
-	child = child->right_sibling;
-	putchar('0');
-	/* putchar(','); */
-    }
-
-    return 0;
-
-}
-
-void print_tree_as_dyck(node* n){
-    print_tree_rec(n);
-    putchar('\n');
-    return;
-}
-
-
-void printdyck(uint8_t* b, int n){
-
-    /* return; */
-
-    for(int i = 0; i < n-1; i++){
-	putchar(b[i+1]+48);
-	/* putchar(','); */
-	/* printf("%c,",(b[i+1]+48)); */
-    }
-    putchar(b[n+1]+48);
-    putchar('\n');
-    /* printf("\n"); */
-}
-
-
-
 //mnemonics: 
 //l is left of o
 //p is o's parent
@@ -101,6 +38,8 @@ void shift_tree_zero(node* root, node* o){
 }
 
 void shift_tree_one(node* root, node* o){
+    /* node* p = o->parent; // is it worth saving p here??? it's accessed exactly twice */
+
     //get l
     node* l = o->parent->left_child;
 
@@ -167,7 +106,8 @@ int main(int argc, char** argv){
 	exit(1);
 
     //todo: parse command line arguments to change the visit function
+    //for now, just toggle these two lines if you want a tree printed as a tree.
     coolOtree(atoi(argv[1]), print_tree_as_dyck);
-    /* coolOtree(atoi(argv[1]), latex_qtree); */
+    /* coolOtree(atoi(argv[1]), print_tree_as_latex); */
 
 }
