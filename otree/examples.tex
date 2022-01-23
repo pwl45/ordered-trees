@@ -19,18 +19,23 @@ $T=$
     \Tree [.1 [.2 [.P(3) [.L(1) [.1 [.1 [.0 ] ] ] ] [.O(1) [.0 ] ] [.0 ] ] [.1 [.0 ] ] ] ]
 \end{tikzpicture}
 
-\noindent Let D be the dyck word corresponding to T and let k be the index of the first 01 prefix in D. Note that the node O within T corresponds to $D_k$.
+\noindent Let D be the dyck word corresponding to T and let k be the index of the first 01 substring in D. Note that the node O within T corresponds to $D_k$.
 
 \noindent The cool-lex rule for shifts in ordered trees can be broken down into 3 cases:
 \begin{itemize}
     \item Case 1: O has at least 1 child
 	
-	This case corresponds to the case where $D_{k+1}=1$
+	Since O corresponds to $D_k$, O having at least one child corresponds to the case where $D_{k+1}=1$ 
+
 	
 	Shift L to be O's first child. 
 
 
     \item Case 2: O has no children and O is the child of the root
+
+	% O is a child of the root $\iff$ the prefix is tight. 
+
+	% This is because the level of O is equal to $1+a-b$, where a and b are the numbers of ones and zeroes in the non-increasing prefix respectively.
 
 	This case corresponds to the case where $D_{k+1}=0$ and the non-increasing prefix is tight (i.e., the non-increasing prefix hsa exactly as many ones as zeroes).
 	
