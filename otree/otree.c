@@ -71,7 +71,6 @@ node* get_initial_tree(int t){
 	}
     }
     return root;
-
 }
 
 void coolOtree(int t, void (*visit)(node*)){
@@ -108,6 +107,6 @@ int main(int argc, char** argv){
     //todo: parse command line arguments to change the visit function
     //for now, just toggle these two lines if you want a tree printed as a tree.
     coolOtree(atoi(argv[1]), print_tree_as_dyck);
-    /* coolOtree(atoi(argv[1]), print_tree_as_latex); */
+    /* coolOtree(atoi(argv[1]), print_tree_as_tikz); */
 
 }
