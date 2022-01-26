@@ -30,21 +30,28 @@ void printdyck(uint8_t* b, int n){
 }
 
 //not currently used: convert a tree to a buffer of 0/1 uint8_ts 
+//call as tree_to_dyck_arr(root,b,1) to preserve 1-based indexing.
 int tree_to_dyck_arr(node* n, uint8_t* buf, int off){
     if(n== NULL){
 	return 0;
     }
 
-
     node* child = n->left_child;
 
-    int ret = 0;
+    //if node has no children, this while loop is skipped and off is preserved
     while(child != NULL){
+	//record a 1 for the current child
 	buf[off] = 1;
+
+	//pass offset+1 to recursive call, traverse child's subtree
 	off = tree_to_dyck_arr(child,buf,off+1);
-	child = child->right_sibling;
+
+	//write a zero reflecting the move back up to the parent and increment offset
 	buf[off] = 0;
 	off += 1;
+
+	//move to next child if it exists
+	child = child->right_sibling;
     }
 
     return off;
