@@ -4,11 +4,12 @@
 #include <inttypes.h>
 #include "otree.h" 
 
-//mnemonics: 
-//l is left of o
-//p is o's parent
-//pp is o's parent's parent
+//Tree shift corresponding to shifting a 0 to index 2 of a Dyck word
 void shift_tree_zero(node* root, node* o){
+    //mnemonics: 
+    //l is left of o
+    //p is o's parent
+    //pp is o's parent's parent
     /* if(o == NULL) */
 	// to make this work for the non-increasing (111...000...) case, do something here
 	// right now, the loop ends on the non-increasing string, so this case isn't necessary
@@ -37,6 +38,7 @@ void shift_tree_zero(node* root, node* o){
     root->left_child=o;
 }
 
+//Tree shift corresponding to shifting a 1 to the front of a dyck word
 void shift_tree_one(node* root, node* o){
     /* node* p = o->parent; // is it worth saving p here??? it's accessed exactly twice */
 

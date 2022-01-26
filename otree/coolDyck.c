@@ -17,12 +17,19 @@ void printdyck(uint8_t* b, int n){
     /* printf("\n"); */
 }
 
+/* void rankDyck(uint8_t* b, int s, int t){ */
+/*     int n = s+t; */
+/*     if(b[){ */
+/*     }else{ */
+/*     } */
+/* } */
+
 //slightly modified version of coolDyck that starts with 10111...000... and ends with 1111...0000...
 void coolDyck(int t){
     int n = 2*t;
 
     // one based indexing; uses calloc so we only need to set the ones 
-    uint8_t* b = (uint8_t*) malloc(sizeof(uint8_t)*(n+1));
+    uint8_t* b = (uint8_t*) calloc(sizeof(uint8_t),(n+1));
     b[0]=-1;
 
     //INITIAL STRING: 101111...0000....
