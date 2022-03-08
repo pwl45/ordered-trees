@@ -158,7 +158,8 @@ def nosentinelMotzkin(t, s, visitFn):
     b = [-1] + [2]*s + [1]*t + [0]*s # + [0] # 1-based indexing  # new: trying to remove sentinel
     x = n-1 # first increase - initial value is this just so it can trigger the b[x]==0 branch
     y = s+t+1 # first 0 (actually first past 1's)
-    z = s++1 # first 1 (actually first past 2's)
+    z = s+1 # first 1 (actually first past 2's)
+    print(z,s)
 
     visitFn(b,x,y,z)
     p=-1

@@ -7,7 +7,7 @@ node* new_node(int data){
     node* n = (struct node*)malloc(sizeof(struct node));
 
     n->data=data;
-    n->nchildren=0;
+    /* n->nchildren=0; */
     n->parent=NULL;
     n->left_child=NULL;
     n->right_sibling=NULL;
@@ -89,7 +89,8 @@ void print_tree_as_dyck(node* n){
 //some stuff for latex
 void qtree(node* n){
 
-    printf("[.%d ",n->nchildren);
+    /* printf("[.%d ",n->nchildren); */
+    printf("[.%d ",0);
 
     node* child=n->left_child;
     while(child != NULL){

@@ -3,6 +3,7 @@
 \usepackage{tikz-qtree}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\definecolor{lightpurple}{RGB}{203, 195, 227}
 \begin{document}
 \section*{Ordered Trees}
 
@@ -16,7 +17,7 @@ $T=$
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
 \tikzset{edge from parent/.style={draw, edge from parent path=
     {(\tikzparentnode) -- (\tikzchildnode)}}}
-    \Tree [.1 [.2 [.P(3) [.L(1) [.1 [.1 [.0 ] ] ] ] [.O(1) [.0 ] ] [.0 ] ] [.1 [.0 ] ] ] ]
+    \Tree [.\node[style={fill=lightpurple}]{1}; [.\node[style={fill=lightpurple}]{2}; [.\node[style={fill=lightpurple}]{P(3)};[.\node[style={fill=lightpurple}]{L(1)}; [.\node[style={fill=lightpurple}]{1}; [.\node[style={fill=lightpurple}]{1}; [.\node[style={fill=lightpurple}]{0}; ] ] ] ] [.O(1) [.0 ] ] [.0 ] ] [.1 [.0 ] ] ] ]
 \end{tikzpicture}
 
 \noindent Let D be the dyck word corresponding to T and let k be the index of the first 01 substring in D. Note that the node O within T corresponds to $D_k$.

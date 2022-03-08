@@ -57,26 +57,25 @@ $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
 
 Let $\otree{D}$ and $\dyck{T}$ be functions that convert a Dyck word to an ordered tree and an ordered tree to a Dyck word respectively via the above process. 
 
-Let $\dyckindex{N}$ be a function that converts a ordered tree node n to the index of its corresponding $1$ in $\dyck{T}$. Similarly, let $\otreenode{i}$ be a function that converts a node of an ordered tree to the index of its corresponding 1 in $\dyck{T}$
 
 \subsubsection{Successor Rule}
 
-Define the left-down path of an ordered tree T, denoted $\leftdown{T}$ to be the first $m$ nodes in a preorder traversal of T such that, for each $t_i$ with $0 \le i \le m-1$, $i=0$ or $t_i$ is the leftmost child of $t_{i-1}$.
+Define the left-down path of an ordered tree T, denoted $\leftdown{T}$ to be the first $m+1$ nodes in a preorder traversal of T such that, for each $t_i$ with $0 \le i \le m$, $i=0$ or $t_i$ is the leftmost child of $t_{i-1}$.
 
-Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the left-down path of T. Let P be O's parent, let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
+Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the left-down path of T. If there is no such node, in the case where the tree is a single path, let O be the tree's (only) leaf node.  Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
  Fig. \ref{exampleotree} gives an example illustrating O,P,G,L, and the left-down path in an tree.
 
 
 The successor rule for enumerating ordered trees with n nodes can be stated as folows:
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:otreeRule}}
-    TODO & $\leftdown{T}=T$ \label{eq:otree_noo}\\
+    \treeshift{T}{O}{root} & $\leftdown{T}=T$ \label{eq:otree_noo}\\
     \treeshift{\treeshift{T}{L}{G}}{O}{root}& if $P \ne root $; O has no children \label{eq:otree_zeroshift}\\
     \treeshift{T}{L}{O} & otherwise \label{eq:otree_oneshift}
 \end{subnumcases}
 % \footnote{important: \includegraphics[width=.3\textwidth]{shiftree}} 
 
-\subsubsection{Proof of Correctness} --
+\subsubsection{Proof of Correctness} -- still somewhat of an outline.
 
 
 HELPFUL FUNCTIONS 
@@ -85,7 +84,7 @@ $\depth{t_i}=$ length of path between root and $t_i$. $\depth{root}=0$
 
 $\ithone{D}{i}=$ the index of the $i\thh{}$ one in D.
 
-% $\zeroesbetween{D}{i}{j}=$ the number of zeroes between the $i$th and $j$th 
+Let $\dyckindex{N}$ be a function that converts a ordered tree node n to the index of its corresponding $1$ in $\dyck{T}$. Similarly,% $\zeroesbetween{D}{i}{j}=$ the number of zeroes between the $i$th and $j$th 
 
 \bigskip
 
@@ -111,7 +110,7 @@ HELPFUL LEMMAS
 
     \item $\depth{O}=m-j+1$
 
-	$t_m$ is the last node in the $\leftdown{T}$, as the left-down path has m nodes. It has depth m, as it is exactly m left-down steps from the root.  Note that $O=t_{m+1}$.  The number of zeroes between $t_m$ and $t_{m+1}$ is the number of zeroes between the $m\thh$ and $(m+1)^{\underline{st}}$ ones in $D_i$.  
+	$t_m$ is the last node in the $\leftdown{T}$, as the left-down path has m+1 nodes. It has depth m, as it is exactly m left-down steps from the root.  Note that $O=t_{m+1}$.  The number of zeroes between $t_m$ and $t_{m+1}$ is the number of zeroes between the $m\thh$ and $(m+1)^{\underline{st}}$ ones in $D_i$.  
 
     \item Preorder listing of T $\implies $ D
 
@@ -147,9 +146,14 @@ $\coolCat{D}=\dyck{\nextTree{T}}$
 In other words, we aim to show that $\coolCat{D}=\dyck{\nextTree{\otree{D}}}$
 
 
-First, consider the node O in the specification of the $\nextTree{T}$ algorithm.  Let $D=\dyck{T}$ and let k be the index of the 1 in the leftmost 01 substring of D.  We will show that $\dyckindex{O}=k$.  
+First, consider the node O in the specification of the $\nextTree{T}$ algorithm.  
 
-Note that each 1 in D corresponds to a step down; each 0 to a step up.  Consequently, $\leftdown{T}$ corresponds to the ``all-one" prefix of D.  In other words, $\leftdown{T}=t_0,t_1,...t_{m-1}$ such that $i=0$ or $D_{\dyckindex{t_i}}=1$. Note that $t_m$ is therefore the first node in a preorder traversal of T such that $D_{\dyckindex{t_m}}=1$ and $D_{\dyckindex{t_m}-1}=0$ and the first node in a preorder traversal of T such that $t_m \notin \leftdown{T}$.  Therfore, $\dyckindex{O}=k$, i.e. O corresponds to the first 1 in the leftmost 01 substring of D.
+Let $D=\dyck{T}$ and let k be the index of the 1 in the leftmost 01 substring of D.  Let $t_0...t_m=\leftdown{T}$; $O=t_{m+1}$.  We will show that O corresponds to $D_k$.
+
+(This can be done better) 
+
+Note that each 1 in D corresponds to a step down; each 0 to a step up.  Consequently, $\leftdown{T}$ corresponds to the ``all-one" prefix of D.  In other words, $\leftdown{T}=t_0,t_1,...t_{m}$ such that $i=0$ or $D_{\dyckindex{t_i}}=1$. Note that $t_{m+1}$ is therefore the first node in a preorder traversal of T such that $D_{\ithone{D}{m+1}}=1$ and $D_{\ithone{D}{m+1}-1}=0$ and the first node in a preorder traversal of T such that $t_m \notin \leftdown{T}$.  Therfore, $\ithone{D}{m+1}=k$, i.e., $t_{m+1}=O$ corresponds to the 1 in the leftmost 01 substring of D.
+
 
 
 $\coolCat{D}$ and $\nextTree{T}$ are each broken down into 3 cases in equations \ref{eq:prefixDyck} and \ref{eq:otreeRule} respectively. 
@@ -181,7 +185,7 @@ Let $m$ be the number of consecutive ones to start D, let $j$ be the number of c
     \item $D$ has no 01 substring $\iff$ $LD(T)=T$
 
 
-	If $D$ has no $01$ substring, $D=1^n0^n$, and T is $n+1$ nodes where $t_0$ is the root and each $t_i$ for $1\le i \le n$ is a child of $t_{i-1}$  In this case, $T$ is essentially a linked list of $n+1$ nodes, and the left-down path of T is the entire tree.
+	If $D$ has no $01$ substring, $D=1^n0^n$, and T is $n+1$ nodes where $t_0$ is the root and each $t_i$ for $1\le i \le n$ is a child of $t_{i-1}$  In this case, $T$ is essentially a path of $n+1$ nodes, and the left-down path of T is the entire tree.
     \item $D_{k+1} = 0 \iff O$ has no children
 
 	This follows logically from the bijection between Dyck words and ordered trees.  $D_k$ corresponds to O.  If $D_{k+1}=0$, an ``upward" step is taken after O and consequently the next node after O cannot be a child of O.  Since the ones in $D$ give the nodes of T in preorder, O must have no children.
@@ -215,7 +219,8 @@ Let $m$ be the number of consecutive ones to start D, let $j$ be the number of c
 	    \item It was previously shown that $D$ has no 01 substring $\iff$ $LD(T)=T$.  
 
 		Thus, $\nextTree{T}$ executes case \ref{eq:otree_noo} if and only if $\coolCat{D}$ executes case  \ref{eq:expandedDyck_n}
-		%TODO: show the shifts are equivalent.
+
+		TODO: show the shifts are equivalent.
 	\end{itemize}
     \item \ref{eq:otree_zeroshift} corresponds to \ref{eq:expandedDyck_k1_0}
 
@@ -337,6 +342,7 @@ $\treeshift{T'}{O}{root}$ shifts O to become the first child of the root. Note t
 	\end{itemize}
 
     \item \ref{eq:otree_oneshift} corresponds to \ref{eq:expandedDyck_k1_1} and \ref{eq:expandedDyck_k}
+	TODO
 \end{enumerate}
 
 

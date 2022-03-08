@@ -1,12 +1,12 @@
 #include <inttypes.h>
 
 struct node {
-    int data; //not really used
-    int nchildren; //only used sometimes; not necessary for algorithm
+    int data; //not  strictly necessary
     struct node* parent;
     struct node* left_child;
     struct node* right_sibling;
 };
+
 typedef struct node node;
 
 //function for allocating and initializing a node

@@ -415,6 +415,34 @@ def basic_tostr(ms):
 
     return res
 
+#multi digit numbers do not exist as far as this function is concerned
+def colored_tostr(ms,prefix_len,shift_index):
+    res=""
+    res+="\\underline{"
+    # prefix_len = min(prefix_len,len(ms)-1)
+    added=False
+    for i in range(len(ms)):
+        if i == shift_index:
+            res+="\\color{deeppurple}\\textbf{" + str(ms[prefix_len]) + "}\\color{black}"
+        else:
+            res+=str(ms[i])
+        if i == prefix_len-1 or i == len(ms)-1 and not added:
+            res+="}"
+            added=True
+
+    # for i in range(min(prefix_len,len(ms))):
+    #     res+=str(ms[i])
+
+    # res += "}"
+    
+    # if prefix_len < len(ms):
+    #     res+="\\color{deeppurple}\\textbf{" + str(ms[prefix_len]) + "}\\color{black}"
+
+    # for i in range(prefix_len+1,len(ms)):
+    #     res+=str(ms[i])
+
+
+    return res
 # 4a -> n_2
 # 4b -> m1_1
 # 4c -> m2_1
@@ -427,6 +455,7 @@ def LukaTable(ms):
     return result
 
 def lukatex(ms,results,prefix_len,shift_index,insert_index):
+    # print(ms)
     lukatable=LukaTable(ms)
     if prefix_len >= len(ms):
         case="n_2"
@@ -443,7 +472,8 @@ def lukatex(ms,results,prefix_len,shift_index,insert_index):
     # todo: change if you drop the zero at the end
     print(lukatable,end=" & ")
 
-    print(basic_tostr(ms),end=" & ")
+    # print(basic_tostr(ms),end=" & ")
+    print(colored_tostr(ms,prefix_len,shift_index),end=" & ")
 
     # prefix_len could be len(ms)+1 because of the extra zero
     print(min(prefix_len,len(ms)),end=" & ")
@@ -475,9 +505,7 @@ def prefix_lukatex(ms, visit):
         # CASE 0:
         # >= len(ms)-1 means it's either the last thing in the prefix zero or the last real zero. 
         if prefix_len >= len(ms)-1:
-            # TODO: toggle these when you remove the extra zeroboy
-            shift_index=len(ms)-2
-            # shift_index=len(ms)-1
+            shift_index=len(ms)-1
             if ms[shift_index] == 0:
                 insert_index=1
             else:
@@ -523,7 +551,7 @@ def prefix_lukatex(ms, visit):
                 # we're shifting first inc, so it goes to the front
                 insert_index = 0
 
-        lukatex(ms[:len(ms)-1],results,prefix_len,shift_index,insert_index)
+        lukatex(ms[:-1],results,prefix_len,shift_index,insert_index)
         # print(prefix_len,shift_index,insert_index)
         ms.insert(insert_index, ms.pop(shift_index))
         # In every case we want to check if we just created an inc at the front
@@ -535,8 +563,6 @@ def prefix_lukatex(ms, visit):
                 incs.append(insert_index+1)
         else:
             prefix_sum += ms[insert_index]
-
-        # visit(ms,results)
 
         if(len(incs) == 0):
             prefix_len=len(ms)
@@ -1028,9 +1054,9 @@ def print_debug(permutations, color):
                         arrow_string += "-"
                 arrow_string += "|"
                 print(arrow_string)
-                ind_diff = red_index-candidate_shifts[0][1]
-                preval = permutations[i-1][red_index-1]
-                postval = permutations[i-1][red_index+1]
+                # ind_diff = red_index-candidate_shifts[0][1]
+                # preval = permutations[i-1][red_index-1]
+                # postval = permutations[i-1][red_index+1]
                 # if ind_diff == 0:
                 #     print("i",end="\t")
                 #     red = True
@@ -1209,6 +1235,16 @@ def print_debug_reverse(permutations,color):
     else:
         print_debug_right(permutations,color)
 
+def print_tikzstairs(permutations,color):
+    for perm in permutations:
+        for val in perm:
+            print(val,end="")
+
+        print(" & ",end="")
+        print("\\tikzstairs{1,30,0," + str(perm[0]),end="")
+        for val in perm[1:]:
+            print(", " + str(val),end="")
+        print("} \\\\")
 
 if __name__ == "__main__":
     if len( sys.argv ) < 2:
@@ -1267,6 +1303,8 @@ if __name__ == "__main__":
                         generate_perms=prefix_general
                     elif argchar == 'e':
                         generate_perms=prefix_lukatex
+                    elif argchar == 't':
+                        output=print_tikzstairs
                     elif argchar == 'd':
                         diff_mode = True
                     elif argchar == 'x':

@@ -6,14 +6,6 @@
 
 //Tree shift corresponding to shifting a 0 to index 2 of a Dyck word
 void shift_tree_zero(node* root, node* o){
-    //mnemonics: 
-    //l is left of o
-    //p is o's parent
-    //pp is o's parent's parent
-    /* if(o == NULL) */
-	// to make this work for the non-increasing (111...000...) case, do something here
-	// right now, the loop ends on the non-increasing string, so this case isn't necessary
-
     //get l,p,pp
     node* p = o->parent;
     node* l = p->left_child;
@@ -40,11 +32,9 @@ void shift_tree_zero(node* root, node* o){
 
 //Tree shift corresponding to shifting a 1 to the front of a dyck word
 void shift_tree_one(node* root, node* o){
-    /* node* p = o->parent; // is it worth saving p here??? it's accessed exactly twice */
-
     //get l
     node* l = o->parent->left_child;
-
+                                                                            
     //make l o's first child
     o->parent->left_child=o;
     l->parent=o;
@@ -81,7 +71,6 @@ void coolOtree(int t, void (*visit)(node*)){
     node* root = get_initial_tree(t);
     node* o=root->left_child->right_sibling;
 
-    uint8_t* b = (uint8_t*) malloc(sizeof(uint8_t)*(n+1));
     visit(root);
 
     while(o){
@@ -108,7 +97,7 @@ int main(int argc, char** argv){
 
     //todo: parse command line arguments to change the visit function
     //for now, just toggle these two lines if you want a tree printed as a tree.
-    coolOtree(atoi(argv[1]), print_tree_as_dyck);
-    /* coolOtree(atoi(argv[1]), print_tree_as_tikz); */
+    /* coolOtree(atoi(argv[1]), print_tree_as_dyck); */
+    coolOtree(atoi(argv[1]), print_tree_as_tikz);
 
 }
