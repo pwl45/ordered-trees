@@ -70,7 +70,7 @@ The successor rule for enumerating ordered trees with n nodes can be stated as f
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:otreeRule}}
     \treeshift{T}{O}{root} & $\leftdown{T}=T$ \label{eq:otree_noo}\\
-    \treeshift{\treeshift{T}{L}{G}}{O}{root}& if $P \ne root $; O has no children \label{eq:otree_zeroshift}\\
+    \treeshift{\treeshift{T}{L}{G}}{O}{root}& if $P \ne root $ and O has no children \label{eq:otree_zeroshift}\\
     \treeshift{T}{L}{O} & otherwise \label{eq:otree_oneshift}
 \end{subnumcases}
 % \footnote{important: \includegraphics[width=.3\textwidth]{shiftree}} 
@@ -308,6 +308,7 @@ $\treeshift{T'}{O}{root}$ shifts O to become the first child of the root. Note t
 \bigskip
 
 
+		% TODO: tm+2 dots, here and other tables
 		$T''=$
 		\begin{center}
 		\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c|c|c| } 
@@ -342,7 +343,70 @@ $\treeshift{T'}{O}{root}$ shifts O to become the first child of the root. Note t
 	\end{itemize}
 
     \item \ref{eq:otree_oneshift} corresponds to \ref{eq:expandedDyck_k1_1} and \ref{eq:expandedDyck_k}
-	TODO
+
+	``otherwise" in case \ref{eq:otree_oneshift} corresponds to the following:
+	\begin{itemize}
+	    \item At least 1 node in T is not in $\leftdown{T}$ and (O has at least 1 child OR (O has no children and O is a child of the root))
+	\end{itemize}
+
+	Combining cases \ref{eq:expandedDyck_k1_1} and \ref{eq:expandedDyck_k} gives the following condition:
+	\begin{itemize}
+	    \item D has a 01 substring and ($D_{k+1}=1$ OR ($D_{k+1}=0$ and D starts with exactly $\frac{k-1}{2}$ ones))
+
+	\end{itemize}
+
+	These are equivalent. 
+
+	$T \ne \leftdown{T} \iff D$ has a 01 substring.
+
+	$D_{k+1}=1 \iff O$ has at least one child.
+
+	$D_{k+1}=0$ and $m=\frac{k-1}{2} \iff O$ has no children and O is a child of the root.
+
+	TODO: elaborate. Thus, \ref{eq:otreeRule} executes case \ref{eq:otree_zeroshift} if  $\coolCat{D}$ executes case \ref{eq:expandedDyck_k1_1}
+
+	Execution equivalence: 
+
+	Given the above,
+
+	\begin{itemize}
+	    \item Given D has a 01 substring $\iff \leftdown(T) \ne T$ and 
+
+		$D_{k+1}=1 \iff$ $O$ has at least one child
+\bigskip
+
+		\ref{eq:expandedDyck_k1_1} corresponds to  \ref{eq:otree_oneshift}
+
+	    $\preshift{\dyck{T}}{k+1}=\treeshift{T}{L}{O}$
+
+		$D=1^m0^j11$
+
+
+		$T=$
+		\begin{center}
+		\begin{tabular}{ |c|c|c|c|c|c|c|c|c|c|c|c| } 
+		 \hline
+
+		    $node$ & $t_0$ & $t_1$ & $\dots$ & $G=t_{m-j-1}$ & $P=t_{m-j}$ & $L=t_{m-j+1}$ & $\dots$ & $t_m$ & $O=t_{m+1}$ & $t_{m+2}\dots$ \\
+		 \hline
+		    $depth$ & $0$ & $1$ & $\dots$ & $(m-j-1)$ & $(m-j)$ & $(m-j+1)$ & $\dots$ & $m$  & $(m-j+1)$ & $m-j+2 \dots$\\
+		 \hline
+		    $Dyck$ &  &  \multicolumn{7}{|c|}{$1^m$} &  $0^{j}1$   & $1\dots$\\
+		 \hline
+		\end{tabular}
+		\end{center}
+
+		Shift L to be O's first child: L:$t_m$ come after O in preorder traversal, 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\item Given D has a 01 substring, and $D_{k+1}=0$ and $D$ starts with exactly $\frac{k-1}{2}$ ones 
+
+	    \ref{eq:expandedDyck_k} corresponds to  \ref{eq:otree_oneshift}
+
+	    $\preshift{\dyck{T}}{k}=\treeshift{T}{L}{O}$
+	    Case equivalence: 
+
+
+     \end{itemize}
 \end{enumerate}
 
 
