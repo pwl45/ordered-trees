@@ -1,0 +1,66 @@
+
+
+\subsection{Loopless Motzkin Generation}
+Since Lukasiewicz words are a generalization of Motzkin words, the same algorithm can be used to generate Motzkin words by restricting the content set S to be strictly zeroes, ones, and twos.  However, the additional restrictions on Motzkin words allow for a simpler implementation of the rule.   Pseudocode for loopless generation of Motzkin words is given below in Fig. \ref{motzkinAlg}. Further investigation may uncover a similar loopless implementation for the more general Lukasiewicz successor rule.
+
+
+
+% \iffalse
+\begin{figure}
+    \centering
+        \begin{algorithm}[H]
+        \begin{algorithmic}
+        \Function{coolMotzkin}{$s,t$}
+        \EndFunction{}
+         
+        \State $n \gets 2*s+t$
+        \State $b \gets 2^1 0^1 2^{s-1} 1^t 0^{s-1}$
+        \State $x \gets 3$
+        \State $y \gets 2$
+        \State $z \gets 2$
+        
+        \State \visit{$b$}
+        
+        \While{$x <= n$}
+            \State $q \gets b_{x-1}$
+            \State $r \gets b_x$
+            \vspace{.4em} 
+            \State $b_x\gets b_{x-1}$
+            \State $b_y\gets b_{y-1}$
+            \State $b_z\gets b_{z-1}$
+            \State $b_1\gets r$
+            \vspace{.4em} 
+            \State $x \gets x+1$
+            \State $y \gets y+1$
+            \State $z \gets y+1$
+            
+            \vspace{.4em} 
+            \If{$b_x = 0$}
+                \If{$z-2 > x-y$}
+                    \State $b_1=2$
+                    \State $b_2=0$
+                    \State $b_x=r$
+                    \State $x \gets 3$
+                    \State $y \gets 2$
+                    \State $z \gets 2$
+                \Else 
+                    \State $x \gets x+1$
+                
+                \EndIf
+                \ElsIf{$q \ge b[x]$}
+                    \State $b_x \gets 2$     
+                    \State $b_{x-1} \gets 1$     
+                    \State $b_1 \gets 1$     
+                    \State $z \gets 1$     
+                
+            \EndIf
+            \visit{$b$}
+        \EndWhile
+        \end{algorithmic}
+        % I don't know how to get rid of this "a" here
+        \caption{Motzkin}
+        \end{algorithm}
+    \caption{Pseudocode algorithm for loopless enumeration of Motzkin words}
+    \label{motzkinAlg}
+\end{figure}
+% \fi

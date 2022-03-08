@@ -1,0 +1,118 @@
+% reqno is needed to make the subnumcases have the case numbers on the right
+\documentclass[reqno]{amsart}
+% \documentclass{article}
+% \documentclass[runningheads]{llncs}
+% \documentclass[preview]{standalone}
+
+\usepackage{mathtools}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{xcolor}
+% TODO: maybe get nicer colors
+\definecolor{p1col1}{rgb}{1.0, 0, 0}
+% \definecolor{p1col1}{RGB}{80, 0, 130}
+\definecolor{p1col2}{rgb}{0, 1.0, 0}
+% \definecolor{p1col2}{RGB}{255, 190, 10}
+\definecolor{p1col3}{rgb}{0, 0, 1.0}
+% \definecolor{p1col3}{RGB}{255, 190, 10}
+\definecolor{p1col4}{rgb}{0, 0, 0}
+\definecolor{lightpurple}{RGB}{203, 195, 227}
+% \definecolor{p1col4}{RGB}{40, 0, 80}
+
+\usepackage{graphicx}
+
+\usepackage{verbatim}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+
+\usepackage{twoopt}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usetikzlibrary{math}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage[title]{appendix}
+
+\usepackage{verbatim}
+
+\newcommand{\emptystring}{\varepsilon}
+
+\usepackage{cases}
+
+
+
+
+
+%
+% Algorithm environment commands
+%
+% https://tex.stackexchange.com/questions/74880/algorithmicx-package-comments-on-a-single-line
+\algnewcommand{\LineComment}[1]{\State \(\triangleright\) #1}
+
+% https://tex.stackexchange.com/questions/184154/algorithmic-put-if-and-endif-into-same-line
+\algnewcommand{\OneLineIf}[2]{\State\algorithmicif\ #1\ \algorithmicthen\ #2}
+
+% https://tex.stackexchange.com/questions/234690/and-in-algorithm
+\algnewcommand{\algorithmicand}{\textbf{ and }}
+\algnewcommand{\algorithmicor}{\textbf{ or }}
+\algnewcommand{\algorithmicnot}{\textbf{ not }}
+\algnewcommand{\OR}{\algorithmicor}
+\algnewcommand{\AND}{\algorithmicand}
+\algnewcommand{\NOT}{\algorithmicnot}
+
+\newcommand{\visit}[1]{\texttt{visit}(#1)}
+
+% \newcommand{\pshift}[2][]{$\mathsf{preshift}_{#1}(#2)$}
+\newcommand{\transpose}[3]{\mathsf{transpose(} #1, #2, #3 \mathsf{)}}
+\newcommand{\preshift}[2]{\mathsf{preshift(} #1, #2 \mathsf{)}}
+
+% \newcommand{\leftshift}[2]{\mathsf{leftshift(} #1, #2 \mathsf{)}}
+\newcommand{\treeshift}[3]{\mathsf{shiftree(} #1, #2, #3 \mathsf{)}}
+
+
+% https://tex.stackexchange.com/questions/228474/bold-horizontally-and-vertically-aligned-multiline-table-headers
+\newcommand*{\thead}[1]{%
+\multicolumn{1}{c}{\bfseries\begin{tabular}{@{}c@{}}#1\end{tabular}}}
+
+
+    % TODO: might not actually need these
+\newcommand{\leftshift}[3][]{\mathsf{left}_{#1}(#2,#3)}
+
+\newcommand{\nextPrefix}[1]{\mathsf{next}{(#1)}}
+\newcommand{\nextTree}[1]{\mathsf{nextree}{(#1)}}
+\newcommand{\coolCat}[1]{\overrightarrow{\mathsf{coolCat}}{(#1)}}
+\newcommand{\otree}[1]{\mathsf{OTree}{(#1)}}
+\newcommand{\dyck}[1]{\mathsf{Dyck}{(#1)}}
+\newcommand{\dyckindex}[1]{\mathsf{DyckIndex}{(#1)}}
+
+\newcommand{\otreenode}[1]{\mathsf{OTreeNode}{(#1)}}
+\newcommand{\leftdown}[1]{\mathsf{LD}{(#1)}}
+\newcommand{\depth}[1]{\mathsf{Depth}{(#1)}}
+% \newcommand{\ithone}[2]{\mathsf{i^{\underline{th}}one}_{#1}{(#2)}}
+\newcommand{\ithone}[2]{\mathsf{i^{\underline{th}}one}({#1}, #2)}
+\newcommand{\zeroesbetween}[3]{\mathsf{zeroesbetween({#1}, #2, #3)}}
+\newcommand{\thh}{^{\underline{th}}}
+% \newcommand{\thh}{Arnold Schwarzenegger}
+
+
+
+\usepackage{tabularx,booktabs}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Cooler than Cool: \\ Cool-Lex Order for Generating New Combinatorial Objects}
+\author{Paul Lapey}

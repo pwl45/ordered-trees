@@ -1,0 +1,18 @@
+\subsection{Lukasiewicz Path Successor Rule}
+The successor rule for Lukasiewicz paths is as follows:
+
+Let $S$ be a multiset whose sum is equal to its length.  Let $\mathcal{L}(S)$ denote the set of valid Lukasiewicz words with content equal to S. Let $\alpha \in \mathcal{L}(S)$.  
+
+Let $m$ be the maximum value such that $\alpha_{i-1} \ge \alpha_{i}$ for all $2 \le i \le m$. In other words, let m be the length of the non-increasing prefix of $\alpha$.
+
+
+\begin{equation*}
+    \overleftarrow{\text{luka}}(\alpha) = \begin{cases}
+	\leftshift{n}{2} & $if $ m=n \\
+	\leftshift{m+1}{1} & $if $ m=n-1 $ or $ \alpha_{m} < \alpha_{m+2}  $ or$ \\
+    & (\alpha_{m+2} = 0 $ and $ \sum \rho = m) \\
+	\leftshift{m+2}{1} & $ if $ \alpha_{m+2} \neq 0 \\
+	\leftshift{m+2}{2} & $otherwise$  \\
+\end{cases}
+\end{equation*}
+In addition to generating Lukasiewicz words, this successor rule also 
