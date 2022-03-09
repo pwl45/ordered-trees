@@ -158,12 +158,7 @@ Note that each 1 in D corresponds to a step down; each 0 to a step up.  Conseque
 
 $\coolCat{D}$ and $\nextTree{T}$ are each broken down into 3 cases in equations \ref{eq:prefixDyck} and \ref{eq:otreeRule} respectively. 
 
-\begin{subnumcases}{\coolCat{D} = \label{eq:expandedDyck}}
-    \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:expandedDyck_n}\\
-	\preshift{D}{k+1} & $D_{k+1}=1$ \label{eq:expandedDyck_k1_1}\\
-	\preshift{D}{k+1} & $D_{k+1}=0$ and $m>\frac{k-1}{2}$ \label{eq:expandedDyck_k1_0}\\
-	\preshift{D}{k} & $D_{k+1}=0$ and $m=\frac{k-1}{2}$ \label{eq:expandedDyck_k}
-\end{subnumcases}
+For convenience, equations \ref{eq:expandedOtree} and \ref{eq:expandedDyck}  give the expanded restatemtents of the successor rules for $\nextTree{T}$ and $\coolCat{D}$ to facilitate comparisons between the two.  Recall that $m$ is the number of consecutive ones at the start of $D$.
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:expandedOtree}}
     \treeshift{T}{O}{root} & $\leftdown{T}=T$ \label{eq:ex_otree_n}\\
@@ -172,21 +167,26 @@ $\coolCat{D}$ and $\nextTree{T}$ are each broken down into 3 cases in equations 
     \treeshift{T}{L}{O} & if O has no children and $P=root$ \label{eq:ex_otree_k}
 \end{subnumcases}
 
+\begin{subnumcases}{\coolCat{D} = \label{eq:expandedDyck}}
+    \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:expandedDyck_n}\\
+	\preshift{D}{k+1} & $D_{k+1}=1$ \label{eq:expandedDyck_k1_1}\\
+	\preshift{D}{k+1} & $D_{k+1}=0$ and $m>\frac{k-1}{2}$ \label{eq:expandedDyck_k1_0}\\
+	\preshift{D}{k} & $D_{k+1}=0$ and $m=\frac{k-1}{2}$ \label{eq:expandedDyck_k}
+\end{subnumcases}
+
+
 % \footnote{important: \includegraphics[width=.3\textwidth]{shiftree}} 
 
-For convenience, equations \ref{eq:expandedDyck} and \ref{eq:expandedOtree} give the expanded restatemtents of the successor rules for $\coolCat{D}$ and $\nextTree{T}$ that to facilitate comparisons between the two.  
 
 We will show the following equivalences:
 
 TODO: use the cases from 5, make this easier
-\begin{enumerate}
-    \item \ref{eq:otree_noo} corresponds to \ref{eq:prefixDyck_n}
-    \item \ref{eq:otree_zeroshift} corresponds to \ref{eq:expandedDyck_k1_0}
-	% \begin{itemize}
- 	% \item Case equivalence: $D_{k+1}=0$ and $D$ starts with more than $\lfloor \frac{k-1}{2} \rfloor$ ones \iff $O$ is not the child of the root or
- % \end{itemize}
-    \item \ref{eq:otree_oneshift} corresponds to \ref{eq:expandedDyck_k1_1} and \ref{eq:expandedDyck_k}
-\end{enumerate}
+\begin{itemize}
+    \item \ref{eq:ex_otree_n} corresponds to \ref{eq:expandedDyck_n}
+    \item \ref{eq:ex_otree_k1_1} corresponds to \ref{eq:expandedDyck_k1_1}
+    \item \ref{eq:ex_otree_k1_0} corresponds to \ref{eq:expandedDyck_k1_0}
+    \item \ref{eq:ex_otree_k} corresponds to \ref{eq:expandedDyck_k}
+\end{itemize}
 
 To show these, first we show a few auxillary equivalences:
 
