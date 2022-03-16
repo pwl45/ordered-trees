@@ -154,7 +154,7 @@ The following remarks can be derived from from the definition of the successor r
 
 Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(k-s-1)$; $d_{k}=1$
 
-\begin{remark} $\depth{O}=s-z+1$
+\begin{remark} $\depth{O}=s-z+1$ \label{re:o_depth_formula}
     % \bigskip
 \end{remark} 
 \begin{proof}
@@ -210,7 +210,7 @@ Recall that the successor rule $\coolCat{D}$ generates all Dyck words.  Therefor
 
 
 
-First, consider the node O in the specification of the $\nextTree{T}$ algorithm.  
+% First, consider the node O in the specification of the $\nextTree{T}$ algorithm.  
 
 
 
@@ -246,9 +246,9 @@ We will show the following equivalences:
     \item \ref{eq:ex_otree_k} corresponds to \ref{eq:expandedDyck_k}
 \end{itemize}
 
-First, we will prove a few auxillary lemmas to be used to show equivalency between cases. 
+To accomplish this, we will first prove a few auxillary lemmas to be used to show equivalency between cases. 
 
-Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(k-s-1)$; $d_{k}=1$
+Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(k-s-1)$; $d_{k}=1$
 % \begin{itemize}
 \begin{lemma} \label{le:final_case_equivalence}
 
@@ -275,7 +275,7 @@ Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be t
 
     First, note that $P=root$ simply means that O is a child of the root.  O is a child of the root $\iff \depth{O}=1$.  Additionally, note that $s+z=k-1$
 
-    As shown previously, $\depth{O}=s-z+1$, therefore, $P=root \iff s=z=\frac{k-1}{2}$
+    As shown in remark \ref{re:o_depth_formula}, $\depth{O}=s-z+1$. Therefore, $P=root \iff s=z=\frac{k-1}{2}$
     i.e. the first $k-1$ symbols of D are $\frac{k-1}{2}$ ones followed by $\frac{k-1}{2}$ zeroes. 
 
     % This equivalence can can be rewriten as follows: 
@@ -321,7 +321,7 @@ Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be t
 
     The third row of this table illustrates the construction of $\dyck{T}$ via the process specified in remark \ref{re:construct_dyck}.
 
-    Shifting $F$ to be the first child of the root changes $F's$ depth to 1 and does not affect the depth of any other nodes.  Thus, if $T'=\nextTree{T}$, 
+    Shifting $F$ to be the first child of the root changes $\depth{F}$ to 1 and does not affect the depth of any other nodes.  Thus, if $T'=\nextTree{T}$, 
 
 
     $T=$
@@ -342,7 +342,7 @@ Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be t
 
     $\coolCat{D}=101^{n-1}0^{n-1}$
      
-     Note that this is exactly the Dyck word constructed from $T'$.  Therefore, if D has no 01 substring or $\leftdown{T}$, 
+     Note that this is exactly the Dyck word constructed from $T'$.  Therefore, if D has no 01 substring or $\leftdown{T}=T$, 
 
      $\otree{\coolCat{D}}=\nextTree{T}$
 
@@ -356,7 +356,7 @@ Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be t
     % \begin{itemize}
     Per lemma \ref{le:tight_case_equivalence} $P=root \iff D$ starts with exactly $\frac{k-1}{2}$ ones.  
 
-    It was also previously shown that $D_{k+1}=0 \iff O$ has no children.  main.tex
+    It was also previously shown that $D_{k+1}=0 \iff O$ has no children.  
     Thus, $\nextTree{T}$ executes case \ref{eq:otree_zeroshift} 
     if and only if $\coolCat{D}$ executes case   \ref{eq:expandedDyck_k1_0}
 
