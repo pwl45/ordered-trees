@@ -1,5 +1,7 @@
 % reqno is needed to make the subnumcases have the case numbers on the right
-\documentclass[reqno]{amsart}
+% \documentclass[reqno]{amsart}
+\documentclass[twoside,reqno]{report}
+% \usepackage[top=1in, bottom=1in, left=1.5in, right=1in, includehead]{geometry}
 % \documentclass{article}
 % \documentclass[runningheads]{llncs}
 % \documentclass[preview]{standalone}
@@ -26,6 +28,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{amsthm}
 
 \usepackage{xcolor}
 \usepackage{colortbl}
@@ -97,13 +100,14 @@
 \newcommand{\dyckindex}[1]{\mathsf{DyckIndex}{(#1)}}
 
 \newcommand{\otreenode}[1]{\mathsf{OTreeNode}{(#1)}}
-\newcommand{\leftdown}[1]{\mathsf{LD}{(#1)}}
+\newcommand{\leftdown}[1]{\mathsf{leftpath}{(#1)}}
 \newcommand{\depth}[1]{\mathsf{Depth}{(#1)}}
 % \newcommand{\ithone}[2]{\mathsf{i^{\underline{th}}one}_{#1}{(#2)}}
-\newcommand{\ithone}[2]{\mathsf{i^{\underline{th}}one}({#1}, #2)}
+\newcommand{\oneindex}[2]{\mathsf{oneindex}({#1}, #2)}
 \newcommand{\zeroesbetween}[3]{\mathsf{zeroesbetween({#1}, #2, #3)}}
 \newcommand{\thh}{^{\underline{th}}}
-% \newcommand{\thh}{Arnold Schwarzenegger}
+% \newcommand{\path}[2]{\mathsf{path}({#1}, #2)}
+\newcommand{\path}[3]{\mathsf{path({#1}, #2, #3)}}
 
 
 
@@ -113,6 +117,13 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+% THEOREM STUFF
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+% \newtheorem{theorem}{Theorem}[section]
+\newtheorem{remark}{Remark}
+% \newtheorem{lemma}[theorem]{Lemma}
 
 \title{Cooler than Cool: \\ Cool-Lex Order for Generating New Combinatorial Objects}
 \author{Paul Lapey}
