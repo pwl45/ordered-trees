@@ -10,11 +10,11 @@ Ruskey and Williams previously gave a cool-lex algorithm for looplessly generati
 % In this thesis, we consider ordered trees cool lex, it's minimal change and loopless. this is not nec true for any dyck word minimal change order. One order, 3 loopless algorithms for 3 coolest catalan structures. 
 % This thesis provides an additional adaptation of the successor rule to looplessly generating ordered trees with a fixed number of nodes via node shifts. % reasonable term?
 % TODO: adaptation of order, new successor rule
-This thesis provides a new algorithm that generates ordered trees with a fixed number of nodes in a cool-lex order. The algorithm generates a minimal change ordering of ordered trees in the same order as their corresponding Dyck words in Ruskey and Williams's paper. Like the cool-lex algorithms for Dyck words and binary trees, this algorithm can be implemented looplessly: each ordered tree takes worst-case constant time to generate. This is faster than other algorithms for generating ordered trees which take constant amortized time \cite{parque2021efficient} \cite{er1985lexotrees} \cite{zaks1980lexotrees} \cite{skarbek1988pointerotrees}. Moreover, taken in conjunction with Ruskey and Williams's algorithms for Dyck words and binary trees, this algorithm completes a trio of loopless cool-lex algorithms for enumerating the three most important Catalan structures.
+This thesis provides a new algorithm that generates ordered trees with a fixed number of nodes in a cool-lex order. The algorithm generates a minimal change ordering of ordered trees in the same order as their corresponding Dyck words in Ruskey and Williams's paper. Like the cool-lex algorithms for Dyck words and binary trees, this algorithm can be implemented looplessly: each ordered tree takes worst-case constant time to generate. This is faster than other algorithms for generating ordered trees which take constant amortized time \cite{parque2021efficient} \cite{er1985lexotrees} \cite{zaks1980lexotrees} \cite{skarbek1988pointerotrees}. Moreover, taken in conjunction with Ruskey and Williams's algorithms for Dyck words and binary trees, this algorithm completes a trio of loopless cool-lex algorithms for enumerating the three foremost Catalan structures.
 
 
 % can't actually say this, unfortunately
-Parque and Miyashita present a constant amortized time algorithm for generating ordererd trees, claiming that it operates ``with utmost efficiency'' \cite{parque2021efficient}.  Our algorithm operates in worst-case constant time per tree, which is faster. To borrow Parque and Miyashita's terminology, perhaps we should say that our algorithm operates with \emph{utmoster} efficiency
+% Parque and Miyashita present a constant amortized time algorithm for generating ordererd trees, claiming that it operates ``with utmost efficiency'' \cite{parque2021efficient}.  Our algorithm operates in worst-case constant time per tree, which is faster. To borrow Parque and Miyashita's terminology, perhaps we should say that our algorithm operates with \emph{utmoster} efficiency
 
 Like the cool-lex algorithm for binary trees, this algorithm generates ordered trees stored as pointer structures.  This contrasts from other efficient gray codes for enumerating ordered trees, which use either bit-strings or integer sequences to represent ordered trees \cite{parque2021efficient} \cite{zaks1980lexotrees} \cite{er1985lexotrees} as representations of ordered trees.  Skarbek's 1988 paper \emph{Generating Ordered Trees} gives a constant amortized time algorithm for generating ordered trees stored as pointer structures and is therefore a a noable exception to this \cite{skarbek1988pointerotrees}.
 Generating ordered trees via a pointer structure facilitates the practical %TODO: word?
@@ -92,7 +92,8 @@ The following remarks can be derived from the bijection between ordered trees an
 \end{proof}
 
 \begin{remark} \label{re:depthformula}
-    The relatoinship between...
+    % TODO: restate in words.
+    TODO: restate in words The relationship between...
 
     % TODO: eqref?
     \begin{equation}
