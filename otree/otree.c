@@ -90,14 +90,44 @@ void coolOtree(int t, void (*visit)(node*)){
     }
 }
 
+void coolOtree_donothing(int t){
+    int n = 2*t;
+
+    node* root = get_initial_tree(t);
+    node* o=root->left_child->right_sibling;
+
+    /* visit(root); */
+
+    while(o){
+	if(o->left_child){ //if o has a child, shift 1
+	    shift_tree_one(root,o);
+	    o=o->left_child->right_sibling;
+	}else{
+	    if(o->parent == root){ //if the string is tight, shift a 1
+		shift_tree_one(root,o);
+		o=o->right_sibling;
+	    }else{ //if the string isn't tight, shift a zero
+		shift_tree_zero(root,o);
+		o=o->right_sibling;
+	    }
+	}
+	/* visit(root); */
+    }
+}
+
 int main(int argc, char** argv){
     //not exactly bulletproof
+    /* printf("here\n"); */
     if(argc < 2)
 	exit(1);
 
     //todo: parse command line arguments to change the visit function
     //for now, just toggle these two lines if you want a tree printed as a tree.
-    /* coolOtree(atoi(argv[1]), print_tree_as_dyck); */
-    coolOtree(atoi(argv[1]), print_tree_as_tikz);
+    /* for(int i = 1; i < 16; i++){ */
+	/* coolOtree(i, print_tree_as_dyck); */
+    /* } */
+    coolOtree(atoi(argv[1]), print_tree_as_dyck);
+    /* coolOtree(atoi(argv[1]), print_tree_as_tikz); */
+    /* coolOtree_donothing(atoi(argv[1])); */
 
 }
