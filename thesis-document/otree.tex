@@ -670,91 +670,107 @@ void coolOtree(int t, void (*visit)(node*)){
 
 
 
-%\begin{algorithm}
-%    \begin{algorithmic}
-%    %\Require todo?
-%    %\Ensure todo?
-%    \Function{cool-ordered-trees}{$t$}
-%        % \vspace{0.75em}
-%        \LineComment{Generate initial tree}
-%        % \If{$a_0==1$}
-%        %     \State \visit{a}
-%        %     \State \Return
-%        % \EndIf            
+% Assume t>=2?
+\begin{algorithm}
+    \begin{algorithmic}
+    %\Require todo?
+    %\Ensure todo?
+    \Function{cool-ordered-trees}{$t$}
+        % \vspace{0.75em}
+        \LineComment{Generate initial tree}
+
+	TODO
+
+	\State visit(root)
+
+
+	\State $O\gets root.lchild$
+	\State \visit{root}
+
+        \While{$O \ne NULL$}
+
+	    \If{$O.lchild \ne NULL$}
+
+		\State $P \gets O.parent$
+		\State $L \gets P.lchild$
+
+		\State $P.lchild \gets O$
+		\State $L.parent \gets O$
+	    \EndIf
+
+        \EndWhile
         
-%        \vspace{0.75em}
         
+        %\LineComment{Initialize instance variables}
         
-%        %\LineComment{Initialize instance variables}
+        \LineComment{Initialize instance variables}
+        \State Initialize $incs$ as an empty stack
+        \State $m \gets |a|$
+        \State $prefix\_sum \gets |a|-1$
+        \vspace{0.75em}
+        \LineComment{Loop through all permutations}
         
-%        \LineComment{Initialize instance variables}
-%        \State Initialize $incs$ as an empty stack
-%        \State $m \gets |a|$
-%        \State $prefix\_sum \gets |a|-1$
-%        \vspace{0.75em}
-%        \LineComment{Loop through all permutations}
-        
-%        % use a do while loop instead for clarity?
-%        \While{True}
-%            \LineComment{Find indices for the shift}
-%            \If{$m == |a|$}
-%                \State $insert\_index \gets 1$
-%                \State $shift\_index \gets |a| - 1$
-%            \ElsIf{$a_{m+1}>a_m-1$}
-%                \If{$a_{m+1}>a_m$}
-%                    \State $incs.pop()$
-%                \EndIf
-%                \State $shift\_index \gets m$
-%                \State $insert\_index \gets 0$
-%                \State $incs.append(m+1)$
-%            \ElsIf{$a\_{m+1} > 0$ or $prefix\_sum > prefix\_len$}   
-%                \If{$a_{m+2}>a_{m+1}$ and $a_{m+2}<=a_{m} $}
-%                    \State $incs.pop()$
-%                \EndIf
-%                \State $shift\_index \gets m - 1$
-%                \If{$a_{shift\_index} > 0$}
-%                    \State $insert\_index \gets 0$
-%                \Else 
-%                    \State $insert\_index \gets 1$
-%                \EndIf
-%                \State $incs.append(m+1)$
-%            \Else
-%                \State $shift\_index \gets m$
-%                \State $insert\_index \gets 0$
+        % use a do while loop instead for clarity?
+        \While{True}
+            \LineComment{Find indices for the shift}
+            \If{$m == |a|$}
+                \State $insert\_index \gets 1$
+                \State $shift\_index \gets |a| - 1$
+            \ElsIf{$a_{m+1}>a_m-1$}
+                \If{$a_{m+1}>a_m$}
+                    \State $incs.pop()$
+                \EndIf
+                \State $shift\_index \gets m$
+                \State $insert\_index \gets 0$
+                \State $incs.append(m+1)$
+            \ElsIf{$a\_{m+1} > 0$ or $prefix\_sum > prefix\_len$}   
+                \If{$a_{m+2}>a_{m+1}$ and $a_{m+2}<=a_{m} $}
+                    \State $incs.pop()$
+                \EndIf
+                \State $shift\_index \gets m - 1$
+                \If{$a_{shift\_index} > 0$}
+                    \State $insert\_index \gets 0$
+                \Else 
+                    \State $insert\_index \gets 1$
+                \EndIf
+                \State $incs.append(m+1)$
+            \Else
+                \State $shift\_index \gets m$
+                \State $insert\_index \gets 0$
             
-%            \EndIf
+            \EndIf
             
-%            \vspace{0.75em}
-%            \LineComment{Do shift and visit}
-%            \State $a.insert(insert\_index,a.remove(shift\_index))$ 
-%            \State \visit{$a$}
+            \vspace{0.75em}
+            \LineComment{Do shift and visit}
+            \State $a.insert(insert\_index,a.remove(shift\_index))$ 
+            \State \visit{$a$}
             
-%            \vspace{0.75em}
-%            \LineComment{Update variables for next iteration}
-%            \If{$a_{insert\_index}<a_{insert\_index+1}$}
-%                \State $prefix\_sum \gets a_0$
-%                \If{$insert\_index \neq m$}
-%                \State $incs.append(m+1)$
-%                \EndIf 
-%                \Else
-%                \State $prefix\_sum \gets prefix\_sum+a_{insert\_index}$
-%            \EndIf
+            \vspace{0.75em}
+            \LineComment{Update variables for next iteration}
+            \If{$a_{insert\_index}<a_{insert\_index+1}$}
+                \State $prefix\_sum \gets a_0$
+                \If{$insert\_index \neq m$}
+                \State $incs.append(m+1)$
+                \EndIf 
+                \Else
+                \State $prefix\_sum \gets prefix\_sum+a_{insert\_index}$
+            \EndIf
            
-%           % do incs is empty instead? 
-%            \If{$|incs| = 0$}
-%            \State \Return
-%            \Else
-%            \State $m \gets incs.pop()$
-%            \EndIf
+           % do incs is empty instead? 
+            \If{$|incs| = 0$}
+            \State \Return
+            \Else
+            \State $m \gets incs.pop()$
+            \EndIf
             
             
             
 
-%        \EndWhile
+        \EndWhile
        
        
-%    \EndFunction
-%    \end{algorithmic}
-%    \caption{Generate all ordered trees with $t+1$ nodes}
-%    \label{alg:prefix}
-%\end{algorithm}
+    \EndFunction
+    \end{algorithmic}
+    \caption{Generate all ordered trees with $t+1$ nodes}
+    \label{alg:prefix}
+\end{algorithm}
