@@ -608,4 +608,153 @@ Since $D=\dyck{T}=1^s0^s101\dots$, $\coolCat{D}=1^{s+1}0^{s+1}1\dots$ as per cas
 Since these 4 cases cover all cases for the two successor rules, we have shown that $\nextTree{T}=\otree{\coolCat{\dyck{T}}}$ in all cases. 
 \end{proof}
 \subsection{Loopless Implementation}
-todo
+The algorithm described in this section has been implemented in C using a tree node struct that contains fields for each node's parent, left child, and right sibling.
+
+The functions \verb+shift_tree_a+ and \verb+shift_tree_b+ perform the shifts outlined in cases \ref{eq:otree_zeroshift} and \ref{eq:otree_oneshift} respectively; the function \verb+get_initial_tree+ generates the first tree in the ordering.
+
+\verb$t$ is a parameter equal to the number of non-root nodes in the tree; \verb$visit$ is a user-supplied function for visiting a tree.
+% TODO: QUESTION: Is this confusing? Using t like this simplifies the correspondence between ordered trees and Dyck words. But would it be clearer to have t just be the number of total nodes?
+
+% Verbatim (not verbatim) from fancyvrb package lets you do \ref inside of it. 
+\begin{Verbatim}[commandchars=\\\[\]]
+void coolOtree(int t, void (*visit)(node*)){
+    node* root = get_initial_tree(t);
+    node* o=root->left_child->right_sibling;
+
+    visit(root);
+    //o is NULL for the final tree
+    while(o){ 
+	if(o->left_child){ //if o has a child
+	    shift_tree_b(root,o); \ref[eq:otree_oneshift]
+	    o=o->left_child->right_sibling;
+	}else{
+	    if(o->parent == root){ 
+		shift_tree_b(root,o); \ref[eq:otree_oneshift]
+		o=o->right_sibling;
+	    }else{ //if the string isn't tight, shift a zero
+		shift_tree_a(root,o); \ref[eq:otree_zeroshift]
+		o=o->right_sibling;
+	    }
+	}
+	visit(root);
+    }
+}
+\end{Verbatim}
+
+\begin{figure}
+    \centering
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] ] 
+\end{tikzpicture} \hspace{1.5em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} ] ] 
+\end{tikzpicture}\hspace{1.5em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} [.{} ] ] ] 
+\end{tikzpicture}\hspace{1.5em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} [.{} [.{} ] ] ] ] 
+\end{tikzpicture}
+
+    \cprotect\caption{The initial trees returned by \verb$get_initial_tree$ in \verb$coolOtree$ with $t=1,2,3,$ and $4$}
+    \label{exampleotree}
+\end{figure}
+
+
+
+%\begin{algorithm}
+%    \begin{algorithmic}
+%    %\Require todo?
+%    %\Ensure todo?
+%    \Function{cool-ordered-trees}{$t$}
+%        % \vspace{0.75em}
+%        \LineComment{Generate initial tree}
+%        % \If{$a_0==1$}
+%        %     \State \visit{a}
+%        %     \State \Return
+%        % \EndIf            
+        
+%        \vspace{0.75em}
+        
+        
+%        %\LineComment{Initialize instance variables}
+        
+%        \LineComment{Initialize instance variables}
+%        \State Initialize $incs$ as an empty stack
+%        \State $m \gets |a|$
+%        \State $prefix\_sum \gets |a|-1$
+%        \vspace{0.75em}
+%        \LineComment{Loop through all permutations}
+        
+%        % use a do while loop instead for clarity?
+%        \While{True}
+%            \LineComment{Find indices for the shift}
+%            \If{$m == |a|$}
+%                \State $insert\_index \gets 1$
+%                \State $shift\_index \gets |a| - 1$
+%            \ElsIf{$a_{m+1}>a_m-1$}
+%                \If{$a_{m+1}>a_m$}
+%                    \State $incs.pop()$
+%                \EndIf
+%                \State $shift\_index \gets m$
+%                \State $insert\_index \gets 0$
+%                \State $incs.append(m+1)$
+%            \ElsIf{$a\_{m+1} > 0$ or $prefix\_sum > prefix\_len$}   
+%                \If{$a_{m+2}>a_{m+1}$ and $a_{m+2}<=a_{m} $}
+%                    \State $incs.pop()$
+%                \EndIf
+%                \State $shift\_index \gets m - 1$
+%                \If{$a_{shift\_index} > 0$}
+%                    \State $insert\_index \gets 0$
+%                \Else 
+%                    \State $insert\_index \gets 1$
+%                \EndIf
+%                \State $incs.append(m+1)$
+%            \Else
+%                \State $shift\_index \gets m$
+%                \State $insert\_index \gets 0$
+            
+%            \EndIf
+            
+%            \vspace{0.75em}
+%            \LineComment{Do shift and visit}
+%            \State $a.insert(insert\_index,a.remove(shift\_index))$ 
+%            \State \visit{$a$}
+            
+%            \vspace{0.75em}
+%            \LineComment{Update variables for next iteration}
+%            \If{$a_{insert\_index}<a_{insert\_index+1}$}
+%                \State $prefix\_sum \gets a_0$
+%                \If{$insert\_index \neq m$}
+%                \State $incs.append(m+1)$
+%                \EndIf 
+%                \Else
+%                \State $prefix\_sum \gets prefix\_sum+a_{insert\_index}$
+%            \EndIf
+           
+%           % do incs is empty instead? 
+%            \If{$|incs| = 0$}
+%            \State \Return
+%            \Else
+%            \State $m \gets incs.pop()$
+%            \EndIf
+            
+            
+            
+
+%        \EndWhile
+       
+       
+%    \EndFunction
+%    \end{algorithmic}
+%    \caption{Generate all ordered trees with $t+1$ nodes}
+%    \label{alg:prefix}
+%\end{algorithm}
