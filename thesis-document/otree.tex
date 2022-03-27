@@ -66,7 +66,7 @@ Figure \ref{ordered_tree_bijection_illustration} demonstrates both directions of
     \end{tikzpicture}
 
     $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
-    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  Each node is labelled with its number of children; the left down path of T is highlighted in purple. Nodes are labelled by their degree.}
+    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  The left down path of T is highlighted in purple. }
     \label{exampleotree}
 \end{figure}
 
@@ -80,6 +80,19 @@ In addition to the above bijection, we define the following functions relating t
 
 \bigskip
 
+\begin{figure}
+    $T=$
+
+    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+	\tikzset{edge from parent/.style={draw, edge from parent path=
+	{(\tikzparentnode) -- (\tikzchildnode)}}}
+	\Tree [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{G}; [.\node[style={fill=lightpurple}]{P};[.\node[style={fill=lightpurple}]{L}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{F}; ] ] ] ] [.\node{O}; [.\node{}; ] ] [.\node{}; ] ] [.\node{}; [.\node{}; ] ] ] ]
+    \end{tikzpicture}
+
+    $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
+    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  The left down path of T is highlighted in purple. }
+    \label{exampleotree}
+\end{figure}
 
 The following remarks can be derived from the bijection between ordered trees and Dyck words.
 
@@ -168,6 +181,9 @@ The successor rule for enumerating ordered trees with n nodes can be stated as f
 \end{subnumcases}
 
 
+Figure \ref{fig:otreeruledemo} gives a demonstration of the shifts in cases \ref{eq:otree_zeroshift} and \ref{eq:otree_oneshift}
+
+
 To make the order cyclic, an additional rule can be added, modifying the successor rule to be:
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:otreeRule_cyclic}}
@@ -175,6 +191,64 @@ To make the order cyclic, an additional rule can be added, modifying the success
     \treeshift{\treeshift{T}{L}{G}}{O}{root}& if $P \ne root $ and O has no children \label{eq:otree_zeroshift_cyclic}\\
     \treeshift{T}{L}{O} & otherwise \label{eq:otree_oneshift_cyclic}
 \end{subnumcases}
+
+\begin{figure}
+    \begin{subfigure}[]{.5 \textwidth}
+	\begin{center}
+	    11111000100100 $\implies$ 10111100010100
+
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+		\tikzset{edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O}; ] ] [.{} ] ] ]
+	    \end{tikzpicture}
+	    $\implies$
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+		\tikzset{edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.{} [.\node[style={fill=lightblue}]{O}; ] [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightpurple}]{P}; ] [.{} ] ] ]
+	    \end{tikzpicture}
+	\end{center}
+	\caption{$O$ has no children, $P \ne root$: \\
+	$\treeshift{\treeshift{T}{L}{G}}{O}{root}$ \\
+	$L$ becomes $G$'s first child; \\
+	$O$ becomes the first child of $root$\\
+	% test
+	}
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[]{.5 \textwidth}
+	\begin{center}
+	    11110001100100 $\implies$ 11111000100100
+
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+		\tikzset{edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.{} [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O}; [.{} ] ] [.{} ] ] ]
+	    \end{tikzpicture} $\implies$
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+		\tikzset{edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.{} [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.{} ] ] [.{} ] ] ]
+	    \end{tikzpicture}
+	\end{center}
+	\caption{$O$ has at least 1 child \\
+	$\treeshift{T}{L}{O}$ \\
+	$L$ becomes $O$'s first child
+	}
+	\label{fig:}
+    \end{subfigure}
+
+    \caption{Illustrations of cases \ref{eq:otree_zeroshift} and \ref{eq:otree_oneshift} }
+    \label{fig:otreeruledemo}
+\end{figure}
+
+% \begin{figure}[]
+% 	\centering
+
+% 	\caption{}
+% 	\label{}
+% \end{figure}
 
 The following remarks can be derived from from the definition of the successor role and the nodes O,G,L, and T.
 
