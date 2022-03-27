@@ -49,8 +49,8 @@ Figure \ref{ordered_tree_bijection_illustration} demonstrates both directions of
 \begin{figure}
     \centering
     % TODO: degree three, color binary bits to illustrate correspondence
-    \includegraphics{Ordered-Tree-Bijection-Illustration}
-    \caption{An ordered tree with $5+1=6$ nodes corresponding to the order 5 Dyck word $1101001100$.}
+    \includegraphics{otreebij.png}
+    \caption{An ordered tree with $6+1=7$ nodes corresponding to the order 6 Dyck word $110101001100$.}
     \label{ordered_tree_bijection_illustration}
 \end{figure}
 
@@ -91,25 +91,32 @@ The following remarks can be derived from the bijection between ordered trees an
     Recall the method of constructing an ordered tree from a Dyck word.  Each one in D creates a new node; zeroes in D do not create nodes.  Generating an ordered tree from a Dyck word generates the nodes of the tree in preorder.  Thus, $t_i$ corresponds to the $i$th one in D for $1 \le i \le n$.
 \end{proof}
 
-\begin{remark} \label{re:depthformula}
-    % TODO: restate in words.
-    TODO: restate in words The relationship between...
+\begin{remark} The difference in depths between nodes $t_i$ and $t_{i-1}$ is equal to one minus the number of zeroes between the $(i-1)^{\underline{st}}$ and $i\thh$ and  ones in $D$
+
 
     % TODO: eqref?
-    \begin{equation}
-    	\depth{t_i}=\depth{t_{i-1}}+1-(\oneindex{D}{i}-\oneindex{D}{i-1}-1) 
-    \end{equation}
-    
-
-    Equivalently, $\oneindex{D}{i} = \oneindex{D}{i-1} + \depth{t_{i-1}} - \depth{t_i} + 2$
 \end{remark}
 \begin{proof}
 
-    Note that $(\oneindex{D}{i}-\oneindex{D}{i-1}-1)$ is equal to the number of zeroes between the $i\thh$ and $(i-1)^{\underline{st}}$ ones in D.  Therfore, this rule can be informally described as follows:
+    This remark can be stated formally as 
 
-    The depth of $t_i$ is the depth of $t_{i-1}$ plus 1 minus the number of zeroes between the $(i-1)\thh$ and $i\thh$ ones in D
+    \begin{equation} \label{eq:depthformula} 
+    	\depth{t_i} - \depth{t_{i-1}}=1-(\oneindex{D}{i}-\oneindex{D}{i-1} - 1) 
+    \end{equation}
+    
 
-    The number of zeroes between the $i\thh$ and $(i-1)\thh$ ones in $D$ is equal to one plus the depth  $\depth{t_i}$ minus $\depth{t_{i-1}}$
+    % or equivalently, 
+
+    % \begin{equation} \label{eq:indexformula} 
+    % 	\oneindex{D}{i} = \oneindex{D}{i-1} + \depth{t_{i-1}} - \depth{t_i} + 2
+    % \end{equation}
+    
+
+    Note that $(\oneindex{D}{i}-\oneindex{D}{i-1}-1)$ is equal to the number of zeroes between the $i\thh$ and $(i-1)^{\underline{st}}$ ones in D.  % Therefore, this rule can be informally described as follows:
+
+    % The depth of $t_i$ is the depth of $t_{i-1}$ plus 1 minus the number of zeroes between the $(i-1)\thh$ and $i\thh$ ones in D
+
+    % The number of zeroes between the $i\thh$ and $(i-1)\thh$ ones in $D$ is equal to one plus the depth  $\depth{t_i}$ minus $\depth{t_{i-1}}$
 
     This follows naturally from the bijection between Dyck words and ordered trees.  Each zero corresponds to a step up in the tree before adding the next child.  
 
