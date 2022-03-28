@@ -5,7 +5,7 @@
 #include "otree.h" 
 
 //Tree shift corresponding to shifting a 0 to index 2 of a Dyck word
-void shift_tree_zero(node* root, node* o){
+void shift_tree_a(node* root, node* o){
     //get l,p,pp
     node* p = o->parent;
     node* l = p->left_child;
@@ -31,7 +31,7 @@ void shift_tree_zero(node* root, node* o){
 }
 
 //Tree shift corresponding to shifting a 1 to the front of a dyck word
-void shift_tree_one(node* root, node* o){
+void shift_tree_b(node* root, node* o){
     //get l
     node* l = o->parent->left_child;
                                                                             
@@ -66,8 +66,6 @@ node* get_initial_tree(int t){
 }
 
 void coolOtree(int t, void (*visit)(node*)){
-    int n = 2*t;
-
     node* root = get_initial_tree(t);
     node* o=root->left_child->right_sibling;
 
@@ -75,14 +73,14 @@ void coolOtree(int t, void (*visit)(node*)){
 
     while(o){
 	if(o->left_child){ //if o has a child, shift 1
-	    shift_tree_one(root,o);
+	    shift_tree_b(root,o);
 	    o=o->left_child->right_sibling;
 	}else{
 	    if(o->parent == root){ //if the string is tight, shift a 1
-		shift_tree_one(root,o);
+		shift_tree_b(root,o);
 		o=o->right_sibling;
 	    }else{ //if the string isn't tight, shift a zero
-		shift_tree_zero(root,o);
+		shift_tree_a(root,o);
 		o=o->right_sibling;
 	    }
 	}
@@ -91,8 +89,6 @@ void coolOtree(int t, void (*visit)(node*)){
 }
 
 void coolOtree_donothing(int t){
-    int n = 2*t;
-
     node* root = get_initial_tree(t);
     node* o=root->left_child->right_sibling;
 
@@ -100,14 +96,14 @@ void coolOtree_donothing(int t){
 
     while(o){
 	if(o->left_child){ //if o has a child, shift 1
-	    shift_tree_one(root,o);
+	    shift_tree_b(root,o);
 	    o=o->left_child->right_sibling;
 	}else{
 	    if(o->parent == root){ //if the string is tight, shift a 1
-		shift_tree_one(root,o);
+		shift_tree_b(root,o);
 		o=o->right_sibling;
 	    }else{ //if the string isn't tight, shift a zero
-		shift_tree_zero(root,o);
+		shift_tree_a(root,o);
 		o=o->right_sibling;
 	    }
 	}

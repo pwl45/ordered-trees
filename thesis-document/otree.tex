@@ -14,7 +14,7 @@ This thesis provides a new algorithm that generates ordered trees with a fixed n
 
 
 % can't actually say this, unfortunately
-% Parque and Miyashita present a constant amortized time algorithm for generating ordererd trees, claiming that it operates ``with utmost efficiency'' \cite{parque2021efficient}.  Our algorithm operates in worst-case constant time per tree, which is faster. To borrow Parque and Miyashita's terminology, perhaps we should say that our algorithm operates with \emph{utmoster} efficiency
+Parque and Miyashita present a constant amortized time algorithm for generating ordererd trees, claiming that it operates ``with utmost efficiency'' \cite{parque2021efficient}.  Our algorithm operates in worst-case constant time per tree, which is faster. To borrow Parque and Miyashita's terminology, perhaps we should say that our algorithm operates with \emph{utmoster} efficiency
 
 Like the cool-lex algorithm for binary trees, this algorithm generates ordered trees stored as pointer structures.  This contrasts from other efficient gray codes for enumerating ordered trees, which use either bit-strings or integer sequences to represent ordered trees \cite{parque2021efficient} \cite{zaks1980lexotrees} \cite{er1985lexotrees} as representations of ordered trees.  Skarbek's 1988 paper \emph{Generating Ordered Trees} gives a constant amortized time algorithm for generating ordered trees stored as pointer structures and is therefore a a noable exception to this \cite{skarbek1988pointerotrees}.
 Generating ordered trees via a pointer structure facilitates the practical %TODO: word?
@@ -160,7 +160,7 @@ Let $F$ be the leftmost leaf of T, or equivalently the leftmost descendant of th
 Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the $\path{T}{root}{F}$. Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
 Fig. \ref{exampleotree} gives an example illustrating O,P,G,L,F, and the left-down path in an tree.
 
-Given an ordered tree T, let $\treeshift{T}{A}{B}$ be a function that shifts A to be the first child of B, with the restriction that A and B are each \emph{first-born}s, or the first child of their respective parents.
+Given an ordered tree T, let $\treeshift{T}{A}{B}$ be a function that shifts A to be the first child of B, with the restriction that A is a \emph{first-born}s, or the first child of its parents.
 
 The successor rule for enumerating ordered trees with n nodes can be stated as folows:
 
@@ -708,6 +708,46 @@ void coolOtree(int t, void (*visit)(node*)){
 	}
 	visit(root);
     }
+}
+\end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\[\]]
+void shift_tree_a(node* root, node* o){
+    //get l,p,pp
+    node* p = o->parent;
+    node* l = p->left_child;
+    node* pp = p->parent;
+
+    //setup p
+    //new left_child is l's right sibling
+    p->left_child=o->right_sibling;
+
+    //setup l
+    //new right sibling is old parent
+    //new parent is parent's parent
+    l->parent=pp;
+    l->right_sibling=p;
+    pp->left_child=l;
+
+    //note: O shift must come after l shift
+    //push o up to root;
+    o->parent=root;
+    o->right_sibling=root->left_child;
+    root->left_child=o;
+}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\[\]]
+void shift_tree_b(node* root, node* o){
+    //get l
+    node* l = o->parent->left_child;
+                                                                            
+    //make l o's first child
+    o->parent->left_child=o;
+    l->parent=o;
+    l->right_sibling=o->left_child;
+    o->left_child=l;
 }
 \end{Verbatim}
 
