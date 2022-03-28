@@ -1,5 +1,5 @@
-\subsection{Cool-Lex Order on Different Combinatorial Objects}
-\subsubsection{Combinations: Fixed-Weight Binary Strings}
+\section{Cool-Lex Order on Different Combinatorial Objects}
+\subsection{Combinations: Fixed-Weight Binary Strings}
 Generating all binary strings with $s$ zeroes and $t$ ones is often referred to as combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph. D thesis and is as follows\cite{williams2009shift}:
 
 \noindent Let $S$ be a binary string of length $n$.
@@ -37,7 +37,7 @@ The left-shift rule can be re-stated as follows:
 
 % Thus, depending on the value of $S_{x+1}$, the cool-lex successor rule for binary strings requires either one or two transpositions per combination.  
 
-\subsubsection{Cool Lex Order on Dyck Paths and Binary Trees}
+\subsection{Cool Lex Order on Dyck Paths and Binary Trees}
 Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its cool-lex order and (cat)alan numbers \cite{ruskey2008generating}:
 We will use $\mathbf{B}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{B}_n$ is thus $2n$.
 
@@ -90,7 +90,7 @@ Ruskey and Williams provided a pseudocode implementation of CoolCat that utilize
 
 Due to its simplicity and efficienty, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and also provided an implementation of it for his theoretical MMIX processor architecture \cite{knuth2015art}.
 
-\subsubsection{Multiset Permutations}
+\subsection{Multiset Permutations}
 
 Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams is as follows \cite{williams2009loopless}:
 \bigskip

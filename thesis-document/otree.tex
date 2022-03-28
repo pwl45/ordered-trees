@@ -56,20 +56,6 @@ Figure \ref{ordered_tree_bijection_illustration} demonstrates both directions of
 
 %TODO: Combine the above and below figures?? Have them adjacent to each other?
 
-\begin{figure}
-    $T=$
-
-    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
-	\tikzset{edge from parent/.style={draw, edge from parent path=
-	{(\tikzparentnode) -- (\tikzchildnode)}}}
-	\Tree [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{G}; [.\node[style={fill=lightpurple}]{P};[.\node[style={fill=lightpurple}]{L}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{F}; ] ] ] ] [.\node{O}; [.\node{}; ] ] [.\node{}; ] ] [.\node{}; [.\node{}; ] ] ] ]
-    \end{tikzpicture}
-
-    $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
-    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  The left down path of T is highlighted in purple. }
-    \label{exampleotree}
-\end{figure}
-
 In addition to the above bijection, we define the following functions relating to ordered trees, Dyck words, and the correspondence between them.
 
 \begin{itemize}
@@ -81,6 +67,7 @@ In addition to the above bijection, we define the following functions relating t
 \bigskip
 
 \begin{figure}
+    \centering
     $T=$
 
     \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
@@ -172,6 +159,8 @@ Let $F$ be the leftmost leaf of T, or equivalently the leftmost descendant of th
 
 Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the $\path{T}{root}{F}$. Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
 Fig. \ref{exampleotree} gives an example illustrating O,P,G,L,F, and the left-down path in an tree.
+
+Given an ordered tree T, let $\treeshift{T}{A}{B}$ be a function that shifts A to be the first child of B, with the restriction that A and B are each \emph{first-born}s, or the first child of their respective parents.
 
 The successor rule for enumerating ordered trees with n nodes can be stated as folows:
 
