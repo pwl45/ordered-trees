@@ -678,7 +678,7 @@ Since $D=\dyck{T}=1^s0^s101\dots$, $\coolCat{D}=1^{s+1}0^{s+1}1\dots$ as per cas
 Since these 4 cases cover all cases for the two successor rules, we have shown that $\nextTree{T}=\otree{\coolCat{\dyck{T}}}$ in all cases. 
 \end{proof}
 \subsection{Loopless Implementation}
-The algorithm described in this section has been implemented in C using a tree node struct that contains fields for each node's parent, left child, and right sibling.
+The algorithm described in this section has been implemented in C using a tree node struct that contains fields for each node's parent, leftmost child (firstborn), and right sibling.
 
 The functions \verb+shift_tree_a+ and \verb+shift_tree_b+ perform the shifts outlined in cases \ref{eq:otree_zeroshift} and \ref{eq:otree_oneshift} respectively; the function \verb+get_initial_tree+ generates the first tree in the ordering.
 
@@ -699,9 +699,9 @@ void coolOtree(int t, void (*visit)(node*)){
 	    o=o->left_child->right_sibling;
 	}else{
 	    if(o->parent == root){ 
-		shift_tree_b(root,o); \ref[eq:otree_oneshift]
+		shift_tree_b(root,o); \ref[eq:otree_oneshift] 
 		o=o->right_sibling;
-	    }else{ //if the string isn't tight, shift a zero
+	    }else{ 
 		shift_tree_a(root,o); \ref[eq:otree_zeroshift]
 		o=o->right_sibling;
 	    }
@@ -711,12 +711,13 @@ void coolOtree(int t, void (*visit)(node*)){
 }
 \end{Verbatim}
 
-\begin{Verbatim}[commandchars=\\\[\]]
-void shift_tree_a(node* root, node* o){
-    //get l,p,pp
+\begin{Verbatim}[commandchars=\\\[\]] 
+//implements the shifts specified in in \ref[eq:otree_zeroshift]
+void shift_tree_a(node* root, node* o){ 
+    //get l,p,g
     node* p = o->parent;
     node* l = p->left_child;
-    node* pp = p->parent;
+    node* g = p->parent;
 
     //setup p
     //new left_child is l's right sibling
@@ -725,11 +726,10 @@ void shift_tree_a(node* root, node* o){
     //setup l
     //new right sibling is old parent
     //new parent is parent's parent
-    l->parent=pp;
+    l->parent=g;
     l->right_sibling=p;
-    pp->left_child=l;
+    g->left_child=l;
 
-    //note: O shift must come after l shift
     //push o up to root;
     o->parent=root;
     o->right_sibling=root->left_child;
@@ -738,7 +738,9 @@ void shift_tree_a(node* root, node* o){
 \end{Verbatim}
 
 
+
 \begin{Verbatim}[commandchars=\\\[\]]
+//implements the shift specified in in \ref[eq:otree_oneshift]
 void shift_tree_b(node* root, node* o){
     //get l
     node* l = o->parent->left_child;
@@ -774,7 +776,9 @@ void shift_tree_b(node* root, node* o){
     \Tree [.{} [.{} ] [.{} [.{} [.{} ] ] ] ] 
 \end{tikzpicture}
 
-    \cprotect\caption{The initial trees returned by \verb$get_initial_tree$ in \verb$coolOtree$ with $t=1,2,3,$ and $4$}
+    \cprotect\caption{The initial trees returned by \verb$get_initial_tree$ in \verb$coolOtree$ with $t=1,2,3,$ and $4$ \\
+    Note the convenient feature for each tree, O is equal to \verb$root->left_child->right_sibling$
+    }
     \label{exampleotree}
 \end{figure}
 
