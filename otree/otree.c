@@ -6,22 +6,21 @@
 
 //Tree shift corresponding to shifting a 0 to index 2 of a Dyck word
 void shift_tree_a(node* root, node* o){
-    //get l,p,pp
+    //get l,p,g
     node* p = o->parent;
     node* l = p->left_child;
-    node* pp = p->parent;
+    node* g = p->parent;
 
     //setup p
     //new left_child is l's right sibling
-    /* printf(" setup p\n"); */
     p->left_child=o->right_sibling;
 
     //setup l
     //new right sibling is old parent
     //new parent is parent's parent
-    l->parent=pp;
+    l->parent=g;
     l->right_sibling=p;
-    pp->left_child=l;
+    g->left_child=l;
 
     //note: O shift must come after l shift
     //push o up to root;
@@ -78,11 +77,10 @@ void coolOtree(int t, void (*visit)(node*)){
 	}else{
 	    if(o->parent == root){ //if the string is tight, shift a 1
 		shift_tree_b(root,o);
-		o=o->right_sibling;
 	    }else{ //if the string isn't tight, shift a zero
 		shift_tree_a(root,o);
-		o=o->right_sibling;
 	    }
+	    o=o->right_sibling;
 	}
 	visit(root);
     }
