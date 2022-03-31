@@ -37,59 +37,6 @@ The left-shift rule can be re-stated as follows:
 
 % Thus, depending on the value of $S_{x+1}$, the cool-lex successor rule for binary strings requires either one or two transpositions per combination.  
 
-\subsection{Cool Lex Order on Dyck Paths and Binary Trees}
-Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its cool-lex order and (cat)alan numbers \cite{ruskey2008generating}:
-We will use $\mathbf{B}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{B}_n$ is thus $2n$.
-
-\noindent Let $S \in \mathbf{B}_n$
-
-\noindent Let the $i$th prefix shift of S, denoted by $\preshift{S}{i}$, be a function that rotates the second through ith symbols of S one to the right circularly.  More formally, 
-
-\noindent $\preshift{S}{i}=S_1,S_i,S_2,...,S_{i-1},S_{i+1},S_{i+2},...,S_{2n}$
-
-
-\noindent Let $k$ be the index of the 1 in the leftmost $01$ substring in S if it exists. Note that if $S$ has no $01$ substring, then $S=1^n0^n$.  The successor rule for $S$ is as follows:
-
-
-\begin{subnumcases}{\coolCat{S} = \label{eq:prefixDyck_simple}}
-	\preshift{S}{2n} & \text{if $S$ has no $01$ substring}\\
-	\preshift{S}{k+1} & if $\preshift{S}{k+1} \in \mathbf{B}_n$\\
-	\preshift{S}{k} & otherwise
-\end{subnumcases}
-
-Ruskey and Williams's algorithm can also enumerate a broader set of strings: The algorithm enumerates any set $\mathbf{B}_{s,t}$ where for any $S \in \mathbf{B}_{s,t}$ satisfies the constraint that each prefix of S has as many ones as zeroes.  This is slightly broader than the language of Dyck words, as it does not have the requirement that a string have an equal number of ones and zeroes.
-We will focus on $\mathbf{B}_n$  languages due to their correspondce with Dyck words.
-
-Evaluating whether $\preshift{S}{k+1} \in B$ can be determined by looking $S_{k+1}$ and the sum of the first k symbols of S:  
-
-The above algorithm can be 
-Let $S'=$ $\preshift{S}{k+1}$
-
-Note that we know $S \in \mathbf{B}_n$.  
-
-Since preshift only rotates symbols, $S'$ will automaticallly satisfy the requirement that strings in $\mathbf{B}_n$ must have an equal number of zeroes and ones since S satisfied that requirement. Thus, $S' \in \mathbf{B}_n$ will be determined by whether or not all prefixes of $S'$ have at least as many ones as zeroes.  
-
-If $S_{k+1}$ is a 1, then  every prefix i of $S'$ will have at least as many ones as the corresponding ith prefix of S.  Thus, $S'$ must be $\in \mathbf{B}_n$, as rotating a 1 to earlier in the string will never invalidate the requirement that every prefix of the string has at least as many ones as zeroes.  
-
-Note that the kth prefix of S must be of the form $1^a0^b1$, as otherwise there would be an earlier $01$ prefix.  Fruthermore, $a\ge b$ as otherwise the bth prefix of S would have more zeroes than ones and S would not be a valid Dyck word.
-
-If $S_{k+1}$ is a 0, then $S' \notin \mathbf{B}_n$ if and only if rotating a 0 to index 2 creates a prefix of S with more zeroes than ones.  This will only happen if the k-1th prefix is exactly $1^{\frac{k-1}{2}}0^{\frac{k-1}{2}}$.  
-
-Therefore, $\preshift{S}{k+1} \in \mathbf{B}_n \iff S_{k+1}=1$ or $S$ starts with more than $\lfloor \frac{k-1}{2} \rfloor$ ones 
-
-\begin{subnumcases}{\coolCat{S} = \label{eq:prefixDyck}}
-    \preshift{S}{2n} & \text{if $S$ has no $01$ substring} \label{eq:prefixDyck_n}\\
-	\preshift{S}{k+1} & $S_{k+1}=1$ or $S$ starts with more than $\lfloor \frac{k-1}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
-	\preshift{S}{k} & otherwise \label{eq:prefixDyck_k}
-\end{subnumcases}
-
-Since $k$ is the index of the first $01$ substring in S, $\sum_{i=1}^{k}S_i$ is actually just the number of consecutive ones to start S, which simplifies the evaluation of this conditional even further.
-
-Ruskey and Williams provided a pseudocode implementation of CoolCat that utilized this fact to enumerate any $\mathbf{B}_{s,t}$ using at most 2 conditionals per successor \cite{ruskey2008generating}.
-
-
-Due to its simplicity and efficienty, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and also provided an implementation of it for his theoretical MMIX processor architecture \cite{knuth2015art}.
-
 \subsection{Multiset Permutations}
 
 Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams is as follows \cite{williams2009loopless}:
