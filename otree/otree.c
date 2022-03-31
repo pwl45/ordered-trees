@@ -3,44 +3,6 @@
 #include <string.h>
 #include <inttypes.h>
 #include "otree.h" 
-
-//Tree shift corresponding to shifting a 0 to index 2 of a Dyck word
-void shift_tree_a(node* root, node* o){
-    //get l,p,g
-    node* p = o->parent;
-    node* l = p->left_child;
-    node* g = p->parent;
-
-    //setup p
-    //new left_child is l's right sibling
-    p->left_child=o->right_sibling;
-
-    //setup l
-    //new right sibling is old parent
-    //new parent is parent's parent
-    l->parent=g;
-    l->right_sibling=p;
-    g->left_child=l;
-
-    //note: O shift must come after l shift
-    //push o up to root;
-    o->parent=root;
-    o->right_sibling=root->left_child;
-    root->left_child=o;
-}
-
-//Tree shift corresponding to shifting a 1 to the front of a dyck word
-void shift_tree_b(node* root, node* o){
-    //get l
-    node* l = o->parent->left_child;
-                                                                            
-    //make l o's first child
-    o->parent->left_child=o;
-    l->parent=o;
-    l->right_sibling=o->left_child;
-    o->left_child=l;
-}
-
 //get the tree corresponding to 101^{t-1}0^{t-1}
 node* get_initial_tree(int t){
     node* root = new_node(0);
@@ -64,6 +26,18 @@ node* get_initial_tree(int t){
     return root;
 }
 
+node* popchild(node* nod){
+    node* result = nod->left_child;
+    nod->left_child=result->right_sibling;
+    return result;
+}
+
+void pushchild(node* parent, node* child){
+    child->right_sibling=parent->left_child;
+    parent->left_child=child;
+    child->parent=parent;
+}
+
 void coolOtree(int t, void (*visit)(node*)){
     node* root = get_initial_tree(t);
     node* o=root->left_child->right_sibling;
@@ -72,40 +46,19 @@ void coolOtree(int t, void (*visit)(node*)){
 
     while(o){
 	if(o->left_child){ //if o has a child, shift 1
-	    shift_tree_b(root,o);
+	    pushchild(o,popchild(o->parent));
 	    o=o->left_child->right_sibling;
 	}else{
 	    if(o->parent == root){ //if the string is tight, shift a 1
-		shift_tree_b(root,o);
+		pushchild(o,popchild(o->parent));
 	    }else{ //if the string isn't tight, shift a zero
-		shift_tree_a(root,o);
+		node* p = o->parent;
+		pushchild(p->parent,popchild(p));
+		pushchild(root,popchild(p));
 	    }
 	    o=o->right_sibling;
 	}
 	visit(root);
-    }
-}
-
-void coolOtree_donothing(int t){
-    node* root = get_initial_tree(t);
-    node* o=root->left_child->right_sibling;
-
-    /* visit(root); */
-
-    while(o){
-	if(o->left_child){ //if o has a child, shift 1
-	    shift_tree_b(root,o);
-	    o=o->left_child->right_sibling;
-	}else{
-	    if(o->parent == root){ //if the string is tight, shift a 1
-		shift_tree_b(root,o);
-		o=o->right_sibling;
-	    }else{ //if the string isn't tight, shift a zero
-		shift_tree_a(root,o);
-		o=o->right_sibling;
-	    }
-	}
-	/* visit(root); */
     }
 }
 
