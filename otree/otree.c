@@ -64,17 +64,8 @@ void coolOtree(int t, void (*visit)(node*)){
 
 int main(int argc, char** argv){
     //not exactly bulletproof
-    /* printf("here\n"); */
     if(argc < 2)
 	exit(1);
-
-    //todo: parse command line arguments to change the visit function
-    //for now, just toggle these two lines if you want a tree printed as a tree.
-    /* for(int i = 1; i < 16; i++){ */
-	/* coolOtree(i, print_tree_as_dyck); */
-    /* } */
     coolOtree(atoi(argv[1]), print_tree_as_dyck);
     /* coolOtree(atoi(argv[1]), print_tree_as_tikz); */
-    /* coolOtree_donothing(atoi(argv[1])); */
-
 }
