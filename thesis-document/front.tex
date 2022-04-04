@@ -5,10 +5,50 @@
 % \documentclass{article}
 % \documentclass[runningheads]{llncs}
 % \documentclass[preview]{standalone}
+\usepackage{twoopt}
+\usepackage{tabularx,booktabs}
+% \usepackage{array}
+\renewcommand\tabularxcolumn[1]{m{#1}}
+\newcommand{\LukaTable}[2][2]{\LukaTableDriver[.36][.22]{8}{#1}{#2}}
+\newcommandtwoopt{\LukaTableDriver}[5][1][1]{
+  \begin{tikzpicture}[x=#1cm, y=#2cm, step=1]
+      \tikzmath{
+        \xValue = 0;
+        \yValue = 0;
+        {
+          \draw[black,thin] (0,0) grid (#3,#4);
+          \filldraw[fill=none, draw=none] (#3, #4) ellipse (0.05cm and 0.05cm);  % for consistent bounding box
+        };
+        for \yDelta in {#5}{
+          %\labelUp = int(\yDelta+1);
+          %\labelDn = int(\yDelta);
+          {
+            \filldraw[fill=black, draw=black] (\xValue, \yValue) ellipse (0.05cm and 0.05cm);
+            %\node[] at (\xValue + 0.5, -1) {\labelDn};
+            %\node[] at (\xValue + 0.5, #3) {\labelUp};
+          };
+          \xNext = \xValue + 1;
+          \yNext = \yValue + \yDelta - 1; % Here is the -1
+          {
+            \draw[black,very thick] (\xValue, \yValue) -- (\xNext, \yNext);
+          };
+          \xValue = \xNext;
+          \yValue = \yNext;
+        };
+      }
+      {
+        \filldraw[fill=black, draw=black] (\xValue, \yValue) circle (0.05cm);
+      };
+  \end{tikzpicture}
+}
+
+% \newcommand*{\thead}[1]{%
+% \multicolumn{1}{c}{\bfseries\begin{tabular}{@{}c@{}}#1\end{tabular}}}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
 
 \usepackage{mathtools}
 \usepackage[english]{babel}
-\usepackage{tabularx}
+% \usepackage{tabularx}
 \usepackage{tikz}
 \usepackage{xcolor}
 
@@ -85,6 +125,7 @@
 \algnewcommand{\NOT}{\algorithmicnot}
 
 \newcommand{\visit}[1]{\texttt{visit}(#1)}
+% \newcommand{\visit}[1]{\texttt{visit}(#1)}
 
 % \newcommand{\pshift}[2][]{$\mathsf{preshift}_{#1}(#2)$}
 \newcommand{\transpose}[3]{\mathsf{transpose(} #1, #2, #3 \mathsf{)}}
@@ -92,6 +133,11 @@
 
 % \newcommand{\leftshift}[2]{\mathsf{leftshift(} #1, #2 \mathsf{)}}
 \newcommand{\treeshift}[3]{\mathsf{shiftfirst(} #1, #2, #3 \mathsf{)}}
+\newcommand{\popchild}[1]{\mathsf{popchild(} #1 \mathsf{)}}
+\newcommand{\pushchild}[2]{\mathsf{pushchild(} #1, #2 \mathsf{)}}
+% \newcommand{\poppush}[2]{\mathsf{poppush(} #1, #2 \mathsf{)}}
+\newcommand{\poppush}[3][]{\mathsf{poppush}_{#1}(#2,#3)}
+% \newcommand{\poppushopt}[2][]{\mathsf{poppush}_{#1}( #2, #3 \mathsf{)}}
 
 
 % https://tex.stackexchange.com/questions/228474/bold-horizontally-and-vertically-aligned-multiline-table-headers

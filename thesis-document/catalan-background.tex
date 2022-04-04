@@ -1,20 +1,70 @@
-\chapter{Catalan Objects: Trees and Paths}
-\section{Dyck Words}
-The language of binary Dyck words is the set of sequences of binary digits that satisfy the following conditions: The sequence has an equal number of ones and zeroes and there is no prefix of the sequence in which the number of zeroes exceeds the number of ones.  The Dyck language can equivalently be thought of as the set of balanced parentheses, with ones representing open parentheses and zeroes representing closing parentheses.  
-In addition to balanced parentheses, Dyck words of length $2n$ are also in bijective correspondence with extended binary trees with $n$ internal nodes. 
-Given an extended binary tree $B$ with n internal nodes, a Dyck word can be obtained by traversing B in preorder and recording each internal node as a $1$ and each leaf with a $0$, ignoring the final leaf of the tree.
+\chapter{Catalan Objects}
+The Catalan numbers are possibly the most ubiquitous sequence of numbers in mathematics.  
+Named for mathematician Eugene Charles Catalan, the $n\thh$ Catalan number can be succinctly defined as the number of ways of triangulating a convex polygon with $n+2$ sides.  The Catalan numbers can also be defined mathematically as follows:
+
+\begin{align}
+    \mathcal{C}_n &= \frac{(2n)!}{n!(n+1)!} =1, 1, 2, 5, 14, 42, 132, \ldots & \text{OEIS} A000108
+\end{align}
+
+\begin{figure}
+\begin{center}
+    This will be a figure of polygons, someday.
+\end{center}
+\caption{Triangulated Polygons!}
+\label{fig:}
+\end{figure}
+
+The Catalan numbers count a remarkable number of interesting and useful combinatorial objects in bijective correspondence with triangulation of $n$-gons. Combinatorial objects counted by the Catalan numbers are referred to as \emph{Catalan objects}.   Richard Stanley's book \emph{Catalan Numbers} gives hundreds of examples of Catalan objects  as well as including a thorough history on the numbers and their study \cite{stanley2015catalan}. This thesis will focus on three Catalan objects: Dyck words, binary trees, and ordered trees. 
+\section{Dyck Words and Paths}
+The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to $\mathcal{C}_n$.
+
+Two common interpretations of Dyck words are in terms of balanced parentheses and in terms of paths in the Cartesian plane. If each one in a Dyck word is taken to represent an open parenthesis and each 0 a closing parenthesis, the Dyck language becomes the language of balanced parentheses.  Alternatively, the Dyck language can be interpreted as the set of paths in the Cartesian plane using $(1,1)$ (northeast) and $(1,-1)$ (southeast) steps that start at $(0,0)$ and never go below the x axis. In this case, each 1 in a Dyck word represents a $(1,1)$ step and each 0 represents a $(1,-1)$ step.
+
+Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations of Dyck words for $n=4$.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.8\textwidth]{CD5.pdf}
-    \caption{The $\mathcal{C}_5=42$ Dyck words of order 5}
-    \label{fig:dyck5}
+    \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
+       \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
+
+\LukaTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
+\LukaTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
+\LukaTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
+\LukaTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
+\LukaTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
+\LukaTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
+\LukaTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
+\LukaTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
+\LukaTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
+\LukaTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
+\LukaTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
+\LukaTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
+\LukaTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
+\LukaTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
+
+    \end{tabularx}
+    \caption{The $\mathcal{C}_4=14$ Dyck words of order 4}
+    \label{fig:Dycks}
 \end{figure}
+%TODO: PATHS
+% In addition to balanced parentheses, Dyck words of length $2n$ are also in bijective correspondence with extended binary trees with $n$ internal nodes. 
+% Given an extended binary tree $B$ with n internal nodes, a Dyck word can be obtained by traversing B in preorder and recording each internal node as a $1$ and each leaf with a $0$, ignoring the final leaf of the tree.
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=.8\textwidth]{CD5.pdf}
+%     \caption{The $\mathcal{C}_5=42$ Dyck words of order 5}
+%     \label{fig:dyck5}
+% \end{figure}
 
 % TODO
-TODO: basic stuff catalan, ordered trees and binary trees
 
-\section{Ordered Trees$\iff$Dyck Words}
+% \section{Grid Paths}
+\section{Binary Trees}
+
+The language
+\section{Ordered Trees}
+\section{Bijections}
 This algorithm will use the bijection between ordered trees and Dyck words specified in \cite{stanley2015catalan}. The bijection described by Stanely is as follows:
 \footnote{ Stanley's text refers to ordered trees as \emph{plane trees} and Dyck words as \emph{ballot sequences}} 
 
@@ -143,6 +193,7 @@ The following remarks can be derived from the bijection between ordered trees an
     \end{itemize}
 \end{proof} 
 
+% TODO: move to ch 3, or its own chapter?
 \section{Cool Lex Order on Dyck Paths and Binary Trees}
 Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}:
 We will use $\mathbf{B}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{B}_n$ is thus $2n$.
