@@ -6,15 +6,32 @@ Named for mathematician Eugene Charles Catalan, the $n\thh$ Catalan number can b
     \mathcal{C}_n &= \frac{(2n)!}{n!(n+1)!} =1, 1, 2, 5, 14, 42, 132, \ldots & \text{OEIS} A000108
 \end{align}
 
-\begin{figure}
+The Catalan numbers count a remarkable number of interesting and useful combinatorial objects in bijective correspondence with triangulation of $n$-gons. Combinatorial objects counted by the Catalan numbers are referred to as \emph{Catalan objects}.   Richard Stanley's book \emph{Catalan Numbers} gives hundreds of examples of Catalan objects  as well as including a thorough history on the numbers and their study \cite{stanley2015catalan}. This thesis will focus on three Catalan objects: Dyck words, binary trees, and ordered trees. 
+
+\begin{figure}[H]
 \begin{center}
-    This will be a figure of polygons, someday.
+\begin{tikzpicture}
+    \coordinate (a) at (-0,1);
+    \coordinate (b) at (0.951,0.309);
+    \coordinate (c) at (0.587,-0.809);
+    \coordinate (d) at (-0.587,-0.809);
+    \coordinate (e) at (-0.951,0.309);
+
+
+\matrix[column sep=0.8cm,row sep=0.5cm]
+{
+    \pslice{a/d,a/c} &
+    \pslice{b/e,b/d} &
+    \pslice{c/a,c/e} &
+    \pslice{d/b,d/a} &
+    \pslice{e/c,e/b} \\
+};
+\end{tikzpicture}
 \end{center}
-\caption{Triangulated Polygons!}
+    \caption{The $\mathcal{C}_3$=5 triangulations of a polygon with $3+2=5$ sides.}
 \label{fig:}
 \end{figure}
 
-The Catalan numbers count a remarkable number of interesting and useful combinatorial objects in bijective correspondence with triangulation of $n$-gons. Combinatorial objects counted by the Catalan numbers are referred to as \emph{Catalan objects}.   Richard Stanley's book \emph{Catalan Numbers} gives hundreds of examples of Catalan objects  as well as including a thorough history on the numbers and their study \cite{stanley2015catalan}. This thesis will focus on three Catalan objects: Dyck words, binary trees, and ordered trees. 
 \section{Dyck Words and Paths}
 The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to $\mathcal{C}_n$.
 
