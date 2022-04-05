@@ -33,17 +33,16 @@ The Catalan numbers count a remarkable number of interesting and useful combinat
 \end{figure}
 
 \section{Dyck Words and Paths}
-The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to $\mathcal{C}_n$.
+The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to $\mathcal{C}_n$.  Dyck words with $n$ ones and $n$ zeroes are frequently referred to as Dyck words of \emph{order n}
 
 Two common interpretations of Dyck words are in terms of balanced parentheses and in terms of paths in the Cartesian plane. If each one in a Dyck word is taken to represent an open parenthesis and each 0 a closing parenthesis, the Dyck language becomes the language of balanced parentheses.  Alternatively, the Dyck language can be interpreted as the set of paths in the Cartesian plane using $(1,1)$ (northeast) and $(1,-1)$ (southeast) steps that start at $(0,0)$ and never go below the x axis. In this case, each 1 in a Dyck word represents a $(1,1)$ step and each 0 represents a $(1,-1)$ step.
 
 Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations of Dyck words for $n=4$.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
        \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
-
 \LukaTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
 \LukaTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
 \LukaTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
@@ -58,7 +57,6 @@ Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations 
 \LukaTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
 \LukaTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
 \LukaTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
-
     \end{tabularx}
     \caption{The $\mathcal{C}_4=14$ Dyck words of order 4}
     \label{fig:Dycks}
@@ -79,9 +77,111 @@ Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations 
 % \section{Grid Paths}
 \section{Binary Trees}
 
-The language
+Binary trees are fundamental objects in computer science, and are commonly used for searching, sorting, and storing data hierarchically. A binary tree can be defined recursively as follows: The empty set $\phi$ is a binary tree. Otherwise a binary tree has a root vertex, a left subtree, and a right subtree, where each subtree is also a binary tree. A closely related object is an \emph{extended binary tree}, which is a binary tree for which every non-leaf node has exactly two children.  
+
+Binary trees and extended binary trees are both counted by the catalan numbers: $\mathcal{C}_n$ is the number of binary trees with $n$ nodes and the number of extneded binary trees with $n$ internal nodes.  
+
+
 \section{Ordered Trees}
+
+An ordered tree is a tree for which each node can have an unrestricted number of children and the order of a node's children is significant.  An ordered tree can be defined recursively as follows:
+
+
+An ordered tree is a tuple (v,C) where v is a root node and C is a sequence of children $(P_1\dots P_m)$ where each $P_i$ is an ordered tree for $1 \le i \le m$.
+
+\begin{figure}
+    \begin{subfigure}[]{\textwidth}
+	\centering
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
+\tikzset{every tree node/.style={minimum width=1.4em,draw,circle},
+         blank/.style={draw=none},
+         edge from parent/.style=
+         {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
+         level distance=1.5cm}
+    \Tree [.{} [.{} [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] \edge[draw=none]; \node[blank]{};] \edge[draw=none]; \node[blank]{};] 
+\end{tikzpicture}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
+\tikzset{every tree node/.style={minimum width=1.4em,draw,circle},
+         blank/.style={draw=none},
+         edge from parent/.style=
+         {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
+         level distance=1.5cm}
+    \Tree [.{} \edge[draw=none]; \node[blank]{};[.{} [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] \edge[draw=none]; \node[blank]{};] ] 
+\end{tikzpicture}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
+\tikzset{every tree node/.style={minimum width=1.4em,draw,circle},
+         blank/.style={draw=none},
+         edge from parent/.style=
+         {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
+         level distance=1.5cm}
+    \Tree [.{} [.{} \edge[draw=none]; \node[blank]{};[.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] ] \edge[draw=none]; \node[blank]{};] 
+\end{tikzpicture}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
+\tikzset{every tree node/.style={minimum width=1.4em,draw,circle},
+         blank/.style={draw=none},
+         edge from parent/.style=
+         {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
+         level distance=1.5cm}
+    \Tree [.{} \edge[draw=none]; \node[blank]{};[.{} \edge[draw=none]; \node[blank]{};[.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] ] ] 
+\end{tikzpicture}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
+\tikzset{every tree node/.style={minimum width=1.4em,draw,circle},
+         blank/.style={draw=none},
+         edge from parent/.style=
+         {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
+         level distance=1.5cm}
+    \Tree [.{} [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] ] 
+\end{tikzpicture}
+
+	\caption{The $\mathcal{C}_3=5$ binary trees with 3 nodes}
+	\label{fig:binarytrees}
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[]{\textwidth}
+	\centering
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} [.{} [.{} ] ] ] ] 
+\end{tikzpicture} \hspace{2.9em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} [.{} ] ] ] 
+\end{tikzpicture} \hspace{2.9em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} [.{} ] [.{} ] ] ] 
+\end{tikzpicture} \hspace{2.9em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} ] [.{} ] ] 
+\end{tikzpicture} \hspace{2.9em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} [.{} ] ] [.{} ] ] 
+\end{tikzpicture}
+	\caption{The $\mathcal{C}_3=5$ ordered trees with $3+1=4$ nodes}
+	\label{fig:otrees}
+    \end{subfigure}
+\end{figure}
+
+
+
 \section{Bijections}
+Since Dyck Words, binary trees, and ordered trees are all catalan objects, all three sets of objects are in bijective correspondence with each other.  For convenience, we will use the $\mathbf{D}_n$, $\mathbf{B}_n$, $\mathbf{E}_n$, and $\mathbf{T}_n$ to refer to the set of Dyck words of order $n$, the set of binary trees with $n$ nodes, the set of extended binary trees with $n$ internal nodes, and the set of ordered trees with $n+2$ nodes respectively.  
+
+First, note the simplicity of the correspondence between $\mathbf{B}_n$ and $\mathbf{E}_n$:
+
+A binary tree $b$ with n nodes can be constructed from an extended binary tree $e$ with n internal nodes by removing all leaves from the extended binary tree, leaving the $n$ internal nodes as the only remaining nodes.
+
+This process can be reversed to construct an extended binary tree with n internal nodes from a binary tree with n nodes. Given a binary tree $b$ with n nodes, add two leaf children to every leaf in $b$ and add one leaf child to every node in $b$ with one child. Following these steps, every node originally in $b$ is now an internal node, and therefore the constructed tree is an extended binary tree with n internal nodes.
+The bijection between extended binary trees and Dyck words is particularly elegant: 
+
+First, note the simple correspondence between the set of binary tre
 This algorithm will use the bijection between ordered trees and Dyck words specified in \cite{stanley2015catalan}. The bijection described by Stanely is as follows:
 \footnote{ Stanley's text refers to ordered trees as \emph{plane trees} and Dyck words as \emph{ballot sequences}} 
 
@@ -90,7 +190,7 @@ Given an ordered tree T with $n+1$ nodes: Traverse T in preorder.  Whenever goin
 
 This process can be inverted as follows: 
 
-As before, let $D=d_1...d_{2n}$ be a dyck word of order n with $n > 0$. Construct an ordered tree T via the following steps. 
+As before, let $D=d_1...d_{2n}$ be a dyck word of order $n$ with $n > 0$. Construct an ordered tree T via the following steps. 
 
 Create a root node of T.  Keep track of a current node $curr$; set $curr=root$.
 
@@ -105,7 +205,7 @@ Create a root node of T.  Keep track of a current node $curr$; set $curr=root$.
 \end{itemize}
 Figure \ref{ordered_tree_bijection_illustration} demonstrates both directions of this process. Note that each $t_i$ with $1 \le i \le n$ in a preorder traversal of T corresponds to the $i^{\underline{th}}$ 1 in D.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     % TODO: degree three, color binary bits to illustrate correspondence
     \includegraphics[width=0.5\textwidth]{otreebij.png}
@@ -140,7 +240,7 @@ In addition to the above bijection, we define the following functions relating t
     \label{exampleotree}
 \end{figure}
 
-The following remarks can be derived from the bijection between ordered trees and Dyck words.
+The following remarks can be derived from the bijection between ordered trees and Dyck words. Ordered trees can be defined recursively as follows: 
 
 
 \begin{remark}
