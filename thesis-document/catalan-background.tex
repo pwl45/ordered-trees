@@ -89,6 +89,8 @@ An ordered tree is a tree for which each node can have an unrestricted number of
 
 An ordered tree is a tuple (v,C) where v is a root node and C is a sequence of children $(P_1\dots P_m)$ where each $P_i$ is an ordered tree for $1 \le i \le m$.
 
+The number of ordered trees with $n+1$ nodes is equal to $\mathcal{C}_n$
+
 \begin{figure}
     \begin{subfigure}[]{\textwidth}
 	\centering
@@ -172,17 +174,25 @@ An ordered tree is a tuple (v,C) where v is a root node and C is a sequence of c
 
 
 \section{Bijections}
+
 Since Dyck Words, binary trees, and ordered trees are all catalan objects, all three sets of objects are in bijective correspondence with each other.  For convenience, we will use the $\mathbf{D}_n$, $\mathbf{B}_n$, $\mathbf{E}_n$, and $\mathbf{T}_n$ to refer to the set of Dyck words of order $n$, the set of binary trees with $n$ nodes, the set of extended binary trees with $n$ internal nodes, and the set of ordered trees with $n+2$ nodes respectively.  
 
+\subsection{Binary Trees and Dyck Words}
 First, note the simplicity of the correspondence between $\mathbf{B}_n$ and $\mathbf{E}_n$:
 
 A binary tree $b$ with n nodes can be constructed from an extended binary tree $e$ with n internal nodes by removing all leaves from the extended binary tree, leaving the $n$ internal nodes as the only remaining nodes.
 
 This process can be reversed to construct an extended binary tree with n internal nodes from a binary tree with n nodes. Given a binary tree $b$ with n nodes, add two leaf children to every leaf in $b$ and add one leaf child to every node in $b$ with one child. Following these steps, every node originally in $b$ is now an internal node, and therefore the constructed tree is an extended binary tree with n internal nodes.
-The bijection between extended binary trees and Dyck words is particularly elegant: 
 
-First, note the simple correspondence between the set of binary tre
-This algorithm will use the bijection between ordered trees and Dyck words specified in \cite{stanley2015catalan}. The bijection described by Stanely is as follows:
+Following this observation,
+the bijection between extended binary trees and Dyck words is particularly elegant: 
+For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each internal node; record a $0$ for each leaf. This process can be reversed to go from $\mathbf{D}_n$ to $\mathbf{E}_n$.
+
+TODO: figure here
+
+\subsection{Ordered Trees and Dyck Words}
+The bijection between ordered trees and Dyck words is particularly relevant to this paper's results, as it is central to the loopless ordered tree generation algorithm given in Chapter \ref{chap:otree}
+This algorithm will use the bijection between ordered trees and Dyck words specified in Richard Stanley's \emph{Catalan Objects} \cite{stanley2015catalan}. The bijection described by Stanely is as follows:
 \footnote{ Stanley's text refers to ordered trees as \emph{plane trees} and Dyck words as \emph{ballot sequences}} 
 
 
@@ -190,20 +200,20 @@ Given an ordered tree T with $n+1$ nodes: Traverse T in preorder.  Whenever goin
 
 This process can be inverted as follows: 
 
-As before, let $D=d_1...d_{2n}$ be a dyck word of order $n$ with $n > 0$. Construct an ordered tree T via the following steps. 
+Let $D=d_1...d_{2n}$ be a dyck word of order $n$ with $n > 0$. Construct an ordered tree T via the following steps. 
 
-Create a root node of T.  Keep track of a current node $curr$; set $curr=root$.
+Let T be an ordered tree with root $r$.  Keep track of a current node $c$; set $c=root$.
 
 \begin{itemize}
-    \item For each $d_i$ such that $1 \le i \le 2n$ %TODO: QUESTION: is it clear that this goes 1,2,3,...,2n?
+    \item For each $d_i$ such that $1 \le i \le 2n$ 
 	\begin{itemize}
-	    \item if $d_i=1$: append a rightmost child $ch$ to $curr$'s children; set $curr=ch$
-	    \item if $d_i=0$, set $curr$ equal to $curr$'s parent.
+	    \item if $d_i=1$: append a rightmost child $ch$ to $c$'s children; set $c=ch$
+	    \item if $d_i=0$, set $c$ equal to $c$'s parent.
 	\end{itemize}
 	%TODO: QUESTION: do I need to prove this? It seems like Stanely assumed this was basically obvious 
 
 \end{itemize}
-Figure \ref{ordered_tree_bijection_illustration} demonstrates both directions of this process. Note that each $t_i$ with $1 \le i \le n$ in a preorder traversal of T corresponds to the $i^{\underline{th}}$ 1 in D.
+Figure \ref{ordered_tree_bijection_illustration} demonstrates both directions of this process. % Note that each $t_i$ with $1 \le i \le n$ in a preorder traversal of T corresponds to the $i^{\underline{th}}$ 1 in D.
 
 \begin{figure}[H]
     \centering
@@ -225,22 +235,8 @@ In addition to the above bijection, we define the following functions relating t
 
 \bigskip
 
-\begin{figure}
-    \centering
-    $T=$
 
-    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
-	\tikzset{edge from parent/.style={draw, edge from parent path=
-	{(\tikzparentnode) -- (\tikzchildnode)}}}
-	\Tree [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{G}; [.\node[style={fill=lightpurple}]{P};[.\node[style={fill=lightpurple}]{L}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{F}; ] ] ] ] [.\node{O}; [.\node{}; ] ] [.\node{}; ] ] [.\node{}; [.\node{}; ] ] ] ]
-    \end{tikzpicture}
-
-    $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
-    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  The left down path of T is highlighted in purple. }
-    \label{exampleotree}
-\end{figure}
-
-The following remarks can be derived from the bijection between ordered trees and Dyck words. Ordered trees can be defined recursively as follows: 
+The following remarks can be derived from the bijection between ordered trees and Dyck words. 
 
 
 \begin{remark}
@@ -312,6 +308,8 @@ The following remarks can be derived from the bijection between ordered trees an
 
 % TODO: move to ch 3, or its own chapter?
 \section{Cool Lex Order on Dyck Paths and Binary Trees}
+TODO: probably move this to a different chapter, also fix notation to be consistent. 
+
 Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}:
 We will use $\mathbf{B}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{B}_n$ is thus $2n$.
 

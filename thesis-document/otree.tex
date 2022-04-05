@@ -1,4 +1,4 @@
-\chapter{Loopless Ordered Tree Generation}
+\chapter{Loopless Ordered Tree Generation} \label{chap:otree}
 This chapter presents the first loopless algorithm for generating all ordered trees with n nodes. 
 % Cooldyck was first loopless for Dyck and Binary; we now show also ordered
 % Give exampl  of bit change that messup tree (show for bin and o). 
@@ -30,6 +30,20 @@ Let $F$ be the leftmost leaf of T, or equivalently the leftmost descendant of th
 
 Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the $\path{T}{root}{F}$. If $\path{T}{root}{F}=T$, i.e. the entire tree is a single path, let O be the leaf of the tree. Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
 Fig. \ref{exampleotree} gives an example illustrating O,P,G,L,F, and the left-down path in an tree.
+\begin{figure}
+    \centering
+    $T=$
+
+    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+	\tikzset{edge from parent/.style={draw, edge from parent path=
+	{(\tikzparentnode) -- (\tikzchildnode)}}}
+	\Tree [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{G}; [.\node[style={fill=lightpurple}]{P};[.\node[style={fill=lightpurple}]{L}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{}; [.\node[style={fill=lightpurple}]{F}; ] ] ] ] [.\node{O}; [.\node{}; ] ] [.\node{}; ] ] [.\node{}; [.\node{}; ] ] ] ]
+    \end{tikzpicture}
+
+    $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
+    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  The left down path of T is highlighted in purple. }
+    \label{exampleotree}
+\end{figure}
 
 % Given an ordered tree T, let $\treeshift{T}{A}{B}$ be a function that shifts A to be the first child of B, with the restriction that A is a \emph{first-born}s, or the first child of its parents.
 Given an ordered tree T and an ordered tree node A in T, let $\popchild{A}$ be a function that removes and returns A's first child.  In other words, it pops A's first child.  
@@ -593,72 +607,6 @@ The functions \verb+shift_tree_a+ and \verb+shift_tree_b+ perform the shifts out
 % TODO: QUESTION: Is this confusing? Using t like this simplifies the correspondence between ordered trees and Dyck words. But would it be clearer to have t just be the number of total nodes?
 
 % Verbatim (not verbatim) from fancyvrb package lets you do \ref inside of it. 
-\begin{Verbatim}[commandchars=\\\[\]]
-void coolOtree(int t, void (*visit)(node*)){
-    node* root = get_initial_tree(t);
-    node* o=root->left_child->right_sibling;
-
-    visit(root);
-    //o is NULL for the final tree
-    while(o){ 
-	if(o->left_child){ //if o has a child
-	    shift_tree_b(root,o); \ref[eq:otree_oneshift]
-	    o=o->left_child->right_sibling;
-	}else{
-	    if(o->parent == root){ 
-		shift_tree_b(root,o); \ref[eq:otree_oneshift] 
-		o=o->right_sibling;
-	    }else{ 
-		shift_tree_a(root,o); \ref[eq:otree_zeroshift]
-		o=o->right_sibling;
-	    }
-	}
-	visit(root);
-    }
-}
-\end{Verbatim}
-
-\begin{Verbatim}[commandchars=\\\[\]] 
-//implements the shifts specified in in \ref[eq:otree_zeroshift]
-void shift_tree_a(node* root, node* o){ 
-    //get l,p,g
-    node* p = o->parent;
-    node* l = p->left_child;
-    node* g = p->parent;
-
-    //setup p
-    //new left_child is l's right sibling
-    p->left_child=o->right_sibling;
-
-    //setup l
-    //new right sibling is old parent
-    //new parent is parent's parent
-    l->parent=g;
-    l->right_sibling=p;
-    g->left_child=l;
-
-    //push o up to root;
-    o->parent=root;
-    o->right_sibling=root->left_child;
-    root->left_child=o;
-}
-\end{Verbatim}
-
-
-
-\begin{Verbatim}[commandchars=\\\[\]]
-//implements the shift specified in in \ref[eq:otree_oneshift]
-void shift_tree_b(node* root, node* o){
-    //get l
-    node* l = o->parent->left_child;
-                                                                            
-    //make l o's first child
-    o->parent->left_child=o;
-    l->parent=o;
-    l->right_sibling=o->left_child;
-    o->left_child=l;
-}
-\end{Verbatim}
 
 \begin{figure}
     \centering
@@ -684,15 +632,12 @@ void shift_tree_b(node* root, node* o){
 \end{tikzpicture}
 
     \cprotect\caption{The initial trees returned by \verb$get_initial_tree$ in \verb$coolOtree$ with $t=1,2,3,$ and $4$ \\
-    Note the convenient feature for each tree, O is equal to \verb$root->left_child->right_sibling$
+    Note the convenient feature that for each tree, O is equal to \verb$root->left_child->right_sibling$
     }
     \label{exampleotree}
 \end{figure}
 
 
-
-% Assume t>=2?
-% TODO: possibly do successor rule functions and all pointer updates side by side
 
 \begin{figure}
     \centering
@@ -766,50 +711,3 @@ void coolOtree(int t, void (*visit)(node*)){
     \cprotect\caption{Pseudocode and C implementation}
     \label{fig:otreeCode}
 \end{figure}
-
-
-\begin{algorithm}
-    \begin{algorithmic}
-    %\Require todo?
-    %\Ensure todo?
-    \Function{cool-ordered-trees}{$t$}
-        % \vspace{0.75em}
-        \LineComment{Generate initial tree}
-
-	TODO
-
-	\State $O\gets root.lchild$
-	\State \visit{root}
-
-        \While{$O \ne NULL$}
-	    \State $P \gets O.parent$
-	    \If{$O.lchild \ne NULL$}
-
-		\State $\pushchild{O}{\popchild{P}}$
-		\State $O \gets O.lchild.rsibling$
-	    \Else
-		\If{$O.parent == root$}
-		\LineComment{Initialize P and L}
-		\State $\pushchild{O}{\popchild{P}}$
-
-		\Else
-
-		\LineComment{Initialize P, L, G}
-
-		\State $\pushchild{O}{\popchild{P}}$
-		\State $\pushchild{root}{\popchild{P}}$
-
-		\EndIf
-		\State $O \gets O.rsibling$
-
-	    \EndIf
-
-        \EndWhile
-    \EndFunction
-    \end{algorithmic}
-    \caption{Generate all ordered trees with $t+1$ nodes}
-    \label{alg:prefix}
-\end{algorithm}
-
-
-
