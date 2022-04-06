@@ -186,7 +186,7 @@ This process can be reversed to construct an extended binary tree with n interna
 
 Following this observation,
 the bijection between extended binary trees and Dyck words is particularly elegant: 
-For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each internal node; record a $0$ for each leaf. This process can be reversed to go from $\mathbf{D}_n$ to $\mathbf{E}_n$.
+For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each internal node; record a $0$ for each leaf ignoring the final leaf. The resulting binary sequence is a Dyck word  $D \in \mathbf{D}_n $ corresponding to the extended binary tree $e$.  This process can be reversed to go from $\mathbf{D}_n$ to $\mathbf{E}_n$.
 
 TODO: figure here
 
