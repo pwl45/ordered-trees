@@ -188,7 +188,30 @@ Following this observation,
 the bijection between extended binary trees and Dyck words is particularly elegant: 
 For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each internal node; record a $0$ for each leaf ignoring the final leaf. The resulting binary sequence is a Dyck word  $D \in \mathbf{D}_n $ corresponding to the extended binary tree $e$.  This process can be reversed to go from $\mathbf{D}_n$ to $\mathbf{E}_n$.
 
-TODO: figure here
+\begin{figure}
+    \centering
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle},
+         blank/.style={draw=none},
+         edge from parent/.style=
+         {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
+         level distance=1.5cm}
+    \Tree [.{1} [.{1} [.{1} [.\node[style={rectangle,minimum height=.6cm,minimum width=1cm}]{0}; ][.\node[style={rectangle,minimum height=.6cm,minimum width=1cm}]{0}; ]] [.{1} [.\node[style={rectangle,minimum height=.6cm,minimum width=1cm}]{0}; ][.\node[style={rectangle,minimum height=.6cm,minimum width=1cm}]{0}; ]] ] [.{1} [.{1} [.\node[style={rectangle,minimum height=.6cm,minimum width=1cm}]{0}; ][.\node[style={rectangle,minimum height=.6cm,minimum width=1cm}]{0}; ]] [.\node[style={rectangle,minimum height=.6cm,minimum width=1cm}]{0}; ]] ] 
+\end{tikzpicture} \hspace{1em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle},
+         blank/.style={draw=none},
+         edge from parent/.style=
+         {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}},
+         level distance=1.5cm}
+    \Tree [.{} [.{} [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] ] [.{} [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] \edge[draw=none]; \node[blank]{};] ] 
+\end{tikzpicture}
+    \caption{The extended binary tree (left) and binary tree (right) corresponding to the Dyck word 111001001100 \\
+    Note that a preorder traversal of the extended binary tree excluding its final leaf yields 111001001100.
+    }
+\label{fig:binarytreesbijection}
+\end{figure}
+
 
 \subsection{Ordered Trees and Dyck Words}
 The bijection between ordered trees and Dyck words is particularly relevant to this paper's results, as it is central to the loopless ordered tree generation algorithm given in Chapter \ref{chap:otree}
