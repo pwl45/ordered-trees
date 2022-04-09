@@ -1,0 +1,4 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\begin{document}
