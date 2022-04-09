@@ -105,3 +105,33 @@ void print_tree_as_tikz(node* n){
     qtree(n);
     printf("\n\\end{tikzpicture}\n\n");
 }
+
+//some stuff for latex
+void binary_qtree(node* n){
+
+    /* printf("[.%d ",n->nchildren); */
+    if(!n){
+	return;
+    }
+    printf("[.{} ");
+
+    if(n->left_child){
+	binary_qtree(n->left_child);
+    }else{
+	printf("\\edge[draw=none]; \\node[blank]{};");
+    }
+
+    if(n->right_sibling){
+	binary_qtree(n->right_sibling);
+    }else{
+	printf("\\edge[draw=none]; \\node[blank]{};");
+    }
+
+    printf("] ");
+}
+
+void print_binary_tree_as_tikz(node* n){
+    printf("\\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]\n\\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\\tikzparentnode) -- (\\tikzchildnode)}}, level distance=1.5cm}\n\\Tree");
+    binary_qtree(n->left_child);
+    printf("\n\\end{tikzpicture}\n\n");
+}

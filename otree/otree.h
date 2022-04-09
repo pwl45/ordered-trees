@@ -1,10 +1,22 @@
 #include <inttypes.h>
 
+/* struct node { */
+/*     int data; //not  strictly necessary */
+/*     struct node* parent; */
+/*     struct node* left_child; */
+/*     struct node* right_sibling; */
+/* }; */
+
+
+
 struct node {
     int data; //not  strictly necessary
     struct node* parent;
-    struct node* left_child;
-    struct node* right_sibling;
+    struct node* left_child; //binary tree left
+    struct node* right_sibling; //binary tree right
+
+    //not necessary for ordered tree
+    struct node* left_sibling; //binary tree parent
 };
 
 typedef struct node node;
@@ -21,3 +33,5 @@ void printdyck(uint8_t* b, int n); //print dyck word as ones and zeroes
 void print_tree_as_dyck(node* n); //print tree as dyck word
 void qtree(node* n); //print just \Tree calls to generate qtrees
 void print_tree_as_tikz(node* n); //print whole tikzpicture
+void print_binary_tree_as_tikz(node* n);
+void print_tree_as_tikz(node* n);
