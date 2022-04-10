@@ -32,6 +32,8 @@ int tree_to_dyck_arr(node* n, uint8_t* buf, int off);
 void printdyck(uint8_t* b, int n); //print dyck word as ones and zeroes
 void print_tree_as_dyck(node* n); //print tree as dyck word
 void qtree(node* n); //print just \Tree calls to generate qtrees
-void print_tree_as_tikz(node* n); //print whole tikzpicture
-void print_binary_tree_as_tikz(node* n);
+void print_otree_as_tikz(node* n); //print whole tikzpicture
+void print_bintree_as_tikz(node* n);
 void print_tree_as_tikz(node* n);
+node* get_initial_tree(int t);
+node* get_initial_tree_flex(int t);

@@ -11,6 +11,7 @@ node* new_node(int data){
     n->parent=NULL;
     n->left_child=NULL;
     n->right_sibling=NULL;
+    n->left_sibling=NULL;
     return n;
 
 }
@@ -86,11 +87,60 @@ void print_tree_as_dyck(node* n){
     return;
 }
 
+//get the tree corresponding to 101^{t-1}0^{t-1}
+node* get_initial_tree(int t){
+    node* root = new_node(0);
+    root->left_child=new_node(1);
+    root->left_child->parent=root;
+
+    node* o = NULL;
+    if(t > 1){
+	o = new_node(2);
+	o->parent=root;
+	root->left_child->right_sibling=o;
+	node* curr=o;
+	for(int i = 2; i < t; i++){
+	    node* next = new_node(i+1);
+	    curr->left_child=next;
+	    next->parent=curr;
+	    /* curr->left_child = */ 
+	    curr=next;
+	}
+    }
+    return root;
+}
+
+//get the tree corresponding to 101^{t-1}0^{t-1}; maintain right_sibling pointer
+node* get_initial_tree_flex(int t){
+    node* root = new_node(0);
+    //TODO: factor out root->left_child
+    root->left_child=new_node(1);
+    root->left_child->parent=root;
+
+    node* o = NULL;
+    if(t > 1){
+	o = new_node(2);
+	o->parent=root;
+	root->left_child->right_sibling=o;
+	o->left_sibling=root->left_child;
+	node* curr=o;
+
+	for(int i = 2; i < t; i++){
+	    node* next = new_node(i+1);
+	    curr->left_child=next;
+	    next->parent=curr;
+	    /* curr->left_child = */ 
+	    curr=next;
+	}
+    }
+    return root;
+}
+
 //some stuff for latex
 void qtree(node* n){
 
     /* printf("[.%d ",n->nchildren); */
-    printf("[.%d ",0);
+    printf("[.{} ");
 
     node* child=n->left_child;
     while(child != NULL){
@@ -100,8 +150,9 @@ void qtree(node* n){
     printf("] ");
 }
 
-void print_tree_as_tikz(node* n){
-    printf("\\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]\n\\tikzset{edge from parent/.style={draw, edge from parent path=\n{(\\tikzparentnode) -- (\\tikzchildnode)}}}\n\\Tree");
+void print_otree_as_tikz(node* n){
+    /* printf("\\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]\n\\tikzset{edge from parent/.style={draw, edge from parent path=\n{(\\tikzparentnode) -- (\\tikzchildnode)}}}\n\\Tree"); */
+    printf("\\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]\n\\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\\tikzparentnode) -- (\\tikzchildnode)}}, level distance=1.5cm}\n\\Tree");
     qtree(n);
     printf("\n\\end{tikzpicture}\n\n");
 }
@@ -130,7 +181,7 @@ void binary_qtree(node* n){
     printf("] ");
 }
 
-void print_binary_tree_as_tikz(node* n){
+void print_bintree_as_tikz(node* n){
     printf("\\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]\n\\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\\tikzparentnode) -- (\\tikzchildnode)}}, level distance=1.5cm}\n\\Tree");
     binary_qtree(n->left_child);
     printf("\n\\end{tikzpicture}\n\n");
