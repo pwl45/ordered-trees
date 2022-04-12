@@ -1,14 +1,5 @@
 #include <inttypes.h>
 
-/* struct node { */
-/*     int data; //not  strictly necessary */
-/*     struct node* parent; */
-/*     struct node* left_child; */
-/*     struct node* right_sibling; */
-/* }; */
-
-
-
 struct node {
     int data; //not  strictly necessary
     struct node* parent;

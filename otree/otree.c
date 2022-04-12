@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <inttypes.h>
-#include <ctype.h>
 #include "otree.h" 
 
 //versions that do not maintain the left_sibling pointer (binary tree parent)
@@ -37,8 +35,8 @@ void pushchild_flex(node* parent, node* child){
     child->parent=parent;
 }
 
-void coolOtree(int t, void (*visit)(node*), void (*push)(node* parent, node* child), node* (*pop)(node* nod) ){
-    node* root = get_initial_tree(t);
+void coolOtree(int t, void (*visit)(node* nod), void (*push)(node* parent, node* child), node* (*pop)(node* child) ){
+    node* root = get_initial_tree(t); //defined in otree-functions.c
     node* o=root->left_child->right_sibling;
 
     visit(root);
@@ -77,6 +75,7 @@ int main(int argc, char** argv){
     void (*push)(node*, node*)=pushchild;
     node* (*pop)(node*)=popchild;
 
+    //parse arguments
     for(int i = 1; i < argc; i++){
 	if(argv[i][0] == '-'){
 	    int len = strlen(argv[i]);
@@ -106,5 +105,4 @@ int main(int argc, char** argv){
     }
 
     generate(t, visit,push,pop);
-    /* coolOtree(atoi(argv[1]), print_tree_as_tikz); */
 }

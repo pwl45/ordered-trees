@@ -6,10 +6,35 @@
 % \documentclass[runningheads]{llncs}
 % \documentclass[preview]{standalone}
 \usepackage{twoopt}
+% \usepackage{bookmark}
 \usepackage{tabularx,booktabs}
 % \usepackage{array}
 \renewcommand\tabularxcolumn[1]{m{#1}}
 \newcommand{\LukaTable}[2][2]{\LukaTableDriver[.36][.22]{8}{#1}{#2}}
+
+
+\newcommand{\C}{\mathcal{C}}
+
+
+\newcommand{\octoSliceTable}[1]{
+
+    \begin{tikzpicture}
+        % Define the heptagon coordinates
+        \coordinate (A) at(0.4362591129,1.0532226671);
+        \coordinate (B) at(-0.4362591129,1.0532226671);
+        \coordinate (C) at(-1.0532226671,0.4362591129);
+        \coordinate (D) at(-1.0532226671,-0.4362591129);
+        \coordinate (E) at(-0.4362591129,-1.0532226671);
+        \coordinate (F) at(0.4362591129,-1.0532226671);
+        \coordinate (G) at(1.0532226671,-0.4362591129);
+        \coordinate (H) at(1.0532226671,0.4362591129);
+
+        \octoslice{{#1}}
+        \draw[densely dotted] (E) -- (F);
+
+    \end{tikzpicture}
+}
+
 \newcommandtwoopt{\LukaTableDriver}[5][1][1]{
   \begin{tikzpicture}[x=#1cm, y=#2cm, step=1]
       \tikzmath{
@@ -160,7 +185,6 @@
 \newcommand{\depth}[1]{\mathsf{Depth}{(#1)}}
 % \newcommand{\ithone}[2]{\mathsf{i^{\underline{th}}one}_{#1}{(#2)}}
 \newcommand{\oneindex}[2]{\mathsf{oneindex}({#1}, #2)}
-\newcommand{\zeroesbetween}[3]{\mathsf{zeroesbetween({#1}, #2, #3)}}
 \newcommand{\thh}{^{\underline{th}}}
 % \newcommand{\path}[2]{\mathsf{path}({#1}, #2)}
 \newcommand{\path}[3]{\mathsf{path({#1}, #2, #3)}}
@@ -184,6 +208,7 @@
 % polygon stuff: thank you to https://texample.net/tikz/examples/polygon-division/
 % Macro for drawing a heptagon   
 \def\hepta{\draw(A) -- (B) -- (C) -- (D) -- (E) -- (F) -- (G) -- cycle;}
+\def\octo{\draw(A) -- (B) -- (C) -- (D) -- (E) -- (F) -- (G) -- (H) -- (A);}
 \def\penta{\draw(a) -- (b) -- (c) -- (d) -- (e) -- cycle;}
 
 % Macro for drawing polygon diagonals. 
@@ -194,6 +219,11 @@
     \draw \foreach \x/\y in {#1} {(\x)--(\y)};
 
 }
+\newcommand{\octoslice}[1]{%
+  \draw(A) -- (B) -- (C) -- (D) -- (E) -- ({#1}) -- (F) -- (G) -- (H) -- (A);
+}
+
+
 \newcommand{\pslice}[1]{%
     \penta
     \draw \foreach \x/\y in {#1} {(\x)--(\y)};

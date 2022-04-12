@@ -93,34 +93,36 @@ To make the order cyclic, an additional rule can be added, modifying the success
 %     \treeshift{T}{L}{O} & otherwise \label{eq:otree_oneshift_cyclic}
 % \end{subnumcases}
 
+% TODO NEW: SUCCESSOR RULES IN BOXES??
+% TODO NEW: NUMBERS BELOW TREES, HIGHLIGHT BITS, GENERAL ILLUSTEATIOn, intermediary stage
+% Make figure like encapsulate the whole thing
+TODO: general illustration
 \begin{figure}
+
     \begin{subfigure}[]{.5 \textwidth}
 	\begin{center}
-	    11111000100100 $\implies$ 10111100010100
+	    $11110000\implies 10111000$
 
 	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
-		\tikzset{edge from parent/.style={draw, edge from parent path=
+	    \tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
 		{(\tikzparentnode) -- (\tikzchildnode)}}}
-		\Tree [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O}; ] ] [.{} ] ] ]
-	    \end{tikzpicture}
-	    $\implies$
+		\Tree [.{} [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; ] ] ] ] ]
+	    \end{tikzpicture} $\implies$
 	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
-		\tikzset{edge from parent/.style={draw, edge from parent path=
+	    \tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
 		{(\tikzparentnode) -- (\tikzchildnode)}}}
-		\Tree [.{} [.\node[style={fill=lightblue}]{O}; ] [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightpurple}]{P}; ] [.{} ] ] ]
+		\Tree [.{} [.\node[style={fill=lightblue}]{O}; ] [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; ] ] ] ]
 	    \end{tikzpicture}
 	\end{center}
-	\caption{$O$ has no children, $P \ne root$: \\
-	$\poppush{P}{G};\poppush{P}{root}$ \\
-	$L$ becomes $G$'s first child; \\
-	$O$ becomes the first child of $root$\\
-	% test
+	\caption{$\leftdown{T}=T$ \\
+	$\poppush{P}{root}$ \\
+	O becomes the first child of the root
 	}
 	\label{fig:}
     \end{subfigure}
     \begin{subfigure}[]{.5 \textwidth}
 	\begin{center}
-	    11110001100100 $\implies$ 11111000100100
+	    $11110001100100 \implies 11111000100100$
 
 	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
 		\tikzset{edge from parent/.style={draw, edge from parent path=
@@ -134,23 +136,71 @@ To make the order cyclic, an additional rule can be added, modifying the success
 	    \end{tikzpicture}
 	\end{center}
 	\caption{$O$ has at least 1 child \\
-	$\poppush{P}{root}$ \\
+	$\poppush{P}{O}$ \\
 	$L$ becomes $O$'s first child
 	}
 	\label{fig:}
     \end{subfigure}
 
-    % TODO: change bit colors
-    \caption{Illustrations of cases \ref{eq:otree_zeroshift} and \ref{eq:otree_oneshift} }
+    \hfill % what does this do? 
+
+    \begin{subfigure}[]{.5 \textwidth}
+	\begin{center}
+	    $11111000100100 \implies 10111100010100$
+
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+		\tikzset{edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O}; ] ] [.{} ] ] ]
+	    \end{tikzpicture}
+	    $\implies$
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+		\tikzset{edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.{} [.\node[style={fill=lightblue}]{O}; ] [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightpurple}]{P}; ] [.{} ] ] ]
+	    \end{tikzpicture}
+	\end{center}
+	\caption{ $P \ne root$, $O$ has no children: \\
+	$\poppush{P}{G};\poppush{P}{O}$ \\
+	$L$ becomes $G$'s first child; \\
+	$O$ becomes the first child of $root$\\
+	% test
+	}
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[]{.5 \textwidth}
+	\begin{center}
+	    $1110001010 \implies 1111000010$
+
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+		\tikzset{edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O};  ] [.{} ] ]
+	    \end{tikzpicture} $\implies$
+	    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+	    \tikzset{minimum width=1.5em,edge from parent/.style={draw, edge from parent path=
+		{(\tikzparentnode) -- (\tikzchildnode)}}}
+		\Tree [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.\node[style={fill=lightblue}]{O}; [.{} [.{} ] ] ] ] [.{} ] ]
+	    \end{tikzpicture}
+	\end{center}
+	\caption{$O$ has no children, $P \ne root$: \\
+	$\poppush{P}{G};\poppush{P}{O}$ \\
+	$L$ becomes $G$'s first child; \\
+	$O$ becomes the first child of $root$\\
+	% test
+	}
+	\label{fig:}
+    \end{subfigure}
+
+    % TODO NEW: more robust caption
+    \caption{Illustrations of the 4 cases of \ref{eq:expandedOtree}}
     \label{fig:otreeruledemo}
+
 \end{figure}
-
-% \begin{figure}[]
-% 	\centering
-
-% 	\caption{}
-% 	\label{}
-% \end{figure}
+    \begin{figure}
+	\begin{center}
+	\end{center}
+    \end{figure}
 
 The following remarks can be derived from from the definition of the successor role and the nodes O,G,L, and T.
 
@@ -639,6 +689,7 @@ The functions \verb+shift_tree_a+ and \verb+shift_tree_b+ perform the shifts out
 
 
 
+% TODO NEW: initial tree
 \begin{figure}
     \centering
     \begin{subfigure}[t]{.49 \textwidth}
