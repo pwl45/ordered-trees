@@ -99,6 +99,7 @@ To make the order cyclic, an additional rule can be added, modifying the success
 TODO: general illustration
 % THE BIGBOI FIGURE
 \begin{figure}
+    Triangles and dashed sections are a work in progress
 
     \begin{subfigure}[]{.5 \textwidth}
 	\begin{center}
@@ -106,13 +107,13 @@ TODO: general illustration
 
 
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
-\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-\Tree[.{} [.{} [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; ] ] ] ] ] ] 
+    \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, dotted/.style={draw=gray,dashed,thick},edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.{} [.\node[dotted]{}; [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; ] ] ] ] ] ] 
 \end{tikzpicture}
 $\implies$
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
-\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-\Tree[.{} [.\node[style={fill=lightblue}]{O}; ] [.{} [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; ] ] ] ] ] 
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, dotted/.style={draw=gray,dashed,thick},edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.{} [.\node[style={fill=lightblue}]{O}; ] [.\node[dotted]{};  [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; ] ] ] ] ] 
 \end{tikzpicture}
 
 	\end{center}
@@ -126,15 +127,14 @@ $\implies$
 	\begin{center}
 	    $11110001100100 \implies 11111000100100$
 
-
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
 \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-\Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O}; [.{} ] ] [.{} ] ] ] 
+    \Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.\node[regular polygon,regular polygon sides=3, draw, minimum size=1.2cm,fill=pink]{};  ] ] [.\node[style={fill=lightblue}]{O}; [.{} ] ] [.{} ] ] ] 
 \end{tikzpicture}
 $\implies$
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
 \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-\Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.{} ] ] [.{} ] ] ] 
+\Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; [.\node[style={fill=pink}]{L}; [.\node[regular polygon,regular polygon sides=3, draw, minimum size=1.2cm,fill=pink]{};  ] ] [.{} ] ] [.{} ] ] ] 
 \end{tikzpicture}
 
 	\end{center}
@@ -195,7 +195,9 @@ $\implies$
     \end{subfigure}
 
     % TODO NEW: more robust caption
-    \caption{Illustrations of the 4 cases of the expanded definition of $\nextTree{T}$ in \ref{eq:expandedOtree}}
+    \caption{Illustrating the successor rule for generating a pop-push Gray code for ordered trees.  In these diagrams, $O$ is the first node in a preorder traversal of the tree that is not in the unique path between the root and the tree's leftmost leaf. \\
+    $P$ is $O$'s parent, $G$ is $P$'s parent (if it exists), and $L$ is $O$'s left sibling.
+    }
     \label{fig:otreeruledemo}
 
 \end{figure}

@@ -70,29 +70,29 @@ Two common interpretations of Dyck words are balanced parentheses and paths in t
 
 Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations of Dyck words for $n=4$.
 
-% \begin{figure}[H]
-%     \centering
-%     % This figure is temporarily omitted because it is slow
-%     \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
-%        \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
-% \LukaTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
-% \LukaTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
-% \LukaTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
-% \LukaTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
-% \LukaTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
-% \LukaTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
-% \LukaTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
-% \LukaTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
-% \LukaTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
-% \LukaTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
-% \LukaTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
-% \LukaTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
-% \LukaTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
-% \LukaTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
-%     \end{tabularx}
-%     \caption{The $\C_4=14$ Dyck words of order 4}
-%     \label{fig:Dycks}
-% \end{figure}
+\begin{figure}[H]
+    \centering
+    % This figure is temporarily omitted because it is slow
+    \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
+       \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
+\LukaTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
+\LukaTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
+\LukaTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
+\LukaTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
+\LukaTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
+\LukaTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
+\LukaTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
+\LukaTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
+\LukaTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
+\LukaTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
+\LukaTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
+\LukaTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
+\LukaTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
+\LukaTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
+    \end{tabularx}
+    \caption{The $\C_4=14$ Dyck words of order 4}
+    \label{fig:Dycks}
+\end{figure}
 
 %TODO: PATHS
 % In addition to balanced parentheses, Dyck words of length $2n$ are also in bijective correspondence with extended binary trees with $n$ internal nodes. 
@@ -244,7 +244,8 @@ For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each int
 
 \subsection{Ordered Trees and Dyck Words}
 The bijection between ordered trees and Dyck words is particularly relevant to this paper's results, as it is central to the loopless ordered tree generation algorithm given in Chapter \ref{chap:otree}.
-This algorithm will use the bijection between ordered trees and Dyck words specified in Richard Stanley's \emph{Catalan Objects} \cite{stanley2015Catalan}. The bijection described by Stanely is as follows:
+This algorithm will use the bijection between ordered trees and Dyck words specified in Richard Stanley's \emph{Catalan Objects} \cite{stanley2015Catalan}. Figure \ref{ordered_tree_bijection_illustration} illustrates both directions of the bijection.
+The bijection can be formalized as follows:
 \footnote{ Stanley's text refers to ordered trees as \emph{plane trees} and Dyck words as \emph{ballot sequences}} 
 
 
@@ -265,17 +266,15 @@ Let T be an ordered tree with root $r$.  Keep track of a current node $c$ and se
 	%TODO: QUESTION: do I need to prove this? It seems like Stanely assumed this was basically obvious 
 
 \end{itemize}
-Figure \ref{ordered_tree_bijection_illustration} demonstrates both directions of this process. % Note that each $t_i$ with $1 \le i \le n$ in a preorder traversal of T corresponds to the $i^{\underline{th}}$ 1 in D.
 
 \begin{figure}
     \centering
-    % TODO: degree three, color binary bits to illustrate correspondence
     \includegraphics[width=0.5\textwidth]{otreebij.png}
     \caption{An ordered tree with $6+1=7$ nodes corresponding to the order 6 Dyck word $110101001100$.}
     \label{ordered_tree_bijection_illustration}
 \end{figure}
 
-%TODO: Combine the above and below figures?? Have them adjacent to each other?
+\subsubsection{Useful properties of the Ordered Trees $\iff$ Dyck Words bijection}
 
 In addition to the above bijection, we define the following functions relating to ordered trees, Dyck words, and the correspondence between them.
 
