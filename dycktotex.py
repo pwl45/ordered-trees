@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 import sys
-
-
 # READ THIS STRING FOR USAGE
-usage_string='''
-dycktotex.py: wraps Dycks in LaTeX
-              More politely, reads Dyck words from stdin
-              and prints LaTeX code to stdout
+usage_string='''\
+*************************** dycktotex.py ***************************
+********************* provides LaTeX for Dycks *********************
+***** reads Dyck words from stdin; prints LaTeX code to stdout *****
 
 usage: ./dycktotex.py [options]
 
@@ -18,10 +16,11 @@ options:
 \t-e: print tex for extended binary trees
 \t-p: print tex for dyck paths
 
-The output of this program can be saved as a tex file and compiled, piped into pdflatex, which will automatically write a pdf to texput.pdf.
+The output of this program can be saved as a tex file and compiled, or piped into pdflatex, which will automatically write a pdf to texput.pdf.
 
-The classes orderedTreeNode and binTreeNode are atrociously written. The code for parsing arguments is about as bullet
-'''
+The classes orderedTreeNode and binTreeNode are atrociously written.
+The program will break if given bad input.
+This program is not good. But it is useful.'''
 
 # Initialize the G-String
 gstring="\\node[style={fill=lightyellow}]{G};"
@@ -252,6 +251,7 @@ def mkbintree_dyck(dyck_word):
 
     return root
 
+#hate this
 def label_gplo(g,p,l,o):
     if g is not None:
         g.data = gstring
@@ -326,9 +326,6 @@ def dyck_word_to_colored_tikz_qtree(dyck_word):
     result = latex_qtree(root)
     return result
 
-def emptystring(dyck_word):
-    return ""
-
 def dyck_word_to_tikz_path(dyck_word):
     result = '\\LukaTableDriver[1][1]{' + str(len(dyck_word)) + '}'
     maxheight = 0
@@ -368,43 +365,12 @@ def parse_file(file,tex_function):
         tex_output=tex_function(dyck_word)
         body +=  tex_output
         body += "\n\n\\bigskip\n\n"
-        # body += "\n\n"
 
     return body
 
 
-def balanced(ms):
-    sum = 0
-    for i in range(0, len(ms) - 1):
-        sum += ms[i]
-        if sum < i+1:
-            # print(ms, sum,i)
-            return False
-    return ms[len(ms)-1] == 0
-
-def valid_tree(dyck_word):
-    if not sum(dyck_word) == len(dyck_word)-1:
-        print("Invalid tree: sum not equal to length-1")
-        print("SUM:",sum(dyck_word), "LEN:",len(dyck_word))
-        return False
-    elif not balanced(dyck_word):
-        print("Invalid tree: not balanced")
-        return False
-    else:
-        return True
-
-
-
 if __name__ == '__main__':
 
-    # root=mkbintree_dyck(sys.argv[1])
-    # bin_preorder(root)
-    # exit(0)
-
-    # input = sys.argv[1].split(",")
-    # otree_regex = re.compile(r"\\otree{(\s*\d+(?:, *\d+ *)*)}")
-    # if len(sys.argv) < 2:
-    #     print("Error: not enough args")
     header = \
             '''\\documentclass{article}
 \\usepackage{tikz}
