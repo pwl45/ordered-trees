@@ -57,18 +57,9 @@ void swap(int* a, int* b){
     //should probably be changed before publishing, though
 }
 
-void reverse(int* ms, int n){
-    int hi=n-1;
-    int lo=0;
-
-    while(hi > lo){
-	swap(ms + (hi--), ms + (lo++));
-    }
-}
-
-//
-void reverse_hi(int* ms, int hi){
-    for(int lo = 0; hi > lo; swap(ms + (hi--), ms + (lo++)));
+//this is more fun than it should be
+void rev(int* lo, int n){
+    for(int* hi = lo + n - 1; hi > lo; swap((hi--),(lo++)));
 }
 
 
@@ -121,29 +112,20 @@ void stack_push(int* stack, int *nptr, int val){
 }
 
 void luka(int* ms, int n, void (*visit)(int* ms, int n)){
-    int prefix_len;
-
-    int prefix_sum = n-1; //if this isn't true, we're fine
-
-    int maxval = max(ms,n);
-
-    int* incs = (int*) malloc(sizeof(int)*maxval);
+    int prefix_len,prefix_sum,shift_index,insert_index;
+    int* incs = (int*) malloc(sizeof(int)*max(ms,n));
     int nincs = 1;
     incs[0]=n;
-
-    //we won't be having that extra zero, for now at least
-    int shift_index = 0;
-    int insert_index = 0;
     while(nincs){
-
-	prefix_len = stack_pop(incs, &nincs);
+	prefix_len = incs[nincs-1]++; //greedy increase of the first increase
 	if(prefix_len >= n-1){
+	    nincs--;
 	    shift_index = n-1;
 	    insert_index = !(ms[n-1]); //nice bang
 	}
 	else if(ms[prefix_len+1] > ms[prefix_len-1]){
-	    if(ms[prefix_len+1] <= ms[prefix_len]){
-		stack_push(incs,&nincs,prefix_len+1);
+	    if(ms[prefix_len+1] > ms[prefix_len]){
+		nincs--;
 	    }
 	    shift_index=prefix_len;
 	    insert_index=0;
@@ -154,17 +136,16 @@ void luka(int* ms, int n, void (*visit)(int* ms, int n)){
 		insert_index = !ms[shift_index];  //another nice bang
 		//sentinel?
 		if(prefix_len < n - 2 && ms[prefix_len+2] > ms[prefix_len+1] && ms[prefix_len+2] <= ms[prefix_len]){
-		    incs[nincs-1]--;
-		}
-		else{
-		    stack_push(incs, &nincs, prefix_len+1);
+		    //the rare triple minus
+		    incs[nincs---2]--; // this could really be nincs--; incs[nincs-1]--;
+		    /* incs[--nincs-1]--; */
 		}
 	    }else{
+		nincs--;
 		shift_index = prefix_len;
 		insert_index = 0;
 	    }
 	}
-
 
 	lshift(ms,insert_index,shift_index);
 
@@ -192,7 +173,7 @@ int main(int argc, char *argv[])
     int n;
     int max;
     int *ms = generate_ms(argv[1],&n, &max);
-    reverse_hi(ms,n-1);
+    rev(ms,n);
     luka(ms,n,print_ms);
 
     return 0;
