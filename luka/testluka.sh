@@ -12,17 +12,18 @@ declare -a tests=(
 "3,2,2"
 "4,2,3"
 "8,2,7"
-# "8,4,7"
+# "8,4,7" # too slow
 "6,0,0,0,0,0,1"
 "3,3,0,1"
 "11,1,1,1,1,1"
 "10,3,0,1,1,1"
-"13,0,13" # big dyck test
+"13,0,13" # big dyck test: C_13
 "7,5,2,2"
 "8,3,3,2"
 "12,2,2,1,1,1"
 "13,0,0,0,1,1,1"
 "202,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1"
+"0,666,0" # will only have one permutation
 )
 
 ret=0
@@ -30,12 +31,13 @@ echo "Comparing results of ./$1 $2 to ./$3"
 for test in "${tests[@]}"
 do 
 	echo "Testing $test..."
+	# still bad, don't feel like changing
 	./$1 $test $2 > outfile1
 	./$3 $test > outfile2
 	diff outfile1 outfile2 > difffile
 	if [ $? -ne 0 ]; then
 		echo "Test results differ. Diff:"
-		cat difffile
+		# cat difffile
 		ret=1
 	fi
 	echo

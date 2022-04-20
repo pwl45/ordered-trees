@@ -26,15 +26,15 @@ Crucially, Frank Gray's reflected binary code achieved a tangible benefit in err
     \label{binary}
 \end{figure}
 
-\section{Gray Codes for Strings, Lattice Paths and Trees}
+\section{Gray Codes for Strings, Lattice Paths and Trees} \label{sec:intro_graycodes}
 In this thesis, we are not concerned with counting combinatorial objects, but rather with efficiently ordering them.  We aim to create a \emph{Gray code} or \emph{minimal change ordering} for these objects.  Frank Gray's reflected binary code used complementing a single bit as the minimal change between successive binary strings in its ordering.  Other notions of minimal changes in strings are \emph{adjacent-transpositions}, or \emph{swaps}, which interchange two adjacent symbols in a string, and \emph{shifts}, in which a single symbol in a string moved to another position. Our Gray codes for strings will use a slightly more restrictive type of shift: a \emph{left-shift}, which moves a single symbol somewhere to the left within a string. 
 % This means sequencing the objects such that each one differs from the other in a specific small way. For example, two successive integer strings might differ by shifting one symbol into another position, or two trees might differ by changing one node to be a child of a different node.
 More specifically, if $\alpha = a_1 a_2 \ldots a_n$ is a string and $i < j$, then we let
-\begin{equation*}
-\leftshift[\alpha]{j}{i} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n.
-\end{equation*}
+\begin{equation}
+    \leftshift[\alpha]{j}{i} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n. \label{eq:leftdef}
+\end{equation}
 
-Our gray code for ordered trees will use \emph{firstborn-shifts}, which shift the first child of one node to be the first child of another node.
+Our gray code for ordered trees will use ``pops", which remove a node's first child, and ``pushes,'' which push one node to be the first child of another. 
 
 %TODO name???
 % Our enumeration algorithms uses \emph{left shifts} and \emph{parent shifts}. Left shifts shift a single symbol in a string somewhere left (earlier) in the string; parent shifts shift a single node in a tree to be the first child of another node.

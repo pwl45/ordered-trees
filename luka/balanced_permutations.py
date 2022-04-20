@@ -580,21 +580,18 @@ def prefix_general(ms, visit):
         visit(ms,results)
         return results
     while(True):
-        is_tight = prefix_len == prefix_sum
         # CASE 0:
         if prefix_len >= len(ms)-1:
             shift_index=len(ms)-1
-            if ms[shift_index] == 0:
-                insert_index=1
-            else:
-                insert_index=0
-        # CASE 1: ms[i+1] > ms[i-1]
+            insert_index = int( not ms[shift_index] );
         elif ms[prefix_len+1] > ms[prefix_len-1]:
             # first check if we're removing an increase by shifting this left
-            if ms[prefix_len+1] > ms[prefix_len]:
-                incs.pop()
-            # We create an increase by shifting here: push prefix_len+1 to stack
-            incs.append(prefix_len+1)
+            # # We create an increase by shifting here: push prefix_len+1 to stack
+            # incs.append(prefix_len+1)
+
+            # don't have an increase at prefix_len+1; add one
+            if ms[prefix_len+1] <= ms[prefix_len]:
+                incs.append(prefix_len+1)
 
             shift_index = prefix_len
             # we know the number being shifted is positive since it's the first inc
@@ -605,6 +602,7 @@ def prefix_general(ms, visit):
             # CASE 2.1 (ms[i+1] != 0) and CASE 2.2.1 (ms[i+1] == 0 and not tight)
             if prefix_sum > prefix_len or ms[prefix_len+1] > 0:
                 # Check if we removed an increase 
+
                 if prefix_len < len(ms)-2 and ms[prefix_len+2] > ms[prefix_len+1] and ms[prefix_len+2] <= ms[prefix_len]:
                     incs.pop()
                 shift_index = prefix_len+1
@@ -620,17 +618,13 @@ def prefix_general(ms, visit):
             # CASE 2.2.2: ms[i+1] == 0 and tight
             else:
                 # We don't create an increase by shifting here
+                # ms[prefix_len+1] is zero, can't be greater than anything
 
-                # this can't happen: ms[prefix_len+1] is zero, can't be greater than anything
-                # if ms[prefix_len+1] > ms[prefix_len]:
-                #     incs.pop()
                 shift_index = prefix_len
-                # we're shifting first inc, so it goes to the front
+                # we're shifting first inc, must be greater than 0, so it goes to the front
                 insert_index = 0
 
         ms.insert(insert_index, ms.pop(shift_index))
-        # In every case we want to check if we just created an inc at the front
-        # except for if we inserted 
         if ms[insert_index] < ms[insert_index+1]:
             prefix_sum = ms[0]
             # We already checked for an increase at prefix_len; don't double count
@@ -639,6 +633,7 @@ def prefix_general(ms, visit):
         else:
             prefix_sum += ms[insert_index]
         visit(ms,results)
+        # print(incs)
         if(len(incs) == 0):
             return results
         else:

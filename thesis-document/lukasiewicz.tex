@@ -1,19 +1,252 @@
 \chapter{Loopless (?) Lukasiewicz Word Generation}
-\subsection{Lukasiewicz Path Successor Rule}
-The successor rule for Lukasiewicz paths is as follows:
+In this chapter, we give a shift gray code for generating Lukasiewicz words with fixed content. 
+\section{Successor Rule}
 
+In this section, we provide a \emph{successor rule} that applies a left-shift to a Lukasiewicz word.  The rule is given below in \ref{eq:luka} 
 Let $S$ be a multiset whose sum is equal to its length.  Let $\mathcal{L}(S)$ denote the set of valid Lukasiewicz words with content equal to S. Let $\alpha \in \mathcal{L}(S)$.  
 
-Let $m$ be the maximum value such that $\alpha_{i-1} \ge \alpha_{i}$ for all $2 \le i \le m$. In other words, let m be the length of the non-increasing prefix of $\alpha$.
+
+Recall the definition of a left shift from equation \ref{eq:leftdef}: $\leftshift[\alpha]{i}{j}$ shifts the $j\thh$ symbol in $\alpha$ into the $i\thh$ position. In addition to the left shift function, we define the length of the \emph{non-increasing prefix} of a string $\alpha$ to be 
+the maximum value $m$ such that $\alpha_{i-1} \ge \alpha_{i}$ for all $2 \le i \le m$. We will let $\rho$ $\rho = a_1 \cdot a_2 \cdots a_m$.  The sum of the symbols in $\rho$ is $\sum \rho = a_1 + a_2 + \cdots + a_m$
+\begin{subnumcases}{\luka{\alpha} = \label{eq:luka}} 
+    \leftshift{n}{2} & if  $m=n$ \label{eq:prefix_n_2}\\
+	\leftshift{m+1}{1} & if  $m=n-1$  or  $\alpha_{m} < \alpha_{m+2}$   or \label{eq:prefix_m1_1}\\
+	    & $(\alpha_{m+2} = 0 $ and $ \sum \rho = m) $\nonumber\\
+	\leftshift{m+2}{1} &  if $ \alpha_{m+2} \neq 0 $\label{eq:prefix_m2_1}\\
+	\leftshift{m+2}{2} & otherwise  \label{eq:prefix_m2_2}
+\end{subnumcases}
+
+Figure \ref{fig:LukaTable} illustrates the successor rule on every string in $\Lukas{S}$ for $S = \{0,0,0,1,2,3\}$.
+For example, consider the top row with $\alpha = a_1 \cdot a_2 \cdot a_3 \cdot a_4 \cdot a_5 \cdot a_6 = 302100$.
+Here the non-increasing prefix is $a_1 \cdot a_2 = 30$, so $m = 2$, and the length of the string is $n = 6$.
+Thus, $m \neq n$, so \eqref{eq:prefix_n_2} is not applied.
+Now consider the conditions in \eqref{eq:prefix_m1_1}.
+The second condition is $a_{m} < a_{m+2}$, which is $a_2 = 0 < 1 = a_4$ for $\alpha$.  
+Since this is true, $\luka{\alpha} = \leftshift{m+1}{1}$ by \eqref{eq:prefix_m1_1}, which is $\leftshift{3}{1}$ for $\alpha$.
+In other words, the rule left-shifts $a_3$ into position $1$.
+Thus, the next string in the list is $a_3 \cdot a_1 \cdot a_2 \cdot a_4 \cdot a_5 \cdot a_6 = 230100$, as seen in the second row of Figure~\ref{fig:LukaTable}.
 
 
-\begin{equation*}
-    \overleftarrow{\text{luka}}(\alpha) = \begin{cases}
-	\leftshift{n}{2} & $if $ m=n \\
-	\leftshift{m+1}{1} & $if $ m=n-1 $ or $ \alpha_{m} < \alpha_{m+2}  $ or$ \\
-    & (\alpha_{m+2} = 0 $ and $ \sum \rho = m) \\
-	\leftshift{m+2}{1} & $ if $ \alpha_{m+2} \neq 0 \\
-	\leftshift{m+2}{2} & $otherwise$  \\
-\end{cases}
-\end{equation*}
-In addition to generating Lukasiewicz words, this successor rule also 
+\begin{figure}
+    \centering
+    This figure is temporarily omitted because it is slow
+    % \begin{tabularx}{0.9\textwidth}{>{\hsize=0.275\hsize}C >{\hsize=0.225\hsize}C >{\hsize=0.05\hsize}C >{\hsize=0.1\hsize}C >{\hsize=0.2\hsize}C  >{\hsize=0.2\hsize}r }
+% \thead{Łukasiewicz path} & \thead{Łukasiewicz word} & \thead{$m$} & \thead{\eqref{eq:luka}} & \thead{shift} & \thead{scut} \\ \hline 
+% \LukaTable[2]{3,0,2,1,0,0} & 302100 & 2 & \eqref{eq:prefix_m1_1} & $\leftshift{3}{1}$ & $100$ \\
+% \LukaTable[3]{2,3,0,1,0,0} & 230100 & 1 & \eqref{eq:prefix_m2_2} & $\leftshift{3}{2}$ & $100$ \\
+% \LukaTable[2]{2,0,3,1,0,0} & 203100 & 2 & \eqref{eq:prefix_m1_1} & $\leftshift{3}{1}$ & $100$ \\
+% \LukaTable[3]{3,2,0,1,0,0} & 320100 & 3 & \eqref{eq:prefix_m2_2} & $\leftshift{5}{2}$ & $100$ \\
+% \LukaTable[2]{3,0,2,0,1,0} & 302010 & 2 & \eqref{eq:prefix_m2_2} & $\leftshift{4}{2}$ & $10$ \\
+% \LukaTable[2]{3,0,0,2,1,0} & 300210 & 3 & \eqref{eq:prefix_m1_1} & $\leftshift{4}{1}$ & $10$ \\
+% \LukaTable[3]{2,3,0,0,1,0} & 230010 & 1 & \eqref{eq:prefix_m2_2} & $\leftshift{3}{2}$ & $10$ \\
+% \LukaTable[2]{2,0,3,0,1,0} & 203010 & 2 & \eqref{eq:prefix_m1_1} & $\leftshift{3}{1}$ & $10$ \\
+% \LukaTable[3]{3,2,0,0,1,0} & 320010 & 4 & \eqref{eq:prefix_m2_2} & $\leftshift{6}{2}$ & $10$ \\
+% \LukaTable[2]{3,0,2,0,0,1} & 302001 & 2 & \eqref{eq:prefix_m2_2} & $\leftshift{4}{2}$ & $1$ \\
+% \LukaTable[2]{3,0,0,2,0,1} & 300201 & 3 & \eqref{eq:prefix_m1_1} & $\leftshift{4}{1}$ & $1$ \\
+% \LukaTable[3]{2,3,0,0,0,1} & 230001 & 1 & \eqref{eq:prefix_m2_2} & $\leftshift{3}{2}$ & $1$ \\
+% \LukaTable[2]{2,0,3,0,0,1} & 203001 & 2 & \eqref{eq:prefix_m1_1} & $\leftshift{3}{1}$ & $1$ \\
+% \LukaTable[3]{3,2,0,0,0,1} & 320001 & 5 & \eqref{eq:prefix_m1_1} & $\leftshift{6}{1}$ & $1$ \\
+% \LukaTable[3]{1,3,2,0,0,0} & 132000 & 1 & \eqref{eq:prefix_m1_1} & $\leftshift{2}{1}$ & $2000$ \\
+% \LukaTable[3]{3,1,2,0,0,0} & 312000 & 2 & \eqref{eq:prefix_m2_2} & $\leftshift{4}{2}$ & $2000$ \\
+% \LukaTable[2]{3,0,1,2,0,0} & 301200 & 2 & \eqref{eq:prefix_m1_1} & $\leftshift{3}{1}$ & $200$ \\
+% \LukaTable[2]{1,3,0,2,0,0} & 130200 & 1 & \eqref{eq:prefix_m1_1} & $\leftshift{2}{1}$ & $200$ \\
+% \LukaTable[2]{3,1,0,2,0,0} & 310200 & 3 & \eqref{eq:prefix_m2_2} & $\leftshift{5}{2}$ & $200$ \\
+% \LukaTable[2]{3,0,1,0,2,0} & 301020 & 2 & \eqref{eq:prefix_m2_2} & $\leftshift{4}{2}$ & $20$ \\
+% \LukaTable[2]{3,0,0,1,2,0} & 300120 & 3 & \eqref{eq:prefix_m1_1} & $\leftshift{4}{1}$ & $20$ \\
+% \LukaTable[2]{1,3,0,0,2,0} & 130020 & 1 & \eqref{eq:prefix_m1_1} & $\leftshift{2}{1}$ & $20$ \\
+% \LukaTable[2]{3,1,0,0,2,0} & 310020 & 4 & \eqref{eq:prefix_m1_1} & $\leftshift{5}{1}$ & $20$ \\
+% \LukaTable[3]{2,3,1,0,0,0} & 231000 & 1 & \eqref{eq:prefix_m2_1} & $\leftshift{3}{1}$ & $31000$ \\
+% \LukaTable[3]{1,2,3,0,0,0} & 123000 & 1 & \eqref{eq:prefix_m1_1} & $\leftshift{2}{1}$ & $3000$ \\
+% \LukaTable[3]{2,1,3,0,0,0} & 213000 & 2 & \eqref{eq:prefix_m2_2} & $\leftshift{4}{2}$ & $3000$ \\
+% \LukaTable[2]{2,0,1,3,0,0} & 201300 & 2 & \eqref{eq:prefix_m1_1} & $\leftshift{3}{1}$ & $300$ \\
+% \LukaTable[2]{1,2,0,3,0,0} & 120300 & 1 & \eqref{eq:prefix_m1_1} & $\leftshift{2}{1}$ & $300$ \\
+% \LukaTable[2]{2,1,0,3,0,0} & 210300 & 3 & \eqref{eq:prefix_m1_1} & $\leftshift{4}{1}$ & $300$ \\
+% \LukaTable[3]{3,2,1,0,0,0} & 321000 & 6 & \eqref{eq:prefix_n_2} & $\leftshift{6}{2}$ & $\epsilon$ 
+    % \end{tabularx}
+    % \caption{nocapneed}
+    \caption{The left-shift Gray code $\cool{S}$ for Łukasiewicz words with content $S = \{0,0,0,1,2,3\}$.
+    Each row gives the non-increasing prefix length $m$, the rule \eqref{eq:luka}, and the shift that creates the next word.
+    The right column gives the scut of each string, which illustrates the suffix-based recursive definition of cool-lex order.}
+    \label{fig:LukaTable}
+\end{figure}
+
+\subsection{Observations}
+\label{sec:prefix_observations}
+
+%We now make a couple of observations to give the reader a better sense of the rule. %how the rule works.
+Note that \eqref{eq:luka} left-shifts a symbol that is at most two symbols past the non-increasing prefix. %, or the last symbol if there is no such symbol.
+%This has two immediate consequences.
+Thus, the shifts given by \eqref{eq:luka} are usually short, and the symbols at the right side of the string are rarely changed.
+% TODO: should be a period here
+%Second, the symbols at the right side of the string are rarely changed.
+This implies that the order will have some similarity to co-lexicographic order, which orders strings right-to-left by increasing symbols. 
+In fact, the order turns out to be a cool-lex order, as discussed in Section~\ref{sec:proof}.
+
+\section{Proof of Correctness}
+\label{sec:proof}
+
+Now we prove that the successor rule is correct. %from Section \ref{sec:prefix} is correct.
+%Given a Łukasiewicz word $\alpha \in \Lukas{S}$, the rule creates the next string a shift Gray code for the fixed-content set $\Lukas{S}$.
+Our strategy is to define a recursive order of $\Lukas{S}$, and show that \eqref{eq:luka} creates the next string in this order.
+%By doing so, we'll also see that our Gray code is a generalization of a previously published Gray code for Dyck words by Ruskey and Williams \cite{ruskey2008generating}.
+
+\subsection{Cool-lex Order}
+\label{sec:proof_cool}
+
+\emph{Cool-lex order} is a variation of co-lexicographic order.
+The order was first given for \emph{$(s,t)$-combinations}, which are binary strings with $s$ copies of $0$ and $t$ copies of $1$, by Ruskey and Williams \cite{ruskey2005generating,ruskey2009coolest}.
+In this context, the order gives a \emph{prefix-shift Gray code}, meaning that a single symbol is left-shifted into the first position.
+The prefix-shift Gray code was then generalized to Dyck words \cite{ruskey2008generating} and multiset permutations \cite{CoolSODA}.
+The latter result provides the recursive structure of our left-shift Gray code of fixed-content Łukasiewicz words.
+
+\subsubsection{Tails and Scuts}
+\label{sec:proof_scuts}
+
+Given a multiset $S$ of cardinality $n$, we define the \emph{tail of length $\ell$} to be smallest $\ell$ symbols arranged in a string in non-increasing order.
+Formally,
+\begin{equation}
+    \tail(\ell) = t_{\ell} \cdot t_{\ell-1} \cdots t_2 \cdot t_1,
+\end{equation}
+where $\tail(n) = t_n \cdot t_{n-1} \cdots t_1$ is the unique non-increasing string with content~$S$.
+
+In English, a \emph{scut} is a short tail.
+We use the term for a tail that is truncated by the addition of a large first symbol.
+More specifically, a scut of length $\ell$ and a tail of length $\ell$ are identical, except for their first symbol, and the first symbol is larger in the scut. % (and also a member of $S$).
+Formally, the \emph{scut of length $\ell+1$}, with respect to $S$ is
+\begin{equation}
+    \scut(s, \ell) = s \cdot \tail(\ell),
+\end{equation}
+where $s \in S$ is greater than the first symbol $\tail(\ell+1)$.
+We refer to a scut of the form $\scut(s, \ell)$ as an \emph{$s$-scut}.
+
+\subsubsection{Recursive Order}
+\label{sec:proof_recursive}
+
+Now we define $\cool{S}$ to be an order of $\Lukas{S}$.
+More broadly, we define $\cool{S}$ on any multiset $S$ with non-negative symbols whose sum is at least as large as its cardinality, and we henceforth refer to these $S$ as \emph{valid}.
+We define $\cool{S}$ recursively by grouping the strings with the same scut together.
+Specifically, the scuts are ordered as follows:
+\begin{itemize}
+    \item The scuts are first ordered by their first symbol in increasing order.
+    In other words, $s$-scuts are before $(s+1)$-scuts.
+    % In other words, scuts starting with value $1$ appear before scuts starting with value $2$, and so on, up to the maximum value in $S$.
+    %(There are no scuts starting with value $0$ since $0$ is never smaller than another symbol in $S$.)
+    \item For a given first symbol, the scuts are ordered by decreasing length.
+    In other words, longer $s$-scuts come before shorter $s$-scuts.
+    \item The string $\tail(n)$ is the only string without a scut, and it is ordered last.
+\end{itemize}
+For example, the rightmost column of Figure \ref{fig:LukaTable} illustrates this order.
+More specifically, the scuts appear in the following order:
+\begin{equation} \label{eq:scuts}
+100, 10, 1, 2000, 200, 20, 31000, 3000, 300,    
+\end{equation}
+% TODO: should these be parens instead of curly braces for tail{n} 
+with the single string $\tail(n) = 321000$ appearing last.
+Note that $2$, $30$ and $3$ are absent from \eqref{eq:scuts} because there are no Łukasiewicz words with these suffixes.
+
+In each scut group the strings are ordered recursively.
+In other words, the common scut is removed from the strings in a particular group, and then they are ordered according to $\cool{S'}$, where $S'$ is the valid multiset obtained by removing the symbols of the common scut from $S$.
+For example, in Figure \ref{fig:LukaTable}, the strings with scut $1$ are ordered according to $\cool{S'}$ where $S' = \{3,2,1,0,0,0\} - \{1\} = \{3,2,0,0,0\}$.
+The base case of the recursion is when $S = \emptyset$.
+
+In the following subsection it will be helpful to know the first string that has an $s$-scut.
+By our recursive order, we know that it will have a longest $s$-scut.
+Moreover, the exact string can be obtained from the tail by a single shift.
+To illustrate this, consider the list in Figure \ref{fig:LukaTable}, and let $\alpha = \tail(n) = 321000$.
+\begin{itemize}
+    \item The first string with a $1$-scut is $\leftshift[\alpha]{4}{2} = 302100$.
+    \item The first string with a $2$-scut is $\leftshift[\alpha]{3}{1} = 132000$.
+    \item The first string with a $3$-scut is $\leftshift[\alpha]{2}{1} = 231000$.
+\end{itemize}
+In other words, the first string with a $1$-scut is obtained by shifting a $0$ into the second position, with the first strings with $2$-scuts and $3$-scuts are obtained by shifting $1$ and $2$ into the first position, respectively.
+This point is stated more generally in the following remark.
+
+\begin{remark}
+\label{rem:first}
+Let $S$ be a valid multiset, and $\tail(n) = t_n \cdot t_{n-1} \cdots t_1$ with $t_i > t_{i-1}$.
+The first string in $\cool{S}$ with a $t_i$-scut is $\leftshift[\tail(n)]{n-i+2}{1}$ if $t_{i-1} = 0$ or $\leftshift[\tail(n)]{n-i+2}{2}$ if $t_{i-1} > 0$.
+\end{remark}
+
+Less technically, Remark \ref{rem:first} says that the first string with a $t_i$-scut is obtained by shifting the next smallest symbol from its position in $\tail(n)$ into the first position, or second position if it is $0$.
+
+% Now we formally define the order recursively. 
+% In the definition, we use 
+% \begin{subnumcases}{cool(S) =}
+%     \phantom{LaTeX Sucks Center this Crap} \emptystring & if $S = \emptyset$ \\
+%     \begin{array}{rcl}
+%         cool(S - \scut(d_2,F_1-1)) & \cdot & \scut(d_2,F_1-1), \\
+%         cool(S - \scut(d_2,F_1-2)) & \cdot & \scut(d_2,F_1-2), \\
+%         & \vdots & \\
+%         cool(S - \scut(d_2,0)) & \cdot & \scut(d_2,0), \\[0.5em]
+%         cool(S - \scut(d_3,F_2-1)) & \cdot & \scut(d_3,F_2-1), \\
+%         cool(S - \scut(d_3,F_2-2)) & \cdot & \scut(d_3,F_2-2), \\
+%         & \vdots & \\
+%         cool(S - \scut(d_3,0)) & \cdot & \scut(d_3,0), \\
+%         & {\Large \vdots} & \\
+%         cool(S - \scut(d_k,F_{k-1}-1)) & \cdot & \scut(d_k,F_{k-1}-1), \\
+%         cool(S - \scut(d_k,F_{k-1}-2)) & \cdot & \scut(d_k,F_{k-1}-2), \\
+%         & \vdots & \\
+%         cool(S - \scut(d_k,0)) & \cdot & \scut(d_k,0), \\
+%         & & \tail(n) \\
+%     \end{array} & 
+%     \begin{tabular}{c}
+%         otherwise, 
+%     \end{tabular}
+% \end{subnumcases}
+% where $sort(S) = d_1, d_2, \ldots, d_k$ and $f_i$ for frequencies and $F_i$ for cumulative frequencies
+
+% The following remark is due to the fact that the above ordering of the scuts (and $tail{n}$) include every possible suffix of a string in $\Lukas{S}$
+
+% \begin{remark}
+% \label{rem:ordering}
+% $\cool{S}$ is an ordering of $\Lukas{S}$.
+% \end{remark}
+
+\subsection{Equivalence}
+\label{sec:proof_equal}
+
+Now we prove that the successor rule \eqref{eq:luka} correctly provides the next string in $\cool{S}$.
+This simultaneously proves that \eqref{eq:luka} is a successor rule for a left-shift Gray code of $\Lukas{S}$, and that $\cool{S}$ is a recursive description of the same.
+
+\begin{theorem}
+\label{thm:equal}
+Let $S$ be a multiset of non-negative values with cardinality $n$ and sum $\Sigma S = n$.
+Also, let $\alpha \in \Lukas{S}$ be a Łukasiewicz word with content $S$, and $\beta \in \Lukas{S}$ be the next string in $\cool{S}$ taken circularly (i.e., if $\alpha$ is the last string in $\cool{S}$, then $\beta$ is the first string in $\cool{S}$).
+Then $\beta = \leftshift[\alpha]{j}{i}$.
+In other words, the successor rule in \eqref{eq:luka} transforms $\alpha$ into $\beta$ with a left-shift.
+\end{theorem}
+\begin{proof}
+Let $\alpha = a_1 \cdot a_2 \cdots a_n$ and $\rho = a_1 \cdot a_2 \cdots a_m$ be $\alpha$'s non-increasing prefix.
+
+\begin{itemize}[nosep]
+\item If $m=n$, then $\alpha = \tail(n)$ and it is the last string in $\cool{S}$.
+We also know that $\nextPrefix{\alpha} = \leftshift{n}{2}$ by \eqref{eq:prefix_n_2}.
+This gives the first string in $\cool{S}$ with a $1$-scut by Remark \ref{rem:first}, which is the first string in $\cool{S}$ as expected.
+This is the only case where \eqref{eq:prefix_n_2} is used.
+\item If $m=n-1$, then $\alpha$'s non-increasing prefix extends until its second-last symbol.
+Furthermore, we know that $a_n = 1$, since this is the only non-zero value that can appear in the rightmost position.
+We also know that $\nextPrefix{\alpha} = \leftshift{m+1}{1} = \leftshift{n}{1}$ by \eqref{eq:prefix_m1_1}.
+Thus, Remark \ref{rem:first} implies that $\beta$ is the first string with an $x$-scut, where $x$ is the smallest symbol larger than $1$ in $S$.
+This is expected since $\alpha$ is the last string in the order with a $1$-scut.
+\end{itemize}
+\noindent
+The remaining cases are handled cumulatively (i.e., each assumes that the previous do not hold).
+Note that $\alpha = \rho \cdot a_{m+1} \cdot a_{m+2} \cdots a_n$ is the last string with $\scut(a_{m+1}, \ell) = a_{m+1} \cdot a_{m+2} \cdots a_{w}$ in a sublist $\cool{S- \{a_{w+1}, a_{w+2}, \ldots, a_n\}}$.
+We also view $\leftshift[\alpha]{j}{i}$ in two steps:
+$a_j$ is left-shifted until it joins the non-increasing prefix, then further to index $i$.
+This allows us to use Remark \ref{rem:first}. 
+\begin{itemize}[nosep]
+    \item If $a_m < a_{m+2}$, then the scut at this level of recursion, namely $\scut(a_{m+1}, \ell)$, cannot be shortened since $\ell=0$.
+    So the next scut will be the longest scut with the next largest symbol, which is true by Remark \ref{rem:first} and $\nextPrefix{\alpha} = \leftshift{m+1}{1}$ by \eqref{eq:prefix_m1_1}.
+    \item If $a_{m+2} = 0$ and $\Sigma \rho = m$, then the scut cannot be shortened since the sum of the symbols before the shorter scut will be less than their cardinality.
+    Thus, the next scut will be the longest scut with the next largest symbol, which is true by Remark \ref{rem:first} and $\nextPrefix{\alpha} = \leftshift{m+1}{1}$ from  \eqref{eq:prefix_m1_1}.
+    \item If $a_{m+2} \neq 0$, then the scut at this level of recursion can be shortened to $\scut(a_{m+1}, \ell-1)$.
+    Given this shorter scut, the order recursively adds new scuts beginning with the first $x$-scut, where $x$ is the second-smallest remaining symbol.
+    This is true by Remark \ref{rem:first} and $\nextPrefix{\alpha} = \leftshift{m+2}{1}$ by \eqref{eq:prefix_m2_1}.
+    \item Otherwise, $a_{m+2} = 0$.
+    This is identical to the previous case, except that $a_{m+2} = 0$.
+    Thus, Remark \ref{rem:first} gives $\nextPrefix{\alpha} = \leftshift{m+2}{2}$ by \eqref{eq:prefix_m2_2}
+\end{itemize}
+Therefore, \eqref{eq:luka} gives the next string in the order, which completes the proof.
+\end{proof}
+

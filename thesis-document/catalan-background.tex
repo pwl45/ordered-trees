@@ -65,7 +65,7 @@ $C_6=\sum_{k=0}^5\C_k\C_{n-k}=42 + 14 + 10 + 10 + 14 + 42 = 132$
     \caption{Constructing $\C_6$, the number of ways to triangulate an octagon, from triangulations of smaller sub-polygons.}
     \label{fig:recursiveTriangulations}
 \end{figure}
-\section{Dyck Words and Paths}
+\section{Dyck Words and Paths} \label{sec:Dycks}
 
 The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to $\C_n$.  Dyck words with $n$ ones and $n$ zeroes are frequently referred to as Dyck words of \emph{order n}.
 For example, the $\C_2=2$ Dyck words of order 2 are $1100$ and $1010$.
@@ -76,24 +76,24 @@ Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations 
 
 \begin{figure}[H]
     \centering
-    % This figure is temporarily omitted because it is slow
-    \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
-       \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
-\LukaTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
-\LukaTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
-\LukaTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
-\LukaTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
-\LukaTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
-\LukaTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
-\LukaTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
-\LukaTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
-\LukaTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
-\LukaTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
-\LukaTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
-\LukaTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
-\LukaTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
-\LukaTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
-    \end{tabularx}
+    This figure is temporarily omitted because it is slow
+    % \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
+    %    \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
+% \DyckTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
+% \DyckTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
+% \DyckTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
+% \DyckTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
+% \DyckTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
+% \DyckTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
+% \DyckTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
+% \DyckTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
+% \DyckTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
+% \DyckTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
+% \DyckTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
+% \DyckTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
+% \DyckTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
+% \DyckTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
+    % \end{tabularx}
     \caption{The $\C_4=14$ Dyck words of order 4}
     \label{fig:Dycks}
 \end{figure}
@@ -362,57 +362,4 @@ The following remarks can be derived from the bijection between ordered trees an
 \end{proof} 
 
 % TODO NEW: move to ch 3:, start with binary rule and then get to this.
-\section{Cool Lex Order on Dyck Paths and Binary Trees}
-TODO: probably move this to a different chapter, also fix notation to be consistent. 
-
-Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}:
-We will use $\mathbf{D}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{D}_n$ is thus $2n$.
-
-\noindent Let $D \in \mathbf{D}_n$
-
-\noindent Let the $i$th prefix shift of D, denoted by $\preshift{D}{i}$, be a function that rotates the second through ith symbols of D one to the right circularly.  More formally, 
-
-\noindent $\preshift{d}{i}=d_1,d_i,d_2,...,d_{i-1},d_{i+1},d_{i+2},...,d_{2n}$
-
-
-\noindent Let $k$ be the index of the 1 in the leftmost $01$ substring in $D$ if it exists. Note that if $D$ has no $01$ substring, then $D=1^n0^n$.  The successor rule for $D$ is as follows:
-
-
-\begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck_simple}}
-	\preshift{D}{2n} & \text{if $D$ has no $01$ substring}\\
-	\preshift{D}{k+1} & if $\preshift{D}{k+1} \in \mathbf{D}_n$\\
-	\preshift{D}{k} & otherwise
-\end{subnumcases}
-
-Ruskey and Williams's algorithm can also enumerate a broader set of strings: The algorithm enumerates any set $\mathbf{D}_{s,t}$ where any $D \in \mathbf{D}_{s,t}$ has s zeroes and t ones and satisfies the constraint that each prefix of D has as many ones as zeroes.  This is slightly broader than the language of Dyck words, as it does not have the requirement that a string have an equal number of ones and zeroes.
-We will focus on $\mathbf{D}_n$  languages due to their correspondce with Dyck words and therefore other Catalan objects.
-
-Evaluating whether $\preshift{D}{k+1} \in \mathbf{D}_n$ can be determined by looking $D_{k+1}$ and the sum of the first k symbols of D:  
-
-Let $D'=$ $\preshift{D}{k+1}$
-
-Note that we know $D \in \mathbf{D}_n$.  
-
-Since preshift only rotates symbols, $D'$ will automaticallly satisfy the requirement that strings in $\mathbf{D}_n$ must have an equal number of zeroes and ones since D satisfied that requirement. Thus, $D' \in \mathbf{D}_n$ will be determined by whether or not all prefixes of $D'$ have at least as many ones as zeroes.  
-
-If $D_{k+1}$ is a 1, then  for all i, the $i\thh$ prefix of $D'$ will have at least as many ones as the $i\thh$ prefix of D.  Thus, $D'$ must be $\in \mathbf{D}_n$, as rotating a 1 to earlier in the string will never invalidate the requirement that every prefix of the string has at least as many ones as zeroes.  
-
-Note that the $k\thh$ prefix of D must be of the form $1^a0^b1$, as otherwise there would be an earlier $01$ prefix.  Fruthermore, $a\ge b$ as otherwise the bth prefix of D would have more zeroes than ones and D would not be a valid Dyck word.
-
-If $D_{k+1}$ is a 0, then $D' \notin \mathbf{D}_n$ if and only if rotating a 0 to index 2 creates a prefix of D with more zeroes than ones.  This will only happen if the $(k-1)\thh$ prefix of D is exactly $1^{\frac{k-1}{2}}0^{\frac{k-1}{2}}$.  
-
-Therefore, $\preshift{D}{k+1} \in \mathbf{D}_n \iff D_{k+1}=1$ or $D$ starts with more than $\lfloor \frac{k-1}{2} \rfloor$ ones 
-
-\begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck}}
-    \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:prefixDyck_n}\\
-	\preshift{D}{k+1} & $D_{k+1}=1$ or $D$ starts with more than $\lfloor \frac{k-1}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
-	\preshift{D}{k} & otherwise \label{eq:prefixDyck_k}
-\end{subnumcases}
-
-Since $k$ is the index of the first $01$ substring in D, $\sum_{i=1}^{k}S_i$ is actually just the number of consecutive ones to start D, which simplifies the evaluation of this conditional even further.
-
-Ruskey and Williams provided a loopless pseudocode implementation of CoolCat that utilized this fact to enumerate any $\mathbf{D}_{s,t}$ using at most 2 conditionals per successor \cite{ruskey2008generating}.
-
-
-Due to its simplicity and efficienty, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and also provided an implementation of it for his theoretical MMIX processor architecture \cite{knuth2015art}.
 
