@@ -1,0 +1,176 @@
+\chapter{Loopless Ordered Tree Generation}
+The algorithm described in this section has two primary implementations: The first implementation uses a linked structure for the nodes, where an ordered tree node stores pointers to its leftmost child and its right sibling.  Therefore, to access a node's 3rd child, one would use 
+
+\verb+node->left_child->right_sibling->right_sibling+ 
+
+This has the advantages of space efficiency and $O(1)$ appending and prepending to a node's list of children, but the disadvantage of requiring $O(k)$ time to access a node's $k\thh$ child. 
+
+The second implementation uses an array-like approach to storing children.  This has the advantage of $O(1)$ access time for all children but the disadvantage of either requiring $O(n)$ space for each node or the additional cost of resizing arrays.  Each node also stores a counter for its number of children and an int keeping track of the maximum amount of children it can store (before requiring reallocation)).  This implementation stores the list of children ``backwards,'' so to access a node's $k\thh$ child, one would use \verb+node->children[(node->nch)-k]+.  Each \verb+node->children[0]+ is set to and kept as \verb+NULL+ for a null-termination like effect that is useful in the algorithm.
+% TODO NEW: initial tree
+\begin{figure}
+    \begin{subfigure}[t]{.5 \textwidth}
+	\begin{center}
+
+	    \begin{Verbatim}
+typedef struct node {
+    int data;
+    struct node* parent;
+    struct node* left_child;
+    struct node* right_sibling;
+} node;
+
+node* new_node(int data){
+    node* n = 
+	(node*)malloc(sizeof(node));
+    n->data=data;
+    n->parent=NULL;
+    n->left_child=NULL;
+    n->right_sibling=NULL;
+    return n;
+}
+	    \end{Verbatim}
+	\end{center}
+
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[t]{.5 \textwidth}
+	\begin{center}
+
+	    \begin{Verbatim}
+typedef struct arraynode {
+    int nch; 
+    int maxch;
+    struct arraynode* parent;
+    struct arraynode** children;
+} anode;
+
+anode* new_anode(int maxch){
+    anode* n = 
+	(anode*)malloc(sizeof(anode));
+    n->maxch=maxch;
+    n->parent=NULL;
+    n->nch=0;
+    n->children =
+	(anode**)malloc(sizeof(anode*) * maxch+1);
+    n->children[0]=NULL; 
+    return n;
+}
+	    \end{Verbatim}
+	\end{center}
+	% \caption{ $C$ implementation of coolOtree} 
+	\label{fig:}
+    \end{subfigure}
+
+    % TODO: change bit colors
+    \cprotect\caption{C code for two different ordered tree structures and functions to initialize a node.}
+    \label{fig:otreeCode}
+\end{figure}
+
+% TODO: QUESTION: Is this confusing? Using t like this simplifies the correspondence between ordered trees and Dyck words. But would it be clearer to have t just be the number of total nodes?
+
+% Verbatim (not verbatim) from fancyvrb package lets you do \ref inside of it. 
+
+\begin{figure}
+    \centering
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] ] 
+\end{tikzpicture} \hspace{1.5em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} ] ] 
+\end{tikzpicture}\hspace{1.5em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} [.{} ] ] ] 
+\end{tikzpicture}\hspace{1.5em}
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{edge from parent/.style={draw, edge from parent path=
+    {(\tikzparentnode) -- (\tikzchildnode)}}}
+    \Tree [.{} [.{} ] [.{} [.{} [.{} ] ] ] ] 
+\end{tikzpicture}
+
+    \cprotect\caption{The initial trees returned by \verb$get_initial_tree$ in \verb$coolOtree$ with $t=1,2,3,$ and $4$ \\
+    Note the convenient feature that for each tree, O is equal to \verb$root->left_child->right_sibling$
+    }
+    \label{exampleotree}
+\end{figure}
+
+
+
+% TODO NEW: initial tree
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{.49 \textwidth}
+	\begin{center}
+	    \begin{algorithm}[H] % What does the H do? it makes it work.
+	    \begin{algorithmic}
+    \Function{cool-ordered-trees}{$t$}
+        % \vspace{0.75em}
+        \LineComment{Generate initial tree} % TODO
+	\State $O\gets root.lchild$
+	\State \visit{root}
+        \While{$O \ne NULL$}
+	    \State $P \gets O.parent$
+	    \If{$O.lchild \ne NULL$}
+		\State $\pushchild{O}{\popchild{P}}$
+		\State $O \gets O.lchild.rsibling$
+	    \Else
+		\If{$O.parent == root$}
+		\State $\pushchild{O}{\popchild{P}}$
+		\Else
+		\State $\pushchild{O}{\popchild{P}}$
+		\State $\pushchild{root}{\popchild{P}}$
+		\EndIf
+		\State $O \gets O.rsibling$
+	    \EndIf
+	\State \visit{root}
+        \EndWhile
+    \EndFunction
+	    \end{algorithmic}
+    \caption*{Generate all ordered trees with $t+1$ nodes}
+	\end{algorithm}
+	\end{center}
+	% \caption{Pseudoc}
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[t]{.5 \textwidth}
+	\begin{center}
+	    \vspace{.9em} % fun alignment
+	    % \vspace{2.1em} % fun alignment
+\begin{Verbatim}[commandchars=\\\[\]]
+
+void coolOtree(int t, void (*visit)(node*)){
+    node* root = get_initial_tree(t);
+    node* o=root->left_child->right_sibling;
+    visit(root);
+    while(o){
+	node* p = o->parent;
+	if(o->left_child){ 
+	    pushchild(o,popchild(p));
+	    o=o->left_child->right_sibling;
+	}else{
+	    if(o->parent == root){ 
+		pushchild(o,popchild(p));
+	    }else{ 
+		pushchild(p->parent,popchild(p));
+		pushchild(root,popchild(p));
+	    }
+	    o=o->right_sibling;
+	}
+	visit(root);
+    }
+}
+\end{Verbatim}
+	\end{center}
+	% \caption{ $C$ implementation of coolOtree} 
+	\label{fig:}
+    \end{subfigure}
+
+    % TODO: change bit colors
+    \cprotect\caption{Pseudocode and C implementation}
+    \label{fig:otreeCode}
+\end{figure}
