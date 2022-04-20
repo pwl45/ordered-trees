@@ -1,6 +1,6 @@
 .PHONY: all
 
-CFLAGS=-O0
+CFLAGS=-O3
 
 all: luka
 
