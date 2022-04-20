@@ -27,13 +27,25 @@ declare -a tests=(
 )
 
 ret=0
-echo "Comparing results of ./$1 $2 to ./$3"
+# simplifies things, 
+if [ -z "$1" ]; then 
+	ref="balanced_permutations.py"
+	refargs="-anpd"
+	luka="luka"
+	lukaargs=""
+else
+	ref=$1
+	refargs=$2
+	luka=$3
+	lukaargs=$4
+fi
+echo "Comparing results of ./$ref $refargs to ./$luka"
 for test in "${tests[@]}"
 do 
 	echo "Testing $test..."
 	# still bad, don't feel like changing
-	./$1 $test $2 > outfile1
-	./$3 $test > outfile2
+	./$ref $test $refargs > outfile1
+	./$luka $test $lukaargs> outfile2
 	diff outfile1 outfile2 > difffile
 	if [ $? -ne 0 ]; then
 		echo "Test results differ. Diff:"

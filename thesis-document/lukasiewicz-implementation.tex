@@ -1,0 +1,231 @@
+\chapter{Loopless Lukaseiwicz Word Generation}
+This chapter gives a loopless implementation of the successor rule in \ref{eq:luka} as well as a simplified implementation of the algorithm for the special case of Motzkin words which evaluates at most 3 conditionals per generated string. 
+
+
+\section{Loopless Generation of Lukasiewicz Words}
+Implementing left-shifts in an array-based representation of Lukasiewicz words would almost certainly require some form of loop left-shifts.  In particular, left-shifting a symbol from an position $i$ in the array to front of the array would require shifting each of the first $i$ symbols down.  This would necessitate worst-case linear time to perform a single iteration. 
+However, using a linked-list of integers to represent Lukasiewicz words, left-shifts can be implemented looplessly as performing a left-shift requires only removing the node to be shifted from the list it and re-inserting it at position 1 or 2.  Thus, a linked-list representation of Lukasiewicz words allows for a loopless implementation of the successor rule in $\ref{eq:luka}$.
+
+\subsection{Observations}
+The algorithm in \ref{fig:lukaAlg} takes advantage of the following observations about equation \ref{eq:luka}:
+
+\begin{enumerate}
+    \item In all cases, $\luka{\alpha}$ shifts a single symbol at most 2 symbols past the first increase in $\alpha$ to either the first or second position in $\alpha$.  
+    \item Given $m$, a pointer to $\alpha_m$ and a pre-calculated value of $\sum{\rho}$, the correct shift to perform can be determined and executed looplessly.
+    \item Case \ref{eq:prefix_n_2} occurs only when $\alpha$ is in descending order and is guaranteed to create an increase at position 2.
+
+    \item Shifting a symbol from position $m+2$ preserves the increase at position $m+1$.  The increase at position $m+1$ remains the first increase in $\alpha$ unless the shift creates an increase at the front of the string.
+
+    \item Shifting a symbol from position $m+1$ creates an increase at position $m+2$ if $\alpha_m < \alpha_{m+2}$.  This becomes the new first increase in the string unless the shift creates an increase at the front of the string.
+
+    \item In the case where a symbol is shifted from position $m+1$, $\alpha_m >= \alpha_{m+2}$, and the shift does not create an increase at the front of the string, the new first increase is whatever the previous second increase in the string was previously.
+
+Shifts from position $m+1$ occurr either when 
+        \begin{enumerate}
+            \item $\alpha_m < \alpha_{m+2}$: the new first increase is at position $m+2$.
+            \item $m=n-1$: the new first increase is either at the front of the string or does not exist
+            \item $\alpha_m >= \alpha_{m+2}$ and $\alpha_{m+2} = 0$: the new first increase is either at the front of the string or at the previous second increase.  Since $\alpha_{m+2}=0$, if no increase is created at the front of the string, all symbols between $\alpha_{m+2}$ and the new first increase must be zero
+        \end{enumerate}
+    \item If shifting creates an increase at the front of the string, the new $\sum{\rho}$ is equal to $\alpha_1$
+    \item If shifting does not create an increase at the front of the string, the new $\sum{\rho}$ is equal to its prior value plus the value of the symbol that was shifted.
+         
+\end{enumerate}
+
+This final observation necessitates keeping track of all increases in $\alpha$ in order to guarantee the ability to determine the new first increase in constant time (i.e., without scanning the string).  This is possible in constant time since left-shifting a symbol from position $m,m+1,$ or $m+2$ will never affect any increases past index $m+3$.  Thus, a stack-like data structure containing pointers to ``increase'' nodes and the indices at which they occur is maintained throughout the algorithm's execution.  This requires order n additional space.
+
+-----------------------------work in progress---------------------------------
+    
+\begin{figure}[H]
+    \begin{subfigure}[]{.5\textwidth}
+    \begin{center}
+        \begin{Verbatim}
+typedef struct ll_node {
+    int data;
+    struct ll_node* prev;
+    struct ll_node* next;
+} ll_node;
+
+typedef struct inc {
+    struct ll_node* node;
+    int index;
+} inc;
+        \end{Verbatim}
+            
+    \end{center}
+
+    \caption{struct definitions for linked list Lukasiewicz word representation and the increase stack.}
+    \label{fig:lukaStruct}
+    \end{subfigure}
+    \begin{subfigure}[]{.5\textwidth}
+    \begin{center}
+        \begin{Verbatim}
+void lshift_ll(ll_node* insert_node, ll_node* shift_node){
+    //remove shift_node
+    ll_node* sprev=shift_node->prev;
+    ll_node* snext=shift_node->next;
+    if(sprev){
+	sprev->next=snext;
+    }
+    if(snext){
+	snext->prev=sprev;
+    }
+
+    //insert shift_node before insert_node
+    ll_node* iprev=insert_node->prev;
+    shift_node->prev=iprev;
+    if(iprev){
+	iprev->next=shift_node;
+    }
+
+    shift_node->next=insert_node;
+    insert_node->prev=shift_node;
+}
+
+        \end{Verbatim}
+            
+    \end{center}
+
+\caption{helper function for left-shifting a linked list node}
+    \label{fig:lukaHelpers}
+    \end{subfigure}
+
+\end{figure}
+
+
+% \begin{figure}[H]
+% \begin{Verbatim}
+% nop
+% \end{Verbatim}
+
+% \label{fig:lukaHelpers}
+% \end{figure}
+
+
+\begin{figure}[H]
+\begin{Verbatim}
+void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd)){
+    inc* incs = (inc*) calloc(n/2, sizeof(inc)); //stack of (node, index) pairs
+    int nincs=1; //number of increases
+    incs[0] = (inc) {.node=tl,.index=n-1}; //cool struct initializer syntax
+
+    ll_node *shift_node, *insert_node;
+    int prefix_sum,prefix_len,insert_index;
+
+    while(nincs){
+	ll_node* m=incs[nincs-1].node;
+	prefix_len = incs[nincs-1].index;
+	if(prefix_len >= n-1){ // increase removed
+	    nincs--;
+	    shift_node=m;
+	}
+	else if(m->next->data > m->prev->data){
+	    if(m->next->data > m->data){ //increase removed
+		nincs--;
+	    }else{ //increase kept
+		incs[nincs-1].node=m->next;
+		incs[nincs-1].index++;
+	    }
+	    shift_node=m;
+	}
+	else{
+	    if(prefix_sum > prefix_len || m->next->data > 0){ //not tight
+		shift_node=m->next; //shift m+2...
+		incs[nincs-1].index++; //same increase, different location (shifted down by one)
+		if(prefix_len < n-2 && m->next->next->data > m->next->data && 
+                 m->next->next->data <= m->data){ //hideous line of code
+		    incs[nincs-2] = incs[nincs-1];
+		    nincs--;
+		}
+	    }else{ //tight; increase removed
+		nincs--;	
+		shift_node=m;
+	    }
+	}
+
+	insert_index=!(shift_node->data); //bang
+	if(insert_index){
+	    insert_node=hd->next;
+	}else{
+	    insert_node=hd;
+	    hd=shift_node;
+	}
+	lshift_ll(insert_node,shift_node);
+	if(insert_index != prefix_len && (shift_node->data < insert_node->data)){
+	    prefix_sum=hd->data;
+	    incs[nincs++]= (inc) {.node = insert_node, .index=insert_index+1};
+	}else{
+	    prefix_sum+=shift_node->data;
+	}
+	visit(hd);
+    }
+}
+\end{Verbatim}
+
+\caption{work in progress. At least it already fits on one page.}
+\label{fig:lukaAlg}
+\end{figure}
+
+
+\section{Simplified Loopless Generation of Motzkin Words}
+Since Lukasiewicz words are a generalization of Motzkin words, the same algorithm can be used to generate Motzkin words by restricting the content set S to be strictly zeroes, ones, and twos.  However, the additional restrictions on Motzkin words allow for a simpler implementation of the rule.   Pseudocode for loopless generation of Motzkin words is given below in Fig. \ref{fig:motzkinAlg}. 
+
+
+% \iffalse
+\begin{figure}[H]
+    \centering
+        \begin{algorithm}[H]
+        \begin{algorithmic}
+        \Function{coolMotzkin}{$s,t$}
+        \EndFunction{}
+         
+        \State $n \gets 2*s+t$
+        \State $b \gets 2^1 0^1 2^{s-1} 1^t 0^{s-1}$
+        \State $x \gets 3$
+        \State $y \gets 2$
+        \State $z \gets 2$
+        
+        \State \visit{$b$}
+        
+        \While{$x <= n$}
+            \State $q \gets b_{x-1}$
+            \State $r \gets b_x$
+            \vspace{.4em} 
+            \State $b_x\gets b_{x-1}$
+            \State $b_y\gets b_{y-1}$
+            \State $b_z\gets b_{z-1}$
+            \State $b_1\gets r$
+            \vspace{.4em} 
+            \State $x \gets x+1$
+            \State $y \gets y+1$
+            \State $z \gets y+1$
+            
+            \vspace{.4em} 
+            \If{$b_x = 0$}
+                \If{$z-2 > x-y$}
+                    \State $b_1=2$
+                    \State $b_2=0$
+                    \State $b_x=r$
+                    \State $x \gets 3$
+                    \State $y \gets 2$
+                    \State $z \gets 2$
+                \Else 
+                    \State $x \gets x+1$
+                
+                \EndIf
+                \ElsIf{$q \ge b[x]$}
+                    \State $b_x \gets 2$     
+                    \State $b_{x-1} \gets 1$     
+                    \State $b_1 \gets 1$     
+                    \State $z \gets 1$     
+                
+            \EndIf
+            \visit{$b$}
+        \EndWhile
+        \end{algorithmic}
+        % I don't know how to get rid of this "a" here
+        \caption{Motzkin}
+        \end{algorithm}
+    \caption{Pseudocode algorithm for loopless enumeration of Motzkin words}
+    \label{fig:motzkinAlg}
+\end{figure}
+% \fi
