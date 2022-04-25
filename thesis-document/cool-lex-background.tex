@@ -2,18 +2,18 @@ This chapter will give background information on cool-lex order and the sets it 
 \section{Combinations: Fixed-Weight Binary Strings} \label{sec:coolCombo}
 Generating all binary strings with $s$ zeroes and $t$ ones is often referred to as combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph. D thesis and is as follows \cite{williams2009shift}:
 
-\noindent Let $\alpha$ be a binary string of length $n$.
+ Let $\alpha$ be a binary string of length $n$.
 
-\noindent Let $y$ be the position of the leftmost zero in $\alpha$ and $x$ be the position of the leftmost 1 in $\alpha$ such that $x > y$.  If there is no such 1, let $x=n$.
+ Let $y$ be the position of the leftmost zero in $\alpha$ and $x$ be the position of the leftmost 1 in $\alpha$ such that $x > y$.  If there is no such 1, let $x=n$.
 
-\noindent Note that $\alpha_1...\alpha_{x-1}$ is the non-increasing prefix of $\alpha$.
+ Note that $\alpha_1...\alpha_{x-1}$ is the non-increasing prefix of $\alpha$.
 
-\noindent Let $\leftshift[\alpha]{i}$ be a simplified version of the left shift function defined in equation \ref{eq:leftdef}:  $\leftshift[\alpha]{i}$ shifts the $i\thh$ symbol of $\alpha$ into the first position.  Thus, $\leftshift[\alpha]{i}=\lshiftindex[\alpha]{1}{i}$.
+ Let $\leftshift[\alpha]{i}$ be a simplified version of the left shift function defined in equation \ref{eq:leftdef}:  $\leftshift[\alpha]{i}$ shifts the $i\thh$ symbol of $\alpha$ into the first position.  Thus, $\leftshift[\alpha]{i}=\lshiftindex[\alpha]{1}{i}$.
 
 % function that shifts the $i\thh$ bit of $\alpha$ into the rotates the first i bits of a string $\alpha$ right circularly by one.
 
 % More formally, 
-% \noindent $\leftshift[\alpha]{i}=\alpha_2,\alpha_3,...,\alpha_i,\alpha_1,\alpha_{i-1},\alpha_{i+1},\alpha_{i+2},...,\alpha_{2n}$
+%  $\leftshift[\alpha]{i}=\alpha_2,\alpha_3,...,\alpha_i,\alpha_1,\alpha_{i-1},\alpha_{i+1},\alpha_{i+2},...,\alpha_{2n}$
 \begin{equation*}
     \overleftarrow{\text{cool}}(\alpha) = \begin{cases}
 	\leftshift[\alpha]{x} & \text{if $\alpha_{x+1}=1$}\\
@@ -23,7 +23,7 @@ Generating all binary strings with $s$ zeroes and $t$ ones is often referred to 
 
 Note that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$, where exponentiation denotes repeated symbols.  Because of this, the two left-shift operations can be replaced with can be replaced with either one or two symbol transpositions.
 
-\noindent Let $\transpose{\alpha}{i}{j}$ with $1 \le i \le j \le n$ be a function that swaps $\alpha_i$ an $\alpha_j$.  More formally, $\transpose{\alpha}{i}{j}=\alpha_1,\alpha_2,\dots,\alpha_{i-1},\alpha_{j}\alpha_{i+1}\dots \alpha_{j-1}\alpha_i \alpha_{j+1}\dots \alpha_n$
+ Let $\transpose{\alpha}{i}{j}$ with $1 \le i \le j \le n$ be a function that swaps $\alpha_i$ an $\alpha_j$.  More formally, $\transpose{\alpha}{i}{j}=\alpha_1,\alpha_2,\dots,\alpha_{i-1},\alpha_{j}\alpha_{i+1}\dots \alpha_{j-1}\alpha_i \alpha_{j+1}\dots \alpha_n$
 The left-shift rule can be re-stated as follows:
 
 \begin{equation*}
@@ -46,17 +46,17 @@ The left-shift rule can be re-stated as follows:
 Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}:
 We will use $\mathbf{D}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{D}_n$ is therefore $2n$.
 
-\noindent Let $D \in \mathbf{D}_n$
+ Let $D \in \mathbf{D}_n$
 
-\noindent Let the $i$th prefix shift of D, denoted by $\preshift{D}{i}$, be a function that rotates the second through $i\thh$ symbols of D one to the right circularly.  More formally, 
+ Let the $i$th prefix shift of D, denoted by $\preshift{D}{i}$, be a function that rotates the second through $i\thh$ symbols of D one to the right circularly.  More formally, 
 
-\noindent $\preshift{D}{i}=d_1,d_i,d_2,...,d_{i-1},d_{i+1},d_{i+2},...,d_{2n}$
+ $\preshift{D}{i}=d_1,d_i,d_2,...,d_{i-1},d_{i+1},d_{i+2},...,d_{2n}$
 
-\noindent Note that the prefix shift operation is a special case of the left shift operation defined in $\ref{eq:leftdef}$: $\preshift{D}{i}=\lshiftindex[D]{2}{i}$
+ Note that the prefix shift operation is a special case of the left shift operation defined in $\ref{eq:leftdef}$: $\preshift{D}{i}=\lshiftindex[D]{2}{i}$
 
 
 
-\noindent Let $k$ be the index of the 1 in the leftmost $01$ substring in $D$ if it exists and $2n$ if $D$ has no $01$ substring. Note that if $D$ has no $01$ substring, then $D=1^n0^n$.
+ Let $k$ be the index of the 1 in the leftmost $01$ substring in $D$ if it exists and $2n$ if $D$ has no $01$ substring. Note that if $D$ has no $01$ substring, then $D=1^n0^n$.
 Furthermore, note that this definition of $k$ is equivalent to the definition of $x$ in \ref{sec:coolCombo}
 The successor rule for $D$ is as follows:
 
@@ -107,15 +107,15 @@ Due to its simplicity and efficienty, Don Knuth included the cool-lex algorithm 
 
 Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams is as follows \cite{williams2009loopless}:
 
-\noindent Let $\alpha$ be a multiset of length $n$.
+ Let $\alpha$ be a multiset of length $n$.
 
-\noindent Let $i$ be the maximum value such that $\alpha_{j-1} \ge s_j$ for all $2 \le j \le i$.  In other words, $i$ is the length of the non-increasing prefix of $\alpha$.  
+ Let $i$ be the maximum value such that $\alpha_{j-1} \ge s_j$ for all $2 \le j \le i$.  In other words, $i$ is the length of the non-increasing prefix of $\alpha$.  
 
 Recall the definition of $\leftshift[\alpha]{i}$ from section $\ref{sec:coolCombo}$
 
-% \noindent Let $\sigma_j(\alpha)$ be a function that shifts the $i\thh$ value of $\alpha$ into the first position, or equivalently rotates the first i elements of $\alpha$ right circularly.  More formally, 
+%  Let $\sigma_j(\alpha)$ be a function that shifts the $i\thh$ value of $\alpha$ into the first position, or equivalently rotates the first i elements of $\alpha$ right circularly.  More formally, 
 
-% \noindent $\sigma_j(\alpha)=\alpha_j,\alpha_1,\alpha_1,\dots,\alpha_{j-1},\alpha_{j+1},\dots,\alpha_n $
+%  $\sigma_j(\alpha)=\alpha_j,\alpha_1,\alpha_1,\dots,\alpha_{j-1},\alpha_{j+1},\dots,\alpha_n $
 
 Then
 
