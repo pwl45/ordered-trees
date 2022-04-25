@@ -30,7 +30,7 @@ In this thesis, we are not concerned with counting combinatorial objects, but ra
 % This means sequencing the objects such that each one differs from the other in a specific small way. For example, two successive integer strings might differ by shifting one symbol into another position, or two trees might differ by changing one node to be a child of a different node.
 More specifically, if $\alpha = a_1 a_2 \ldots a_n$ is a string and $i < j$, then we let
 \begin{equation}
-    \leftshift[\alpha]{j}{i} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n. \label{eq:leftdef}
+    \lshiftindex[\alpha]{j}{i} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n. \label{eq:leftdef}
 \end{equation}
 
 Our Gray code for ordered trees will use ``pops", which remove a node's first child, and ``pushes,'' which push one node to be the first child of another.  More specifically, the algorithm will generate trees using a pop-push operation that pops one node's first child and pushes it to become the first child of another node.  We will refer to this pop-push operation as a ``pull.''
