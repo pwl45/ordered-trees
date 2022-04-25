@@ -1,8 +1,7 @@
-\chapter{Loopless Lukaseiwicz Word Generation}
 This chapter gives a loopless implementation of the successor rule in \ref{eq:luka} as well as a simplified implementation of the algorithm for the special case of Motzkin words which evaluates at most 3 conditionals per generated string. 
 
 
-\section{Loopless Generation of Lukasiewicz Words}
+\section{Generating Lukasiewicz Words in Linked Lists}
 Implementing left-shifts in an array-based representation of Lukasiewicz words would almost certainly require some form of loop left-shifts.  In particular, left-shifting a symbol from an position $i$ in the array to front of the array would require shifting each of the first $i$ symbols down.  This would necessitate worst-case linear time to perform a single iteration. 
 However, using a linked-list of integers to represent Lukasiewicz words, left-shifts can be implemented looplessly as performing a left-shift requires only removing the node to be shifted from the list it and re-inserting it at position 1 or 2.  Thus, a linked-list representation of Lukasiewicz words allows for a loopless implementation of the successor rule in $\ref{eq:luka}$.
 
@@ -166,7 +165,7 @@ void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd)){
 \end{figure}
 
 
-\section{Simplified Loopless Generation of Motzkin Words}
+\section{Generating Motzkin Words in Arrays}
 Since Lukasiewicz words are a generalization of Motzkin words, the same algorithm can be used to generate Motzkin words by restricting the content set S to be strictly zeroes, ones, and twos.  However, the additional restrictions on Motzkin words allow for a simpler implementation of the rule.   Pseudocode for loopless generation of Motzkin words is given below in Fig. \ref{fig:motzkinAlg}. 
 
 

@@ -1,4 +1,3 @@
-\chapter{A Push-Pop Gray Code for Ordered Trees} \label{chap:otree}
 This chapter presents the first loopless algorithm for generating all ordered trees with n nodes. 
 % Cooldyck was first loopless for Dyck and Binary; we now show also ordered
 % Give exampl  of bit change that messup tree (show for bin and o). 
@@ -6,7 +5,6 @@ This chapter presents the first loopless algorithm for generating all ordered tr
 
 Ruskey and Williams previously gave a cool-lex algorithm for looplessly generating all Dyck words  of a given length via prefix shifts \cite{ruskey2008generating}.  In the same paper, Ruskey and Williams also gave a loopless algorithm for generating all binary trees with a fixed number in the same order.
 
-% TODO: rephrase 
 % In this thesis, we consider ordered trees cool lex, it's minimal change and loopless. this is not nec true for any dyck word minimal change order. One order, 3 loopless algorithms for 3 coolest catalan structures. 
 % This thesis provides an additional adaptation of the successor rule to looplessly generating ordered trees with a fixed number of nodes via node shifts. % reasonable term?
 % TODO: adaptation of order, new successor rule
@@ -256,7 +254,101 @@ Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be t
 
 Ruskey and Williams proved that, given a Dyck word of order n, \ref{eq:prefixDyck} iteratively generates all Dyck words of order n.  This proof will use the bijection between Dyck words of order $n$ and ordered trees with $n+1$ nodes to show that that \ref{eq:otreeRule} generates all ordered trees with a given number of nodes.  
 
-Recall that the successor rule $\coolCat{D}$ generates all Dyck words.  Therefore,  To prove that $\nextTree{T}$ generates all ordered trees with $|T|$ nodes, it is sufficient to show that, given an arbitrary ordered tree T, 
+
+\subsection{Terminology and Remarks}
+
+The bijection between ordered trees and Dyck Words given in \ref{subsec:otree-dyck-bij} has many useful properties for proving the correspondence between \ref{eq:prefixDyck} and \ref{eq:otreeRule}.  We will define the following functions to assist in proving this result.
+
+
+\begin{itemize}
+    \item Let $\otree{D}$ and $\dyck{T}$ be functions that convert a Dyck word to an ordered tree and an ordered tree to a Dyck word respectively via the above process.
+    \item Let $\depth{t_i}=$ length of the path between root and $t_i$. $\depth{root}=0$
+    \item Let $\oneindex{D}{i}=$ be the index of the $i\thh{}$ one in D.
+\end{itemize}
+
+
+
+In addition to the above functions, 
+the following remarks can be derived from the bijection between ordered trees and Dyck words. 
+Given an ordered tree $T$, its preorder listing $t_0,t_1,...t_n$, and its corresponding order $n$ Dyck word $D$
+\begin{remark}
+    The $i\thh$ non-root node in a preorder listing of $T$ corresponds to the $i\thh$ one in $D$.
+
+    % Equivalently, $t_i$ corresponds to the $\oneindex{D}{i}$ one in D for $1 \le i \le n$
+\end{remark}
+\begin{proof}
+    Recall the method of constructing an ordered tree from a Dyck word.  Each one in D creates a new node; zeroes in D do not create nodes.  Generating an ordered tree from a Dyck word generates the nodes of the tree in preorder.  Thus, $t_i$ corresponds to the $i$th one in D for $1 \le i \le n$.
+\end{proof}
+
+\begin{remark} The difference in depths between nodes $t_i$ and $t_{i-1}$ is equal to one minus the number of zeroes between the $(i-1)^{\underline{st}}$ and $i\thh$ and  ones in $D$
+
+
+    % TODO: eqref?
+\end{remark}
+\begin{proof}
+
+    This remark can be stated formally as 
+
+    \begin{equation} \label{eq:depthformula} 
+    	\depth{t_i} - \depth{t_{i-1}}=1-(\oneindex{D}{i}-\oneindex{D}{i-1} - 1) 
+    \end{equation}
+    
+
+    % or equivalently, 
+
+    % \begin{equation} \label{eq:indexformula} 
+    % 	\oneindex{D}{i} = \oneindex{D}{i-1} + \depth{t_{i-1}} - \depth{t_i} + 2
+    % \end{equation}
+    
+
+    Note that $(\oneindex{D}{i}-\oneindex{D}{i-1}-1)$ is equal to the number of zeroes between the $i\thh$ and $(i-1)^{\underline{st}}$ ones in D.  % Therefore, this rule can be informally described as follows:
+
+    % The depth of $t_i$ is the depth of $t_{i-1}$ plus 1 minus the number of zeroes between the $(i-1)\thh$ and $i\thh$ ones in D
+
+    % The number of zeroes between the $i\thh$ and $(i-1)\thh$ ones in $D$ is equal to one plus the depth  $\depth{t_i}$ minus $\depth{t_{i-1}}$
+
+    This follows naturally from the bijection between Dyck words and ordered trees.  Each zero corresponds to a step up in the tree before adding the next child.  
+
+    If there are zero zeroes between the $i\thh$  and $(i-1)^{\underline{st}}$ ones in D, $t_i$ is a child of $t_{i-1}$; $\depth{t_i}=\depth{t_{i-1}}+1$
+
+    If there is one zero between the $i\thh$  and $(i-1)^{\underline{st}}$ ones in D, $t_i$ is a child of $t_{i-1}$'s parent; $\depth{t_i}=\depth{t_{i-1}}+1$.  
+
+    Each subsequent zero between $t_{i-1}$ and $t_i$ decreases $\depth{t_{i}}$ by one.  Thus, the depth of $t_i$ is the depth of $t_{i-1}$ plus 1 minus the number of zeroes between $t_{i-1}$ and $t_{i}$.
+\end{proof}
+% \bigskip
+
+
+\begin{remark}A preorder listing of $\depth{t_i} $ for each $ t_i \in T$ can be used to construct a Dyck word. \label{re:construct_dyck}
+
+\end{remark} 
+\begin{proof}
+    % This follows from Remark \ref{re:depthformula}, as it implies that for any $i,i+1 \le n$, $\oneindex{D}-\oneindex{$ 
+
+    Let $T=t_0,t_1,...t_n$ be a preorder traversal of T.  Note that $t_0$ is the root of $T$
+
+    Construct D as follows: 
+
+    \begin{itemize}
+	% \item skip $t_0$
+	\item Let $D=\epsilon$ % clear that this is empty string?
+	\item For each $t_i$, $1\le i \le n$
+	    \begin{itemize}
+		\item Append a 1 to $D$
+		\item Append $1-\depth{t_{i}}+\depth{t_{i-1}}$ zeroes to D.
+	    \end{itemize}
+	\item Append $\depth{t_{n}}$ zeroes to D. 
+    \end{itemize}
+\end{proof} 
+
+% TODO NEW: move to ch 3:, start with binary rule and then get to this.
+
+% \section{ $\overleftarrow{\mathsf{coolCat}} \iff \mathsf{nextree}$ }
+\subsection{Correspondence between coolCat and nextree}
+Recall that the successor rule $\coolCat{D}$ generates all Dyck words.  Therefore,  to prove that $\nextTree{T}$ generates all ordered trees with $|T|$ nodes, it is sufficient to show that, given an arbitrary ordered tree T and its corresponding Dyck word D, $\nextTree{T}$ behaves the same on T as $\coolCat{D}$ does on D. More precisely, we aim to prove the following: 
+
+
+
+% TODO: QUESTION: move to otree section?
 
 \begin{theorem}
     Given an ordered tree T, $\nextTree{T}=\otree{\coolCat{\dyck{T}}}$

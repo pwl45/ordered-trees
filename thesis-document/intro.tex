@@ -1,4 +1,3 @@
-\chapter{Introduction}
 
 % TODO NEW: SAY start with two background sections, then first result, then additional background, then second result. 
 % make ch 1 intro include 1.1 and goals of the thesis
@@ -8,8 +7,8 @@
 
 Combinatorial generation is defined as the exhaustive listing of combinatorial objects of various types.  Frank Ruskey duly notes in his book \emph{Combinatorial Generation} that the phrase ``Let's look at all the possibilities" sums up the outlook of his book and the field as a whole \cite{ruskey2003combinatorial}. Examining all possibilities fitting certain criteria is frequently necessary in fields ranging from mathematics to chemistry to operations research. Combinatorial generation as an area of study seeks to find an underlying combinatorial structure to these possibilities and utilize it to obtain an algorithm to efficiently enumerate an appropriate representation of them \cite{ruskey2003combinatorial}. 
 
-A quintessential result of the combinatorial generation in practice is Frank Gray's reflected binary code, or Gray code. Gray codes give a ``reflected" ordering of binary strings such that each successive string in the ordering differs from the previous string by exactly one bit. This contrasts from a lexicographic ordering of binary strings, in which a n-digit binary string can differ by up to n digits from its predecessor and will differ by approximately two (more precisely $\sum_{i=0}^n2^i$, which is 1.9375 for 4 bit values and 1.996 for 8 bit values) bits on average\footnote{Consecutive pairs of binary digits in lexicographic order will differ in the bit at position i with probability $\frac{1}{2^i}$.  Therefore, the average number of differing bits between two binary strings of length n is $\sum_{i=0}^n2^i$, which converges to 2 as n grows large.}. The binary reflected Gray code, therefore, provides an ordering that requires as many bit switches as the more intuitive lexicographic order. Binary reflected Gray codes are widely used in electromechanical switches to reduce error and prevent spurious output associated with asynchronous bit switches. 
-Crucially, Frank Gray's reflected binary code achieved a tangible benefit in error reduction through the use of an alternative method of enumerating binary strings.  The technique of reflecting all or certain parts of a string to generate new strings has become one of the most widely used techniques in combinatorial generation.
+A quintessential result of the combinatorial generation in practice is Frank Gray's reflected binary code, or Gray code. Gray codes give a ``reflected" ordering of binary strings such that each successive string in the ordering differs from the previous string by exactly one bit. This contrasts from a lexicographic ordering of binary strings, in which a n-digit binary string can differ by up to n digits from its predecessor and will differ by approximately two (more precisely $\sum_{i=0}^n2^i$, which is 1.9375 for 4 bit values and 1.996 for 8 bit values) bits on average\footnote{Consecutive pairs of binary digits in lexicographic order will differ in the bit at position i with probability $\frac{1}{2^i}$.  Therefore, the average number of differing bits between two binary strings of length n is $\sum_{i=0}^n2^i$, which converges to 2 as n grows large.}. The binary reflected Gray code, therefore, provides an ordering that requires half as many bit switches on average as the more intuitive lexicographic order. Binary reflected Gray codes are widely used in electromechanical switches to reduce error and prevent spurious output associated with asynchronous bit switches.   The technique of reflecting all or certain parts of a string to generate new strings has become one of the most widely used techniques in combinatorial generation.
+Crucially, Frank Gray's reflected binary code achieved a tangible benefit in error reduction through the use of an alternative method of enumerating binary strings.
 
 
 \begin{figure}
@@ -26,7 +25,7 @@ Crucially, Frank Gray's reflected binary code achieved a tangible benefit in err
     \label{binary}
 \end{figure}
 
-\section{Gray Codes for Strings, Lattice Paths and Trees} \label{sec:intro_graycodes}
+\section{Gray Codes for Strings, Lattice Paths and Trees} \label{sec:intro_Graycodes}
 In this thesis, we are not concerned with counting combinatorial objects, but rather with efficiently ordering them.  We aim to create a \emph{Gray code} or \emph{minimal change ordering} for these objects.  Frank Gray's reflected binary code used complementing a single bit as the minimal change between successive binary strings in its ordering.  Other notions of minimal changes in strings are \emph{adjacent-transpositions}, or \emph{swaps}, which interchange two adjacent symbols in a string, and \emph{shifts}, in which a single symbol in a string moved to another position. Our Gray codes for strings will use a slightly more restrictive type of shift: a \emph{left-shift}, which moves a single symbol somewhere to the left within a string. 
 % This means sequencing the objects such that each one differs from the other in a specific small way. For example, two successive integer strings might differ by shifting one symbol into another position, or two trees might differ by changing one node to be a child of a different node.
 More specifically, if $\alpha = a_1 a_2 \ldots a_n$ is a string and $i < j$, then we let
@@ -34,36 +33,23 @@ More specifically, if $\alpha = a_1 a_2 \ldots a_n$ is a string and $i < j$, the
     \leftshift[\alpha]{j}{i} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n. \label{eq:leftdef}
 \end{equation}
 
-Our gray code for ordered trees will use ``pops", which remove a node's first child, and ``pushes,'' which push one node to be the first child of another. 
+Our Gray code for ordered trees will use ``pops", which remove a node's first child, and ``pushes,'' which push one node to be the first child of another.  More specifically, the algorithm will generate trees using a pop-push operation that pops one node's first child and pushes it to become the first child of another node.  We will refer to this pop-push operation as a ``pull.''
 
-%TODO name???
 % Our enumeration algorithms uses \emph{left shifts} and \emph{parent shifts}. Left shifts shift a single symbol in a string somewhere left (earlier) in the string; parent shifts shift a single node in a tree to be the first child of another node.
 
 \section{Cool-Lex Order}
 % connect Gray code and cool-lex order
-Cool-lex order has introduced the idea of rotating sublists to enumerate languages.  Different versions of cool-lex order have been shown to enumerate several sets of combinatorial objects, including binary strings, fixed weight binary strings, Dyck words, and multiset permutations.  Cool-lex orders often lead to algorithms that are faster and simpler than standard lexicographic order.  For example, the ``multicool" package in R uses a loopless cool-lex algorithm to efficiently enumerate multiset permutations.   The package started using cool-lex order for multiset permutations in versoin 1.1 and as of version 1.12 has been downloaded nearly a million times \cite{multicool_2021}.
-% minimal change order for stuff mentioned in 1.3
-% say that the order leads to algorithms that are often simpler and faster than standard lexicographic order does
-% for example, cite the multicool page and point out that (a) the package started with cool-lex for multiset permutations in version 1.1 and as of version 1.12 it has been downloaded nearly a million times
-% https://www.rdocumentation.org/packages/multicool/versions/0.1-12
-% maybe add something similar to Figure 1 for cool-lex of binary strings or combinations
-
-
-% cool-lex for all binary strings
-% conference: https://www.researchgate.net/publication/262153840_The_Coolest_Order_of_Binary_Strings
-% journal: https://www.researchgate.net/publication/257376294_The_Coolest_Way_to_Generate_Binary_Strings
+Cool-lex order has introduced the idea of rotating sublists to enumerate languages.  Different versions of cool-lex order have been shown to enumerate several sets of combinatorial objects, including binary strings, fixed weight binary strings, Dyck words, and multiset permutations \cite{williams2009shift}.  Cool-lex orders often lead to algorithms that are faster and simpler than standard lexicographic order.  For example, the ``multicool" package in R uses a loopless cool-lex algorithm to efficiently enumerate multiset permutations.   The package started using cool-lex order for multiset permutations in versoin 1.1 and as of version 1.12 has been downloaded nearly a million times \cite{multicool_2021}.  A common thread in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string, or the longest prefix of a string such that each successive symbol in the prefix is less than or equal to the previous symbol in the string.
 
 \section{Goals of this Thesis}
 
 % Cool-lex order has been shown to provide a minimal change cyclic ordering for Dyck words and binary trees. This thesis provides a new algorithm fo
 
-Cool-lex has been shown to provide a minimal-change cyclic ordering for the sets of fixed-weight binary strings, multiset permutations, binary and k-ary Dyck words, and other languages \cite{williams2009shift}. A common thread in the cool-lex algorithms for combinatorial generation is their focus on the \emph{first increase} of string, or the longest prefix of a string such that each successive symbol in the prefix is less than or equal to the previous symbol in the string.
 
 This thesis will examine the use of cool-lex orders to enumerate other languages. Among these are ordered trees, Lukasiewicz words, and Motzkin words. 
 
-% , Motzkin, and Schröder paths, which are lattice paths that share similarities with Dyck paths. Shift Gray codes for enumerating these languages have been developed and are given in 1.3.
+This thesis will provide two primary contributions, each with sub-contributions.  
 
-Dyck, Motzkin, and Lukasiewicz paths all share bijections with various combinatorial objects. For example, Dyck paths of length $2n$ share a bijection with binary trees with $n$ nodes. Ruskey and Williams found that the cool-lex successor rule for enumerating Dyck words corresponded directly to a loopless successor rule for enumerating binary trees with a constant number of pointer changes \cite{ruskey2008generating}. % This thesis will examine the efficiency of using cool-lex order to enumerate other sets of combinatorial objects in bijective correspondence with these languages.  
+The first contribution is a `pop-push' Gray code for enumerating ordered trees in $O(1)$ time. Chapter \ref{chap:otree-graycode} will give a two-case successor rule for generating all ordered trees with $n$ nodes using at most two ``pull'' operations. Chapter \ref{chap:otree-implementation} will provide a loopless algorithm for the successor rule in \ref{chap:otree-graycode} and an implementation of the algorithm in C.
 
-% TODO: Describe new results of thesis?
-
+The second contribution is a shift Gray code for Lukasiewicz words.  Chapter \ref{chap:luka-graycode} will give a shift Gray code for generating Lukasiewicz words with fixed content using one prefix shift per iteration.  Chapter \ref{chap:luka-implementation} will give a loopless implementation of the algorithm in \ref{chap:luka-graycode} using an array based implementation for the special case of Motzkin words and a linked list implementation for the general case of unrestricted Lukasiewicz words.

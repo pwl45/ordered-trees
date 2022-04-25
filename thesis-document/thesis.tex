@@ -6,19 +6,32 @@
 % Two primary contributions, each with subcontributions
 % each new result: one section on gray code, one section on implementation
 
+% First background block
+\chapter{Introduction}
 \input{intro.tex}
+\chapter{Catalan Objects} \label{chap:catalan}
 \input{catalan-background.tex}
+\chapter{Cool-Lex Order}
 \input{cool-lex-background.tex}
 
+% Ordered Trees
+\chapter{A Pop-Push Gray Code for Ordered Trees} \label{chap:otree-graycode}
 \input{otree-graycode.tex}
+\chapter{Loopless Ordered Tree Generation} \label{chap:otree-implementation}
 \input{otree-implementation.tex}
 
 
+% Second background block
+\chapter{Lattice Paths: Lukasiewicz, Motzkin, Schroder}
 \input{dyck-word-generalizations.tex}
 
+% Lukasiewicz
+\chapter{A New Shift Gray Code for Lukasiewicz Words} \label{chap:luka-graycode}
 \input{lukasiewicz-graycode.tex}
+\chapter{Loopless Lukasiewicz and Motzkin Word Generation} \label{chap:luka-implementation}
 \input{lukasiewicz-implementation.tex}
 
+% other stuff
 \chapter{Final Remarks}
 \section{Summary}
 \section{Open Problems}
