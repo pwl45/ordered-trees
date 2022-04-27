@@ -46,25 +46,24 @@ Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations 
     % This figure is temporarily omitted because it is slow
     \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
        \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
-\DyckTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
-\DyckTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
-\DyckTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
-\DyckTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
-\DyckTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
-\DyckTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
-\DyckTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
-\DyckTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
-\DyckTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
-\DyckTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
-\DyckTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
 \DyckTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
+\DyckTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
+\DyckTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
+\DyckTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
+\DyckTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
 \DyckTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
+\DyckTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
+\DyckTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
+\DyckTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
+\DyckTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
 \DyckTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
+\DyckTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
+\DyckTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
+\DyckTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
     \end{tabularx}
-    \caption{The $\C_4=14$ Dyck words of order 4}
+    \caption{The $\C_4=14$ Dyck words of order 4 in lexicographic order}
     \label{fig:Dycks}
 \end{figure}
-
 \section{Binary Trees}
 
 Binary trees are fundamental objects in computer science, and are commonly used for searching, sorting, and storing data hierarchically. A binary tree can be defined recursively as follows: The empty set $\phi$ is a binary tree. Otherwise a binary tree has a root vertex, a left subtree, and a right subtree, where each subtree is also a binary tree. A closely related object is an \emph{extended binary tree}, which is a binary tree for which every non-leaf node has exactly two children.  

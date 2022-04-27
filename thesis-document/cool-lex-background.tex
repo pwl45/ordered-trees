@@ -103,7 +103,31 @@ Ruskey and Williams provided a loopless pseudocode implementation of CoolCat tha
 
 % TODO: binary trees algorithm
 
-Due to its simplicity and efficiency, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and also provided an implementation of it for his theoretical MMIX processor architecture \cite{knuth2015art}.
+Due to its simplicity and efficiency, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and also provided an implementation of it for his theoretical MMIX processor architecture \cite{knuth2015art}. Figure \ref{fig:CoolDycks} gives demonstrates the iteration of coolCat on Dyck words of order $4$.
+
+\begin{figure}[H]
+    \centering
+    % This figure is temporarily omitted because it is slow
+    \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
+       \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
+\DyckTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
+\DyckTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
+\DyckTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
+\DyckTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
+\DyckTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
+\DyckTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
+\DyckTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
+\DyckTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
+\DyckTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
+\DyckTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
+\DyckTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
+\DyckTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
+\DyckTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
+\DyckTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
+    \end{tabularx}
+    \caption{The $\C_4=14$ Dyck words of order 4 in cool-lex order}
+    \label{fig:CoolDycks}
+\end{figure}
 
 \section{Multiset Permutations}
 
