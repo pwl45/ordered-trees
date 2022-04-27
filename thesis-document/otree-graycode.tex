@@ -283,7 +283,6 @@ Given an ordered tree $T$, its preorder listing $t_0,t_1,...t_n$, and its corres
 \begin{remark} The difference in depths between nodes $t_i$ and $t_{i-1}$ is equal to one minus the number of zeroes between the $(i-1)^{\underline{st}}$ and $i\thh$ and  ones in $D$
 
 
-    % TODO: eqref?
 \end{remark}
 \begin{proof}
 
@@ -340,15 +339,11 @@ Given an ordered tree $T$, its preorder listing $t_0,t_1,...t_n$, and its corres
     \end{itemize}
 \end{proof} 
 
-% TODO NEW: move to ch 3:, start with binary rule and then get to this.
-
 % \section{ $\overleftarrow{\mathsf{coolCat}} \iff \mathsf{nextree}$ }
 \subsection{Correspondence between coolCat and nextree}
 Recall that the successor rule $\coolCat{D}$ generates all Dyck words.  Therefore,  to prove that $\nextTree{T}$ generates all ordered trees with $|T|$ nodes, it is sufficient to show that, given an arbitrary ordered tree T and its corresponding Dyck word D, $\nextTree{T}$ behaves the same on T as $\coolCat{D}$ does on D. More precisely, we aim to prove the following: 
 
 
-
-% TODO: QUESTION: move to otree section?
 
 \begin{theorem}
     Given an ordered tree T, $\nextTree{T}=\otree{\coolCat{\dyck{T}}}$

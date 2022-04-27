@@ -1,4 +1,3 @@
-Introduce all these things plus concepts/features that will be useful later.
 The Catalan numbers are one of the most ubiquitous sequences of numbers in mathematics.  
 Named for mathematician Eugene Charles Catalan, the $n\thh$ Catalan number can be succinctly defined as the number of ways of triangulating a convex polygon with $n+2$ sides.  Figure \ref{fig:pentagontriangulations} demonstrates this for the case of $n=3$ The sequence of Catalan numbers for $n \ge 0$ can be defined mathematically as follows:
 
@@ -29,45 +28,9 @@ Named for mathematician Eugene Charles Catalan, the $n\thh$ Catalan number can b
     \caption{The $\C_3=5$ triangulations of a polygon with $3+2=5$ sides.}
 \label{fig:pentagontriangulations}
 \end{figure}
-The Catalan numbers can also be expressed through a summation that hints at the recursive structure of many of the Catalan objects.  
-
-\begin{align}
-    \C_{n+1} &= \sum_{k=0}^{n}{\C_{k}\C_{n-k}} \textrm{,   }  \C_0=1
-\end{align} 
-
-In the case of triangulated polygons, this summation can be derived as follows:
-
-$\C_{n+1}$ is the way of triangulating a convex polygon with $n+3$ sides.  Let $\mathcal{P}_{n+3}$ be a convex $(n+3)$-gon and let $\mathcal{T}$ be a triangulation of $\mathcal{P}_{n+3}$. Fix an edge $e$ in $\mathcal{P}_{n+3}$.  Note that $e$ lies between two vertices of $\mathcal{P}_{n+3}$. $e$ must be in exactly one triaingle in $\mathcal{T}$.  Let $T_{i}$ be the triangle in $\mathcal{T}$ that contains $e$.  $T_{i}$ must have two of its vertices on the two vertices of $e$ and one vertex that is another vertex in $\mathcal{P}_{n+3}$.  There are $n+1$ other vertices of $\mathcal{P}_{n+3}$.  Suppose the third vertex of $T_i$ is $k+1$ vertices clockwise of $e$, where $0\le k \le n$. Drawing $T_i$ divides $\mathcal{P}_{n+3}$ into 3 polygons: $T_i$, a $(k+2)$-gon clockwise of $T_i$, and a $(n-k+2)$-gon counterclockwise of $T_i$. This means that for each possible value of k, there is one way of triangulating $T_i$, $\C_k$ ways of triangulating the polygon clockwise of $T_i$, and $\C_{n-k}$ ways of triangulating the polygon counterclockwise of $T_i$.  Therefore, there are $C_k*C_{n-k}$ ways of triangulating $\mathcal{P}_{n+3}$ for each value of k.  Therefore, there are $\C_{n+1}=\sum_{k=0}^{n}{\C_{k}\C_{n-k}}$ total ways of triangulating $\mathcal{P}_{n+3}$. Figure \ref{fig:recursiveTriangulations} illustrates this process for the case of $n+1=6$.
-
-
 The Catalan numbers count a remarkable number of interesting and useful combinatorial objects in bijective correspondence with triangulations of $n$-gons. Combinatorial objects counted by the Catalan numbers are referred to as \emph{Catalan objects}.   Richard Stanley's book \emph{Catalan Numbers} gives hundreds of examples of Catalan objects  as well as a thorough history on the numbers and their study \cite{stanley2015Catalan}. This thesis will focus primarily on three Catalan objects: Dyck words, binary trees, and ordered trees. 
 
 
-\begin{figure}
-    \centering
-\begin{center}
-    COLOR LEFT RIGHT AND MIDDLE
-    ILLUSTRATE FOR DYCKS - first time it returns to the floor
-        ADD OPEN AT BEGINNING AND CLOSE WHERERVER YOU WANT
-        BINARY TREE: ROOT NODE IS BLUEMIDDLE, LEFT SUBTREE IS LEFT< RIGHT MIDDLE
-\begin{tabular}{ c c c c c c c}
-    \octoSliceTable{D} & \octoSliceTable{C}  & \octoSliceTable{B}  & \octoSliceTable{A}  & \octoSliceTable{H}  & \octoSliceTable{G}   \\
-    $k=0$ & $k=1$ & $k=2$&$k=3$& $k=4$& $k=5$& \\
-    2-gon; 7-gon & 3-gon; 6-gon& 4-gon; 5-gon&5-gon; 4-gon & 6-gon; 3-gon& 7-gon; 2-gon& \\
-    $\C_0 *\C_5$ & $\C_1 *\C_4$&$\C_2 *\C_3$ & $\C_3 *\C_2$&$\C_4 *\C_1$ & $\C_5 *\C_0$ \\
-
-    $1 *42$ & $1 * 14$&$2*5$ & $5*2$&$14*1$ & $42*1$ \\
-    $42$ & $14$ & $10$ & $10$ & $14$ & $42$
-\end{tabular}
-
-\bigskip
-
-
-$C_6=\sum_{k=0}^5\C_k\C_{n-k}=42 + 14 + 10 + 10 + 14 + 42 = 132$
-\end{center}
-    \caption{Constructing $\C_6$, the number of ways to triangulate an octagon, from triangulations of smaller sub-polygons.}
-    \label{fig:recursiveTriangulations}
-\end{figure}
 \section{Dyck Words and Paths} \label{sec:Dycks}
 
 The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to $\C_n$.  Dyck words with $n$ ones and $n$ zeroes are frequently referred to as Dyck words of \emph{order n}.
@@ -80,24 +43,24 @@ Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations 
 
 \begin{figure}[H]
     \centering
-    This figure is temporarily omitted because it is slow
-    % \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
-    %    \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
-% \DyckTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
-% \DyckTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
-% \DyckTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
-% \DyckTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
-% \DyckTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
-% \DyckTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
-% \DyckTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
-% \DyckTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
-% \DyckTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
-% \DyckTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
-% \DyckTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
-% \DyckTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
-% \DyckTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
-% \DyckTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
-    % \end{tabularx}
+    % This figure is temporarily omitted because it is slow
+    \begin{tabularx}{0.55\textwidth}{>{\hsize=0.4\hsize}C >{\hsize=0.2\hsize}C >{\hsize=0.2\hsize}C   }
+       \thead{Dyck Path} & \thead{Dyck Word} & \thead{Parentheses} \\ \hline 
+\DyckTable[4]{2,2,2,2,0,0,0,0} & 11110000 & (((())))\\
+\DyckTable[3]{2,0,2,2,2,0,0,0} & 10111000 & ()((()))\\
+\DyckTable[3]{2,2,0,2,2,0,0,0} & 11011000 & (()(()))\\
+\DyckTable[3]{2,2,2,0,2,0,0,0} & 11101000 & ((()()))\\
+\DyckTable[2]{2,0,2,2,0,2,0,0} & 10110100 & ()(()())\\
+\DyckTable[2]{2,2,0,2,0,2,0,0} & 11010100 & (()()())\\
+\DyckTable[2]{2,0,2,0,2,2,0,0} & 10101100 & ()()(())\\
+\DyckTable[2]{2,2,0,0,2,2,0,0} & 11001100 & (())(())\\
+\DyckTable[3]{2,2,2,0,0,2,0,0} & 11100100 & ((())())\\
+\DyckTable[2]{2,0,2,2,0,0,2,0} & 10110010 & ()(())()\\
+\DyckTable[2]{2,2,0,2,0,0,2,0} & 11010010 & (()())()\\
+\DyckTable[1]{2,0,2,0,2,0,2,0} & 10101010 & ()()()()\\
+\DyckTable[2]{2,2,0,0,2,0,2,0} & 11001010 & (())()()\\
+\DyckTable[3]{2,2,2,0,0,0,2,0} & 11100010 & ((()))()\\
+    \end{tabularx}
     \caption{The $\C_4=14$ Dyck words of order 4}
     \label{fig:Dycks}
 \end{figure}
@@ -306,4 +269,20 @@ Much of this thesis's content concerns minimal change orderings for catalan obje
         }
         \label{fig:badminimalchange}
 \end{figure}
+
+
+\section{Recursive Enumeration}
+
+To gain more insight into Catalan objects, we conclude this chapter by considering an alternate formula for enumerating the Catalan objects and illustrate the formula for several specific objects.
+
+The Catalan numbers can also be expressed through a summation that hints at the recursive structure of many of the Catalan objects.  
+
+\begin{align}
+    \C_{n+1} &= \sum_{k=0}^{n}{\C_{k}\C_{n-k}} \textrm{,   }  \C_0=1
+\end{align} 
+
+In the case of triangulated polygons, this summation can be derived as follows:
+
+$\C_{n+1}$ is the way of triangulating a convex polygon with $n+3$ sides.  Let $\mathcal{P}_{n+3}$ be a convex $(n+3)$-gon and let $\mathcal{T}$ be a triangulation of $\mathcal{P}_{n+3}$. Fix an edge $e$ in $\mathcal{P}_{n+3}$.  Note that $e$ lies between two vertices of $\mathcal{P}_{n+3}$. $e$ must be in exactly one triaingle in $\mathcal{T}$.  Let $T_{i}$ be the triangle in $\mathcal{T}$ that contains $e$.  $T_{i}$ must have two of its vertices on the two vertices of $e$ and one vertex that is another vertex in $\mathcal{P}_{n+3}$.  There are $n+1$ other vertices of $\mathcal{P}_{n+3}$.  Suppose the third vertex of $T_i$ is $k+1$ vertices clockwise of $e$, where $0\le k \le n$. Drawing $T_i$ divides $\mathcal{P}_{n+3}$ into 3 polygons: $T_i$, a $(k+2)$-gon clockwise of $T_i$, and a $(n-k+2)$-gon counterclockwise of $T_i$. This means that for each possible value of k, there is one way of triangulating $T_i$, $\C_k$ ways of triangulating the polygon clockwise of $T_i$, and $\C_{n-k}$ ways of triangulating the polygon counterclockwise of $T_i$.  Therefore, there are $C_k*C_{n-k}$ ways of triangulating $\mathcal{P}_{n+3}$ for each value of k.  Therefore, there are $\C_{n+1}=\sum_{k=0}^{n}{\C_{k}\C_{n-k}}$ total ways of triangulating $\mathcal{P}_{n+3}$. Figure \ref{fig:recursiveTriangulations} illustrates this process for the case of $n+1=6$.
+
 
