@@ -1,8 +1,6 @@
-FOR EACH OF THESE: A SIMPLE EXAMPLE WITH STRING SHIFTS
-
 This chapter will give background information on cool-lex order and the sets it has been used to enumerate.  
-\section{Combinations: Fixed-Weight Binary Strings} \label{sec:coolCombo}
-Generating all binary strings with $s$ zeroes and $t$ ones is often referred to as combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph. D thesis and is as follows \cite{williams2009shift}:
+\section{$(s,t)$ Combinations: Fixed-Weight Binary Strings} \label{sec:coolCombo}
+Generating all binary strings with $s$ zeroes and $t$ ones is often referred to as $(s,t)$ combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph. D thesis and is as follows \cite{williams2009shift}:
 
  Let $\alpha$ be a binary string of length $n$.
 
@@ -23,7 +21,10 @@ Generating all binary strings with $s$ zeroes and $t$ ones is often referred to 
 \end{cases}
 \end{equation*}
 
-Note that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$, where exponentiation denotes repeated symbols.  Because of this, the two left-shift operations can be replaced with can be replaced with either one or two symbol transpositions.
+Figure \ref{subfig:coolcombo} demonstrates this rule being used to enumerate combinations of 4 zeroes and 2 ones.
+
+
+The restriction that the first $x$ symbols of the string are non-increasing allows for simplification of the left shift operation.  Note that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$, where exponentiation denotes repeated symbols.  Because of this, the two left-shift operations can be replaced with can be replaced with either one or two symbol transpositions.
 
  Let $\transpose{\alpha}{i}{j}$ with $1 \le i \le j \le n$ be a function that swaps $\alpha_i$ an $\alpha_j$.  More formally, $\transpose{\alpha}{i}{j}=\alpha_1,\alpha_2,\dots,\alpha_{i-1},\alpha_{j}\alpha_{i+1}\dots \alpha_{j-1}\alpha_i \alpha_{j+1}\dots \alpha_n$
 The left-shift rule can be re-stated as follows:
@@ -35,15 +36,119 @@ The left-shift rule can be re-stated as follows:
 \end{cases}
 \end{equation*}
 
-% To illustrate the first case, consider $\alpha=11001101$; note that x=5. $\leftshift{5}{1}=11100101$ can be accomplished by just setting $\alpha_3=1$ and $\alpha_5=0$, or alternatively $\transpose{\alpha}{3}{5}$
 
-% To illustrate the second case, consider $\alpha=11100101$; note that x=6. $\leftshift{7}{1}=01110011$ with on  can be accomplished by setting $\alpha_4=1$, $\alpha_6=0$, $\alpha_7=1$, and $\alpha_1=0$.  
+\begin{figure}
+    \begin{center}
+	\begin{subfigure}[]{.25\textwidth}
+            \begin{center}
+\begin{Verbatim}[commandchars=\\\{\}]
+[0, \textcolor{red}{\underline{1}}, 1, 0, 0, 0]
+ |<-|
+[1, 0, \textcolor{red}{\underline{1}}, 0, 0, 0]
+ |<-------|
+[0, \textcolor{red}{\underline{1}}, 0, 1, 0, 0]
+ |<----|
+[0, 0, \textcolor{red}{\underline{1}}, 1, 0, 0]
+ |<----|
+[1, 0, 0, \textcolor{red}{\underline{1}}, 0, 0]
+ |<----------|
+[0, \textcolor{red}{\underline{1}}, 0, 0, 1, 0]
+ |<----|
+[0, 0, \textcolor{red}{\underline{1}}, 0, 1, 0]
+ |<-------|
+[0, 0, 0, \textcolor{red}{\underline{1}}, 1, 0]
+ |<-------|
+[1, 0, 0, 0, \textcolor{red}{\underline{1}}, 0]
+ |<-------------|
+[0, \textcolor{red}{\underline{1}}, 0, 0, 0, 1]
+ |<----|
+[0, 0, \textcolor{red}{\underline{1}}, 0, 0, 1]
+ |<-------|
+[0, 0, 0, \textcolor{red}{\underline{1}}, 0, 1]
+ |<----------|
+[0, 0, 0, 0, \textcolor{red}{\underline{1}}, 1]
+ |<----------|
+[1, 0, 0, 0, 0, \textcolor{red}{\underline{1}}]
+ |<-------------|
+[1, 1, 0, 0, 0, 0]
+\end{Verbatim}
+            \end{center}
+	    \caption{$(s-t)$ combinations with $s=4$ zeroes and $t=2$ ones}
+            \label{subfig:coolcombo}
+        \end{subfigure}
+        \begin{subfigure}[]{.32\textwidth}
+            \begin{center}
+\begin{Verbatim}[commandchars=\\\{\}]
+[1, 0, \textcolor{red}{\underline{1}}, 1, 1, 0, 0, 0]
+    |<-|
+[1, 1, 0, \textcolor{red}{\underline{1}}, 1, 0, 0, 0]
+    |<----|
+[1, 1, 1, 0, \textcolor{red}{\underline{1}}, 0, 0, 0]
+    |<----------|
+[1, 0, \textcolor{red}{\underline{1}}, 1, 0, 1, 0, 0]
+    |<-|
+[1, 1, 0, \textcolor{red}{\underline{1}}, 0, 1, 0, 0]
+    |<-------|
+[1, 0, \textcolor{red}{\underline{1}}, 0, 1, 1, 0, 0]
+    |<-|
+[1, 1, 0, 0, \textcolor{red}{\underline{1}}, 1, 0, 0]
+    |<-------|
+[1, 1, 1, 0, 0, \textcolor{red}{\underline{1}}, 0, 0]
+    |<-------------|
+[1, 0, \textcolor{red}{\underline{1}}, 1, 0, 0, 1, 0]
+    |<-|
+[1, 1, 0, \textcolor{red}{\underline{1}}, 0, 0, 1, 0]
+    |<-------|
+[1, 0, \textcolor{red}{\underline{1}}, 0, 1, 0, 1, 0]
+    |<-|
+[1, 1, 0, 0, \textcolor{red}{\underline{1}}, 0, 1, 0]
+    |<-------|
+[1, 1, 1, 0, 0, 0, \textcolor{red}{\underline{1}}, 0]
+    |<-------------|
+[1, 1, 1, 1, 0, 0, 0, 0]
 
-%Equivalently, the shift can be performed by $\transpose{\transpose{\alpha}{4}{6}}{1}{7}$
+\end{Verbatim}
+            \end{center}
+            \caption{Dyck words of order 4}
+            \label{fig:}
+        \end{subfigure}
+        \begin{subfigure}[]{.15\textwidth}
+            \begin{center}
+\begin{Verbatim}[commandchars=\\\{\}]
+[1, \textcolor{red}{\underline{3}}, 3, 2]
+ |<-|
+[3, 1, \textcolor{red}{\underline{3}}, 2]
+ |<----|
+[3, 3, 1, \textcolor{red}{\underline{2}}]
+ |<-------|
+[2, \textcolor{red}{\underline{3}}, 3, 1]
+ |<-|
+[3, 2, \textcolor{red}{\underline{3}}, 1]
+ |<-------|
+[1, \textcolor{red}{\underline{3}}, 2, 3]
+ |<-|
+[3, 1, \textcolor{red}{\underline{2}}, 3]
+ |<----|
+[2, \textcolor{red}{\underline{3}}, 1, 3]
+ |<----|
+[1, \textcolor{red}{\underline{2}}, 3, 3]
+ |<-|
+[2, 1, \textcolor{red}{\underline{3}}, 3]
+ |<----|
+[3, 2, 1, \textcolor{red}{\underline{3}}]
+ |<-------|
+[3, 3, 2, 1]
+\end{Verbatim}
+            \end{center}
+	    \caption{Permutations of the multiset \{1,2,3,3\}}
+            \label{fig:lotsofcool}
+        \end{subfigure}
+\end{center}
+\caption{Cool-lex order for $(s,t)$ combinations, Dyck words, and multiset permutations. The symbol immediately following each string's non-increasing prefix, or the \emph{first increase} of each string is highlighted in red.  The arrows beneath each string show the shift that translates each string to its successor.  Note that in all cases, either the first increase or the symbol immediately following it is left-shifted.  For $(s,t)$ combinations and multiset permutations, symbols are always shifted to position 1.  For Dyck words, symbols are always shifted to position 2.}
+\label{fig:}
+\end{figure}
 
-% Thus, depending on the value of $\alpha_{x+1}$, the cool-lex successor rule for binary strings requires either one or two transpositions per combination.  
-
-\section{Cool Lex Order on Dyck Paths and Binary Trees}
+\section{Cool Lex Order on Dyck Words and Binary Trees}
 
 Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}:
 We will use $\mathbf{D}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{D}_n$ is therefore $2n$.
@@ -76,20 +181,6 @@ Evaluating whether $\preshift{D}{k+1} \in \mathbf{D}_n$ can be determined by loo
 
 If $D_{k+1}=1$, then shifting it into the second position is valid.  If $D_{k+1}=0$ and $D$ starts with at least $\frac{k-1}{2}$ ones, then shifting a 0 into the second position will not invalidate the condition that all prefixes of $D$ have at least as many ones as zeroes.   Therefore, the successor rule in \ref{eq:prefixDyck_simple} can be simplified to the following: 
 
-% Let $D'=$ $\preshift{D}{k+1}$
-
-% Note that we know $D \in \mathbf{D}_n$.  
-
-% Since preshift only rotates symbols, $D'$ will automaticallly satisfy the requirement that strings in $\mathbf{D}_n$ must have an equal number of zeroes and ones since D satisfied that requirement. Thus, $D' \in \mathbf{D}_n$ will be determined by whether or not all prefixes of $D'$ have at least as many ones as zeroes.  
-
-% If $D_{k+1}$ is a 1, then  for all i, the $i\thh$ prefix of $D'$ will have at least as many ones as the $i\thh$ prefix of D.  Thus, $D'$ must be $\in \mathbf{D}_n$, as rotating a 1 to earlier in the string will never invalidate the requirement that every prefix of the string has at least as many ones as zeroes.  
-
-% Note that the $k\thh$ prefix of D must be of the form $1^a0^b1$, as otherwise there would be an earlier $01$ prefix.  Fruthermore, $a\ge b$ as otherwise the bth prefix of D would have more zeroes than ones and D would not be a valid Dyck word.
-
-% If $D_{k+1}$ is a 0, then $D' \notin \mathbf{D}_n$ if and only if rotating a 0 to index 2 creates a prefix of D with more zeroes than ones.  This will only happen if the $(k-1)\thh$ prefix of D is exactly $1^{\frac{k-1}{2}}0^{\frac{k-1}{2}}$.  
-
-% Therefore, $\preshift{D}{k+1} \in \mathbf{D}_n \iff D_{k+1}=1$ or $D$ starts with more than $\lfloor \frac{k-1}{2} \rfloor$ ones 
-
 \begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck}}
     % \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:prefixDyck_n}\\
 	\preshift{D}{k+1} & $D_{k+1}=1$ or $D$ starts with at least $\lfloor \frac{k-1}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
@@ -101,9 +192,23 @@ $\preshift{D}{k+1} \in \mathbf{D}_{n} \iff$ $D$ starts with more than $\lfloor \
 
 Ruskey and Williams provided a loopless pseudocode implementation of CoolCat that utilized this fact to enumerate any $\mathbf{D}_{s,t}$ using at most 2 conditionals per successor \cite{ruskey2008generating}. Using the bijection between Dyck words and binary trees, Ruskey and Williams also showed that their successor rule can be translated to a loopless algorithm for generating all binary trees with $n$ nodes. 
 
+An an additional simplifying observation is that all Dyck words start with 1.  Thus, a conceivable representation of a Dyck word of order $n$ would be a binary string of length $2n-1$, where the $2n-1$ bits of the representation correspond to bits $2$ through $2n$ of the actual Dyck word, and the leading $1$ is implied.  In this case, each $\preshift[D]{i}$ can be replaced with $\leftshift[D]{i}$, each shift now shifts a symbol to index 1. 
+
+
+With $D$ redefined as above and $k$ defined as before with respect to the updated representation of $D$, the successor rule for Dyck words can be further simplified to the following:
+
+\begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck_lshift}}
+    % \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:prefixDyck_n}\\
+	\leftshift[D]{k+1} & $D_{k+1}=1$ or $D$ starts with at least $\lfloor \frac{k-2}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
+	\leftshift[D]{k} & otherwise \label{eq:prefixDyck_k}
+\end{subnumcases}
+
 % TODO: binary trees algorithm
 
 Due to its simplicity and efficiency, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and also provided an implementation of it for his theoretical MMIX processor architecture \cite{knuth2015art}. Figure \ref{fig:CoolDycks} gives demonstrates the iteration of coolCat on Dyck words of order $4$.
+
+
+
 
 \begin{figure}[H]
     \centering
