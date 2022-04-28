@@ -16,6 +16,7 @@
 
 
 \newcommand{\C}{\mathcal{C}}
+\newcommand{\D}{\mathbf{D}}
 \newcommand{\luka}[1]{\overleftarrow{\text{luka}}(#1)}
 
 \newcommand{\octoSliceTable}[1]{
@@ -329,6 +330,12 @@
 \definecolor{darkpurple}{RGB}{90,25,214}
 \definecolor{midpurp}{RGB}{123,66,233}
 \definecolor{lmidpurp}{RGB}{170,133,241}
+% \def{catleft}{BrickRed}
+\definecolor{catleftdark}{RGB}{66,155,205}
+\definecolor{catleft}{RGB}{86,175,205}
+% \definecolor{catleft}{RGB}{106,195,205}
+\definecolor{catmid}{RGB}{42,43,45}
+\definecolor{catright}{RGB}{255,111,97}
 
 % \definecolor{p1col4}{RGB}{40, 0, 80}
 
@@ -455,43 +462,48 @@
 
 }
 \newcommand{\octosliceA}{%
-  \draw[draw,fill=green](A) -- (B) -- (C) -- (D) -- (E) -- (A);
-  \draw[draw, fill=red](F) -- (G) -- (H) -- (A);
-  \draw[draw,fill=blue] (A) -- (E) -- (F) -- (A);
+  \draw[draw,fill=catleft](A) -- (B) -- (C) -- (D) -- (E) -- (A);
+  \draw[draw, fill=catright](F) -- (G) -- (H) -- (A);
+  \draw[draw,fill=catmid] (A) -- (E) -- (F) -- (A);
 }
 
 \newcommand{\octosliceB}{%
-  \draw[draw,fill=green](B) -- (C) -- (D) -- (E) -- (B);
-  \draw[draw, fill=red](F) -- (G) -- (H) -- (A) -- (B);
-  \draw[draw,fill=blue] (B) -- (E) -- (F) -- (B);
+  \draw[draw,fill=catleft](B) -- (C) -- (D) -- (E) -- (B);
+  \draw[draw, fill=catright](F) -- (G) -- (H) -- (A) -- (B);
+  \draw[draw,fill=catmid] (B) -- (E) -- (F) -- (B);
 }
 \newcommand{\octosliceC}{%
-  \draw[draw,fill=green](C) -- (D) -- (E) -- (C);
-  \draw[draw, fill=red](F) -- (G) -- (H) -- (A) -- (B) -- (C);
-  \draw[draw,fill=blue] (C) -- (E) -- (F) -- (C);
+  \draw[draw,fill=catleft](C) -- (D) -- (E) -- (C);
+  \draw[draw, fill=catright](F) -- (G) -- (H) -- (A) -- (B) -- (C);
+  \draw[draw,fill=catmid] (C) -- (E) -- (F) -- (C);
 }
 \newcommand{\octosliceD}{%
-  \draw[draw,thick,fill=green](D) -- (E) -- (D);
-  \draw[draw, fill=red](F) -- (G) -- (H) -- (A) -- (B) -- (C) -- (D);
-  \draw[draw,fill=blue] (D) -- (E) -- (F) -- (D);
+  \draw[draw,thick,fill=catleft](D) -- (E) -- (D);
+  \draw[draw, fill=catright](F) -- (G) -- (H) -- (A) -- (B) -- (C) -- (D);
+  \draw[draw,fill=catmid] (D) -- (E) -- (F) -- (D);
 }
 
 \newcommand{\octosliceG}{%
-  \draw[draw,fill=green](A) -- (B) -- (C) -- (D) -- (E) -- (G) -- (F) -- (G) -- (H) -- (A);
-  \draw[draw,fill=blue] (G) -- (E) -- (F) -- (G);
+  \draw[draw,fill=catleft](A) -- (B) -- (C) -- (D) -- (E) -- (G) -- (F) -- (G) -- (H) -- (A);
+  \draw[draw,fill=catmid] (G) -- (E) -- (F) -- (G);
 }
 
 \newcommand{\octosliceH}{%
-  \draw[draw,fill=green](H) -- (A) -- (B) -- (C) -- (D) -- (E) --(H) ;
-  \draw[draw, fill=red](F) -- (G) -- (H) -- (A)-- (H);
-  \draw[draw,fill=blue] (H) -- (E) -- (F) -- (H);
+  \draw[draw,fill=catleft](H) -- (A) -- (B) -- (C) -- (D) -- (E) --(H) ;
+  \draw[draw, fill=catright](F) -- (G) -- (H) -- (A)-- (H);
+  \draw[draw,fill=catmid] (H) -- (E) -- (F) -- (H);
 }
 \newcommand{\octoslice}[1]{%
-  \draw[draw,fill=red](A) -- (B) -- (C) -- (D) -- (E) -- ({#1}) -- (F) -- (G) -- (H) -- (A);
+  \draw[draw,fill=catright](A) -- (B) -- (C) -- (D) -- (E) -- ({#1}) -- (F) -- (G) -- (H) -- (A);
 }
 \newcommand{\octooslice}[1]{%
-  \draw[draw,fill=red](1) -- (2) -- (3) -- (4) -- (5) -- ({#1}) -- (6) -- (7) -- (8) -- (1);
+  \draw[draw,fill=catright](1) -- (2) -- (3) -- (4) -- (5) -- ({#1}) -- (6) -- (7) -- (8) -- (1);
 }
+
+
+\newcommand{\dycksplit}[2]{%
+    \textbf{\textcolor{catmid}{(}} \textcolor{catleftdark}{\{\D_{#1}\}} \textbf{\textcolor{catmid}{)}} \textcolor{catright}{\{\D_{#2}\}}
+    }
 
 
 \newcommand{\pslice}[1]{%
@@ -500,6 +512,7 @@
 
 }
 \newcommand{\cool}[1]{\operatorname{cool}(#1)}
+\newcommand{\complementbit}[1]{\operatorname{complement}(#1)}
 \newcommand{\lshiftindex}[3][]{\operatorname{left}_{#1}(#2,#3)}
 \newcommand{\leftshift}[2][]{\operatorname{left}_{#1}(#2)}
 \newcommand{\rrot}[2][]{\operatorname{rrot}_{#1}(#2)}
