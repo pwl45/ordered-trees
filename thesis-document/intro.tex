@@ -169,10 +169,11 @@ Following this rule will eventually yield the following configuration, upon whic
 
 \includegraphics[width=.3\textwidth]{figures/marbles_last_arrow.pdf} 
 
-Cool-lex order is a variation of co-lexicographic order that was first introduced for $(s,t)$ combinations by Ruskey and Williams \cite{ruskey2005generating} \cite{ruskey2008generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \ref{eq:BRGC-rule}. Cool-lex order has some advantages of both lexicographic orderings and Gray codes.  Like lexicographic orders, cool-lex order has a simple recursive structure that is easy to understand at  high level.  Its recursive structure involves rotating sublists (like assembly rotation operations), as opposed to the binary reflected Gray Code which reflects sublists.  Like the binary reflected Gray code, cool-lex orders often lead to generation algorithms that are simpler and more efficient than lexicographic orders.   Figure \ref{fig:marbles} gives an example of the type of simple prefix shifts often employed by cool-lex order.
+Applying this rule to exhaustively generating binary strings with fixed content should follow rather naturally.  The order described by this rule is 
+Cool-lex order a variation of co-lexicographic order that was first introduced for $(s,t)$ combinations by Ruskey and Williams \cite{ruskey2005generating} \cite{ruskey2008generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \ref{eq:BRGC-rule}. Cool-lex order has some advantages of both lexicographic orderings and Gray codes.  Like lexicographic orders, cool-lex order has a simple recursive structure that is easy to understand at  high level.  Its recursive structure involves rotating sublists (like assembly rotation operations), as opposed to the binary reflected Gray Code which reflects sublists.  Like the binary reflected Gray code, cool-lex orders often lead to generation algorithms that are simpler and more efficient than lexicographic orders.   %Figure \ref{fig:marbles} gives an example of the type of simple prefix shifts often employed by cool-lex order.
 
 
-The sublist rotation approach of cool-lex order comes with a particular advantage demonstrated in TODO Understand and cite \cite{ruskey2012binary}. 
+The sublist rotation approach of cool-lex order comes with a particular advantage demonstrated in TODO cite \cite{ruskey2012binary}. 
 
 
 Different versions of cool-lex order have been shown to enumerate several sets of combinatorial objects, including binary strings, fixed weight binary strings, Dyck words, and multiset permutations \cite{williams2009shift}.  
@@ -181,7 +182,7 @@ TODO: multiset permutations = generalization of binary strings
 
 Cool-lex orders often lead to algorithms that are significantly more efficient than standard lexicographic order, and as such are not just of theoretical interest.  For example, the ``multicool" package in R uses a loopless cool-lex algorithm to efficiently enumerate multiset permutations.   The package started using cool-lex order for multiset permutations in version 1.1 and as of version 1.12 has been downloaded nearly a million times \cite{multicool_2021}.  Moreover, due to its efficiency and simplicity, Don Knuth included the cool-lex algorithm for combinations in his 4th volume of \emph{The Art of Computer Programming} and provided an implementation of it for his theoretical MMIX processor architecture due to its efficiency and simplicity \cite{knuth2015art}.  In addition to these, applications of cool-lex order are rapidly growing and new cool-lex algorithms are being discovered every year.  
 
-ACM student research-winning presentation on implementing cool-lex order for combinations in risc-v
+TODO: ACM student research-winning presentation on implementing cool-lex order for combinations in risc-v
 
 Two common threads in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string and their use of \emph{left-shifts} for minimal changes.  Mentioned previously in section \ref{sec:intro_Graycodes}, a left shift can be defined formally as follows:
 
