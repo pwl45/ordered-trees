@@ -7,12 +7,9 @@ Combinatorial generation is defined as the exhaustive listing of combinatorial o
 
 Combinatorial generation has many parallels to sorting.  It is a fundamental computational task that will continue to be a necessary part of solving difficult problems for the foreseeable future.  Additionaly, different sorting algorithms are often better suited for for difbeethoven symphony 9ferent types of data.  For example, bubble sort is generally slower than merge sort, but can be faster when the initial data is already close to being in sorted order. Similarly, different combinatorial generation algorithms may be better suited for different types of tasks.  This makes combinatorial generation an important area of study for making many common tasks more efficient.  
 
-
-
 Unlike sorting, however, combinatorial generation is not widely taught and is rarely discussed in core textbooks. The foundational textbook series The Art of Computer proramming was initially released in 1968; combinatorial generation was not discussed until volume 4A, releaseed in 2011 \cite{knuth2015art}.  Another notable combinatorial generation textbook is  Kreher and Stinson's \emph{Combinatorial Algorithms: Generation, Enumeration, and Search} \cite{kreher2020combinatorial}. Outside of these, however, discussion of combinatorial generation in textbooks is rare.
 
-
-\subsection{Lexicographic Orders}
+\section{Lexicographic Orders}
 Lexicographic order is the simplest and most intuitive way of enumerating combinatorial objects.  Moreover, enumerating a set of combinatorial objects in lexicographic order is always possible. Any combinatorial object handled by computers must be encoded in binary somehow; therefore any combinatorial object can be enumerated in lexicographic order via the lexicographic order of its binary representations. 
 
 % TODO: different ways to implement lex (i.e., scan for location of change, or keep track and predict) ? 
@@ -21,45 +18,96 @@ In addition to traditional lexicographic order, there are several closely relate
 
 Continuing with the comparison of combinatorial generation to sorting, lexicographic and co-lexicographic orders are much like insertion and selection sort.  They are fairly intuitive, easy to implement, and sometimes ``good enough."  However, they are rarely optimal: more thoughtful orderings will frequently have significant performance advantages over lexicographic orderings. In particular, lexicographic orderings often require worst-case $O(n)$ time per generated object, whereas \emph{loopless} generation algorithms that use worst-case constant time per generated object are often achievable. The term loopless refers to the fact that, typically, a worst-case $O(1)$ algorithm can be implemented without any inner loops.
 
-
-\begin{figure}[]
-
-\begin{center}
-    \begin{tabular}{ |c|c|c|c|c||c||c| } 
- \hline
+ \subsection{Lexicographic Orderings via Sublists}
+ An interesting observation is that lexicographic orderings for any fixed length binary language can be obtained by filtering all binary strings to obtain a sub-list. Specificaly, if a language $\mathcal{L}$ is a subset of $n$-bit binary strings, generate all $n$-bit binary strings and filter the list to contain only strings in $\mathcal{L}$.  The resulting list will be a lexicoraphic ordering of the strings in $\mathcal{L}$.  The same property holds for co-lexicographic order, reverse lexicographic order, and reverse co-lexicographic order.  Figure \ref{fig:bintable} illustrates generating $4$-bit binary strings and filtering that list to obtain a sublist of binary strings with $2$ ones and $2$ zeroes.  It does this for lexicographic orderings, the binary reflected Gray code to be discussed in \ref{sec:BRGC}, and cool lex order, discussed in \ref{sec:coolIntro}.
 
 
+ \begin{figure}[]
 
-        n &  lex  & colex & revlex & revcolex & Gray & cool\\  
-\hline
-0 & 0000 & 0000 & 1111 & 1111 & 0000   & 0000  \\
-1 & 0001 & 1000 & 1110 & 0111 & 0001   & 1000  \\
-2 & 0010 & 0100 & 1101 & 1011 & 0011   & 1100  \\
-3 & 0011 & 1100 & 1100 & 0011 & 0010   & 1110  \\
-4 & 0100 & 0010 & 1011 & 1101 & 0110   & 1111  \\
-5 & 0101 & 1010 & 1010 & 0101 & 0111   & 0111  \\
-6 & 0110 & 0110 & 1001 & 1001 & 0101   & 1011  \\
-7 & 0111 & 1110 & 1000 & 0001 & 0100   & 1101  \\
-8 & 1000 & 0001 & 0111 & 1110 & 1100   & 0110  \\
-9 & 1001 & 1001 & 0110 & 0110 & 1101   & 1010  \\
-10 & 1010 & 0101 & 0101 & 1010 & 1111  & 0101  \\
-11 & 1011 & 1101 & 0100 & 0010 & 1110  & 0011  \\
-12 & 1100 & 0011 & 0011 & 1100 & 1010  & 1001  \\
-13 & 1101 & 1011 & 0010 & 0100 & 1011  & 0100  \\
-14 & 1110 & 0111 & 0001 & 1000 & 1001  & 0010  \\
-15 & 1111 & 1111 & 0000 & 0000 & 1000  & 0001  \\
+     \begin{subfigure}[]{\textwidth}
+         \begin{center}
+             \begin{tabular}{ |c|c|c|c|c||c||c| } 
+                 \hline
+                 n &  lex  & colex & revlex & revcolex & Gray & cool\\  
+                 \hline
+                 0 & 0000 & 0000 & 1111 & 1111 & 0000   & 0000  \\
+                 1 & 0001 & 1000 & 1110 & 0111 & 0001   & 1000  \\
+                 2 & 0010 & 0100 & 1101 & 1011 & 0011   & 1100  \\
+                 3 & 0011 & 1100 & 1100 & 0011 & 0010   & 1110  \\
+                 4 & 0100 & 0010 & 1011 & 1101 & 0110   & 1111  \\
+                 5 & 0101 & 1010 & 1010 & 0101 & 0111   & 0111  \\
+                 6 & 0110 & 0110 & 1001 & 1001 & 0101   & 1011  \\
+                 7 & 0111 & 1110 & 1000 & 0001 & 0100   & 1101  \\
+                 8 & 1000 & 0001 & 0111 & 1110 & 1100   & 0110  \\
+                 9 & 1001 & 1001 & 0110 & 0110 & 1101   & 1010  \\
+                 10 & 1010 & 0101 & 0101 & 1010 & 1111  & 0101  \\
+                 11 & 1011 & 1101 & 0100 & 0010 & 1110  & 0011  \\
+                 12 & 1100 & 0011 & 0011 & 1100 & 1010  & 1001  \\
+                 13 & 1101 & 1011 & 0010 & 0100 & 1011  & 0100  \\
+                 14 & 1110 & 0111 & 0001 & 1000 & 1001  & 0010  \\
+                 15 & 1111 & 1111 & 0000 & 0000 & 1000  & 0001  \\
+                 \hline
+             \end{tabular}
+         \end{center}
+         \caption{The $2^4$ $4$-bit binary strings generated lexicographic, co-lexicographic, reverse lexicographic, reverse co-lexicographic, binary reflected Gray code, and cool-lex order.}
+         \label{fig:bin4}
+     \end{subfigure}
+     \begin{subfigure}[]{\textwidth}
+         \begin{center}
+             \begin{tabular}{ |c|c|c|c|c||c||c| } 
+                 \hline
+                 n &  lex  & colex & revlex & revcolex & Gray & cool\\
+                 \hline
+                 0 &      &      &      &      &       &      \\
+                 1 &      &      &      &      &       &      \\
+                 2 &      &      &      &      & 0011  & 1100 \\
+                 3 & 0011 & 1100 & 1100 & 0011 &       &      \\
+                 4 &      &      &      &      & 0110  &      \\
+                 5 & 0101 & 1010 & 1010 & 0101 &       &      \\
+                 6 & 0110 & 0110 & 1001 & 1001 & 0101  &      \\
+                 7 &      &      &      &      &       &      \\
+                 8 &      &      &      &      & 1100  & 0110 \\
+                 9 & 1001 & 1001 & 0110 & 0110 &       & 1010 \\
+                 10 & 1010 & 0101 & 0101 & 1010 &      & 0101 \\
+                 11 &      &      &      &      &      & 0011 \\
+                 12 & 1100 & 0011 & 0011 & 1100 & 1010 & 1001 \\
+                 13 &      &      &      &      &      &      \\
+                 14 &      &      &      &      & 1001 &      \\
+                 15 &      &      &      &      &      &      \\
+                 \hline
+             \end{tabular}
+         \end{center}
+         \caption{4-bit binary strings filtered to only contain strings with 2 ones and 2 zeroes}
+         \label{fig:bin4to2c2}
+     \end{subfigure}
+     \begin{subfigure}[]{\textwidth}
+         \begin{center}
+             \begin{tabular}{ |c|c|c|c||c||c| } 
+                 \hline
+                 lex  & colex & revlex & revcolex & Gray & cool\\
+                 \hline
+                 0011 & 1100 & 1100 & 0011 & 0011 & 1100 \\
+                 0101 & 1010 & 1010 & 0101 & 0110 & 0110 \\
+                 0110 & 0110 & 1001 & 1001 & 0101 & 1010 \\
+                 1001 & 1001 & 0110 & 0110 & 1100 & 0101 \\
+                 1010 & 0101 & 0101 & 1010 & 1010 & 0011 \\
+                 1100 & 0011 & 0011 & 1100 & 1001 & 1001 \\
+                 \hline
+             \end{tabular}
 
-\hline
+         \end{center}
+         \caption{Condensed version of the orders for binary strings with 2 ones and 2 zeroes obtained in \ref{fig:bin4to2c2}}
+         \label{fig:2c2}
+     \end{subfigure}
+     \begin{center}
 
-\end{tabular}
-
-\end{center}
-        \caption{The $2^4$ $4$-bit binary strings generated lexicographic, co-lexicographic, reverse lexicographic, reverse co-lexicographic, binary reflected Gray code, and cool-lex order.}
-        \label{fig:bintable}
-\end{figure}
+     \end{center}
+     \caption{The $2^4$ $4$-bit binary strings generated lexicographic, co-lexicographic, reverse lexicographic, reverse co-lexicographic, binary reflected Gray code, and cool-lex order.}
+     \label{fig:bintable}
+ \end{figure}
 
 
-\subsection{Binary Reflected Gray Code}
+\section{Binary Reflected Gray Code} \label{sec:BRGC}
 
 A quintessential result of the combinatorial generation in practice is Frank Gray's reflected binary code, or Gray code. The binary reflected Gray code gives a ``reflected" ordering of binary strings such that each successive string in the ordering differs from the previous string by exactly one bit. This contrasts from a lexicographic ordering of binary strings, in which a n-digit binary string can differ by up to n digits from its predecessor and will differ by approximately two (more precisely $\sum_{i=0}^n\frac{1}{2}^i$, which is 1.9375 for 4 bit values and 1.996 for 8 bit values) bits on average\footnote{Consecutive pairs of binary digits in lexicographic order will differ in the bit at position i with probability $\frac{1}{2}^i$.  Therefore, the average number of differing bits between two binary strings of length n is $\sum_{i=0}^n\frac{1}{2}^i$, which converges to 2 as n grows large.}. The binary reflected Gray code, therefore, provides an ordering that requires half as many bit switches on average as the more intuitive lexicographic order. 
 
@@ -79,10 +127,14 @@ Binary reflected Gray codes are especially useful in electromechanical switches 
 
 This issue can occur in cases as simple as incrementing $3$ to $4$.  In lexicographic order, the string must change from $011$ to $100$; in Gray code order it changes from $010$ to $110$.  The lexicographic change requires three bit changes; the Gray code order requires only one.  When using physical switches, three bit changes are unlikely to change in exact synchrony.  This creates the possibility of reading $101$, $110$, $111$, or \emph{any other 3-bit binary number} if the switches are read mid-change, depending on the order of the bit changes.  When using the binary reflected Gray code, the only states are $3=010$, the previous value, and $4=110$, the correct next value. One could easily imagine a test, such as checking if a number is less than $5$, that could evaluate incorrectly due to reading during the change between $3=011$ and $4=100$ in lexicographic order.  This type of error is eliminated by using a Gray code ordering that changes only one bit per iteration.
 
-The approach of ``reflecting'' sublists employed by the binary reflected Gray code is one of the most widely used approaches in combinatorial generation. In particular, Gray codes for many binary languages can be obtained by listing all binary strings in Gray code order, filtering the list to contain only strings in the language, and seeing if the resulting ordering is a Gray code.  Sawada, Williams, and Wong showed this in practice for a broad set of ``flip-swap languages" including necklaces, Lyndon words, and feasible 0-1 knapsack problem solutions, among others \cite{sawada2021inside}.
 
 Frank Gray's binary reflected code was influential enough that the term \emph{Gray code} is often used as a general term for any minimal change ordering of combinatorial objects.  If lexicographic orderings with worst-case $O(n)$ time per generated object are like $O(n^2)$ sorting algorithms, Gray codes are like more efficient sorting algorithms such as merge sort, quick sort\footnote{Quicksort is actually worst-case $O(n^2)$, but has better average performance than simple $O(n \log(n))$ sorting algorithms like mergesort or heapsort.  This is due to space efficiency and cache performance, among other things.  Other sorting algorithms like introsort, pdqsort, and Timsort use hybrid approaches to obtain quicksort-like (or better) average performance while maintaining $O(n \log(n))$ worst-case runtime.}, or radix sort.  Gray codes perform iterations by modifying a single object in place, not generating a new object from scratch.  This is almost a hard requirement for achieving better than $O(n)$ time per object, as generating an object of size $n$ from scratch is always at least $O(n)$.
 
+% \subsubsection{Sublists: Reflecting and Filtering}
+% Inspired similar minimal change orders in two distinct ways: taking sublists, and generalizin reversing approach.
+
+\subsection{Sublists}
+The approach of ``reflecting'' sublists employed by the binary reflected Gray code is one of the most widely used approaches in combinatorial generation. In particular, Gray codes for many binary languages can be obtained by listing all binary strings in Gray code order, filtering the list to contain only strings in the language, and seeing if the resulting ordering is a Gray code.  Sawada, Williams, and Wong demonstrated this process in practice for a broad set of binary ``flip-swap languages" including necklaces, Lyndon words, and feasible 0-1 knapsack problem solutions, among others \cite{sawada2021inside}.  They found that orderings obtained for binary ``flip-swap'' languages by filtering the binary reflected Gray code all have the property that successive strings differ from each other by at most 2 bits, allowing for simple and efficient implementations of these orderings.
 
 
 \begin{figure}
@@ -99,7 +151,48 @@ Frank Gray's binary reflected code was influential enough that the term \emph{Gr
     \label{binary}
 \end{figure}
 
-\section{Gray Codes for Trees and Strings} \label{sec:intro_Graycodes}
+\section{Cool-Lex Order} \label{sec:coolIntro}
+
+Cool-lex order can most easily be introduced using marbles on a ramp. Suppose one has $n$ marbles on a ramp, with each marble colored black or white.  If $m$ is the first black marble that follows a white  marble, repeatingly shfting marble $m+1$ to the front of the ramp will eventually yield all possible marble arrangements (with no distinction made between different black and white marbles). If black marble follows a white marble (all black marbles come before all white marbles), shift the last marble to the front of the ramp. 
+
+\includegraphics[width=.3\textwidth]{figures/marbles_first_arrow.pdf} 
+
+\includegraphics[width=.3\textwidth]{figures/marbles_second_arrow.pdf} 
+
+\includegraphics[width=.3\textwidth]{figures/marbles_third_arrow.pdf} 
+
+\includegraphics[width=.3\textwidth]{figures/marbles_fourth_arrow.pdf} 
+
+$\cdots$
+
+Following this rule will eventually yield the following configuration, upon which shifting the last marble to the front returns the marble ramp to its initial configuration. 
+
+\includegraphics[width=.3\textwidth]{figures/marbles_last_arrow.pdf} 
+
+Cool-lex order is a variation of co-lexicographic order that was first introduced for $(s,t)$ combinations by Ruskey and Williams \cite{ruskey2005generating} \cite{ruskey2008generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \ref{eq:BRGC-rule}. Cool-lex order has some advantages of both lexicographic orderings and Gray codes.  Like lexicographic orders, cool-lex order has a simple recursive structure that is easy to understand at  high level.  Its recursive structure involves rotating sublists (like assembly rotation operations), as opposed to the binary reflected Gray Code which reflects sublists.  Like the binary reflected Gray code, cool-lex orders often lead to generation algorithms that are simpler and more efficient than lexicographic orders.   Figure \ref{fig:marbles} gives an example of the type of simple prefix shifts often employed by cool-lex order.
+
+
+The sublist rotation approach of cool-lex order comes with a particular advantage demonstrated in TODO Understand and cite \cite{ruskey2012binary}. 
+
+
+Different versions of cool-lex order have been shown to enumerate several sets of combinatorial objects, including binary strings, fixed weight binary strings, Dyck words, and multiset permutations \cite{williams2009shift}.  
+TODO: multiset permutations = generalization of binary strings
+
+
+Cool-lex orders often lead to algorithms that are significantly more efficient than standard lexicographic order, and as such are not just of theoretical interest.  For example, the ``multicool" package in R uses a loopless cool-lex algorithm to efficiently enumerate multiset permutations.   The package started using cool-lex order for multiset permutations in version 1.1 and as of version 1.12 has been downloaded nearly a million times \cite{multicool_2021}.  Moreover, due to its efficiency and simplicity, Don Knuth included the cool-lex algorithm for combinations in his 4th volume of \emph{The Art of Computer Programming} and provided an implementation of it for his theoretical MMIX processor architecture due to its efficiency and simplicity \cite{knuth2015art}.  In addition to these, applications of cool-lex order are rapidly growing and new cool-lex algorithms are being discovered every year.  
+
+ACM student research-winning presentation on implementing cool-lex order for combinations in risc-v
+
+Two common threads in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string and their use of \emph{left-shifts} for minimal changes.  Mentioned previously in section \ref{sec:intro_Graycodes}, a left shift can be defined formally as follows:
+
+If $\alpha = a_1 a_2 \ldots a_n$ is a string and $i < j$, then we let
+\begin{equation}
+    \lshiftindex[\alpha]{i}{j} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n. \label{eq:leftdef}
+\end{equation}
+
+$\lshiftindex[\alpha]{i}{j}$ can also be thought of as rotating the $i$ through $j\thh$ symbols of $\alpha$ right circularly by one.
+
+\section{Gray Codes for Trees and Catalan Objects} \label{sec:intro_Graycodes}
 
 This thesis aims to create efficient minimal change orderings for other objects, namely ordered trees and Lukasiewicz words.  Ordered trees and Lukasiewicz words are both \emph{Catalan objects}.  The number of Lukasiewicz words of length $n+1$ and the number of ordered trees with $n+1$ nodes are both counted by the $n\thh$ Catalan number $\C_n$.  
 
@@ -113,22 +206,6 @@ Defining minimal changes for trees is more complicated, as what changes are \emp
 
 TODO: picture
 
-\section{Cool-Lex Order}
-
-Cool-lex order is a variation of co-lexicographic order that was first introduced for $(s,t)$ combinations by Ruskey and Williams \cite{ruskey2005generating} \cite{ruskey2008generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \ref{eq:BRGC-rule}. Cool-lex order has some advantages of both lexicographic orderings and Gray codes.  Like lexicographic orders, cool-lex order has a simple recursive structure that is easy to understand at  high level.  Its recursive structure involves rotating sublists (like assembly rotation operations), as opposed to the binary reflected Gray Code which reflects sublists.  Like the binary reflected Gray code, cool-lex orders often lead to generation algorithms that are simpler and more efficient than lexicographic orders.   Figure \ref{fig:marbles} gives an example of the type of simple prefix shifts often employed by cool-lex order.
-TODO: marbles.
-
-
-The sublist rotation approach of cool-lex order comes with a particular advantage demonstrated in TODO Understand and cite \cite{ruskey2012binary}. Different versions of cool-lex order have been shown to enumerate several sets of combinatorial objects, including binary strings, fixed weight binary strings, Dyck words, and multiset permutations \cite{williams2009shift}.  Cool-lex orders often lead to algorithms that are significantly more efficient than standard lexicographic order, and as such are not just of theoretical interest.  For example, the ``multicool" package in R uses a loopless cool-lex algorithm to efficiently enumerate multiset permutations.   The package started using cool-lex order for multiset permutations in version 1.1 and as of version 1.12 has been downloaded nearly a million times \cite{multicool_2021}.  Moreover, due to its efficiency and simplicity, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and provided an implementation of it for his theoretical MMIX processor architecture due to its efficiency and simplicity \cite{knuth2015art}.  In addition to these, applications of cool-lex order are rapidly growing and new cool-lex algorithms are being discovered every year.  
-
-Two common threads in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string and their use of \emph{left-shifts} for minimal changes.  Mentioned previously in section \ref{sec:intro_Graycodes}, a left shift can be defined formally as follows:
-
-If $\alpha = a_1 a_2 \ldots a_n$ is a string and $i < j$, then we let
-\begin{equation}
-    \lshiftindex[\alpha]{i}{j} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n. \label{eq:leftdef}
-\end{equation}
-
-$\lshiftindex[\alpha]{i}{j}$ can also be thought of as rotating the $i$ through $j\thh$ symbols of $\alpha$ right circularly by one.
 
 
 \section{Goals and Results}
@@ -138,6 +215,6 @@ This thesis has the broad goal of extending cool-lex order to new objects.  It p
 
 The first contribution is a `pop-push' Gray code for enumerating ordered trees in $O(1)$ time. Chapter \ref{chap:otree-graycode} will give a two-case successor rule for generating all ordered trees with $n$ nodes using at most two ``pull'' operations. Chapter \ref{chap:otree-implementation} will provide a loopless algorithm for the successor rule in \ref{chap:otree-graycode} and an implementation of the algorithm in C.  This algorithm is an extension of the cool-lex order for Dyck words and binary trees presented by Ruskey and Williams: It shows that the cool-lex order for Dyck words is simultaneously a Gray code for a third Catalan object: ordered trees, as well as Dyck words and binary trees.  These results have been submitted to an international algorithms conference and are currently under review \cite{lapeypush}.
 
-The second contribution is a shift Gray code for Lukasiewicz words.  Lukasiewicz words are a generalization of Dyck words that allow for broader sets of content while maintining a notion of ``balance." Chapter \ref{chap:luka-graycode} will give a shift Gray code for generating Lukasiewicz words with fixed content using one prefix shift per iteration.  Chapter \ref{chap:luka-implementation} will give a loopless implementation of the algorithm in \ref{chap:luka-graycode} using an array based implementation for the special case of Motzkin words and a linked list implementation for the general case of unrestricted Lukasiewicz words.  These results have been accepted at the 33rd International Workshop on Combinatorial Algorithms and will be presented this June \cite{lapey2022shift}.
+The second contribution is a shift Gray code for Lukasiewicz words.  Lukasiewicz words are a generalization of Dyck words that allow for broader sets of content while maintining a notion of ``balance." Chapter \ref{chap:luka-graycode} will give a shift Gray code for generating Lukasiewicz words with fixed content using one prefix shift per iteration.  Chapter \ref{chap:luka-implementation} will give a loopless implementation of the algorithm in \ref{chap:luka-graycode} using an array based implementation for the special case of Motzkin words and a linked list implementation for the general case of unrestricted Lukasiewicz words.  These results have been accepted at the 33rd International Workshop on Combinatorial Algorithms and will be presented June 2022 \cite{lapey2022shift}.
 
 Chapter \ref{chap:catalan} will give background information on the Catalan numbers and their relation to the combinatorial objects generated by this thesis.  Chapter \ref{chap:cool} will give background information on existing applications of cool-lex order.  Chapters \ref{chap:otree-graycode} and \ref{chap:otree-implementation} will give a new successor rule and loopless implementation for generating ordered trees in cool-lex order.  Chapter \ref{chap:luka-background} will give background information on generalizations of Dyck words, including Lukasiewicz words and Motzkin words. Chapters \ref{chap:luka-graycode} and \ref{chap:luka-implementation} will give a successor rule and loopless implementation for generating fixed-content Lukasiewicz words.
