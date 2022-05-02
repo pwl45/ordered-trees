@@ -1,6 +1,6 @@
 This chapter will give background information on cool-lex order and the sets it has been used to enumerate.  
-\section{$(s,t)$ Combinations: Fixed-Weight Binary Strings} \label{sec:coolCombo}
-Generating all binary strings with $s$ zeroes and $t$ ones is often referred to as $(s,t)$ combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph. D thesis and is as follows \cite{williams2009shift}:
+\section{$(s,t)$-Combinations: Fixed-Weight Binary Strings} \label{sec:coolCombo}
+Generating all binary strings with $s$ zeroes and $t$ ones is often referred to as $(s,t)$-combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph. D thesis and is as follows \cite{williams2009shift}:
 
  Let $\alpha$ be a binary string of length $n$.
 
@@ -37,6 +37,7 @@ The left-shift rule can be re-stated as follows:
 \end{equation*}
 
 
+TODO: FIX WIDTHS, HSPACE BEFORE VERBATIM
 \begin{figure}
     \begin{center}
 	\begin{subfigure}[]{.25\textwidth}
@@ -73,7 +74,7 @@ The left-shift rule can be re-stated as follows:
 [1, 1, 0, 0, 0, 0]
 \end{Verbatim}
             \end{center}
-	    \caption{$(s-t)$ combinations with $s=4$ zeroes and $t=2$ ones}
+	    \caption{$(s-t)$-combinations with $s=4$ zeroes and $t=2$ ones}
             \label{subfig:coolcombo}
         \end{subfigure}
         \begin{subfigure}[]{.32\textwidth}
@@ -144,7 +145,7 @@ The left-shift rule can be re-stated as follows:
             \label{fig:lotsofcool}
         \end{subfigure}
 \end{center}
-\caption{Cool-lex order for $(s,t)$ combinations, Dyck words, and multiset permutations. The symbol immediately following each string's non-increasing prefix, or the \emph{first increase} of each string is highlighted in red.  The arrows beneath each string show the shift that translates each string to its successor.  Note that in all cases, either the first increase or the symbol immediately following it is left-shifted.  For $(s,t)$ combinations and multiset permutations, symbols are always shifted to position 1.  For Dyck words, symbols are always shifted to position 2.}
+\caption{Cool-lex order for $(s,t)$-combinations, Dyck words, and multiset permutations. The symbol immediately following each string's non-increasing prefix, or the \emph{first increase} of each string is highlighted in red.  The arrows beneath each string show the shift that translates each string to its successor.  Note that in all cases, either the first increase or the symbol immediately following it is left-shifted.  For $(s,t)$-combinations and multiset permutations, symbols are always shifted to position 1.  For Dyck words, symbols are always shifted to position 2.}
 \label{fig:}
 \end{figure}
 

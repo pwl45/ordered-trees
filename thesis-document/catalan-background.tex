@@ -1,34 +1,34 @@
 The Catalan numbers are one of the most ubiquitous sequences of numbers in mathematics.  
-Named for mathematician Eugene Charles Catalan, the $n\thh$ Catalan number can be succinctly defined as the number of ways of triangulating a convex polygon with $n+2$ sides.  Figure \ref{fig:pentagontriangulations} demonstrates this for the case of $n=3$ The sequence of Catalan numbers for $n \ge 0$ can be defined mathematically as follows:
+Named for mathematician Eugene Charles Catalan, the $n\thh$ Catalan number can be succinctly defined as the number of ways of triangulating a convex polygon with $n+2$ sides.  Figure \ref{fig:pentagontriangulations} demonstrates this for the case of $n=3$. The sequence of Catalan numbers for $n \ge 0$ can be defined mathematically as follows:
 
 \begin{align}
-    \C_n &= \frac{(2n)!}{n!(n+1)!} =1, 1, 2, 5, 14, 42, 132, \ldots & \text{OEIS} A000108
+    \C_n &= \frac{(2n)!}{n!(n+1)!} =1, 1, 2, 5, 14, 42, 132, \ldots & \text{OEIS} A000108 \cite{oeis}
 \end{align}
 
-\begin{figure}
-\begin{center}
-\begin{tikzpicture}
-    \coordinate (a) at (-0,1);
-    \coordinate (b) at (0.951,0.309);
-    \coordinate (c) at (0.587,-0.809);
-    \coordinate (d) at (-0.587,-0.809);
-    \coordinate (e) at (-0.951,0.309);
+% \begin{figure}[H]
+% \begin{center}
+% \begin{tikzpicture}
+%     \coordinate (a) at (-0,1);
+%     \coordinate (b) at (0.951,0.309);
+%     \coordinate (c) at (0.587,-0.809);
+%     \coordinate (d) at (-0.587,-0.809);
+%     \coordinate (e) at (-0.951,0.309);
 
 
-\matrix[column sep=0.8cm,row sep=0.5cm]
-{
-    \pslice{a/d,a/c} &
-    \pslice{b/e,b/d} &
-    \pslice{c/a,c/e} &
-    \pslice{d/b,d/a} &
-    \pslice{e/c,e/b} \\
-};
-\end{tikzpicture}
-\end{center}
-    \caption{The $\C_3=5$ triangulations of a polygon with $3+2=5$ sides.}
-\label{fig:pentagontriangulations}
-\end{figure}
-The Catalan numbers count a remarkable number of interesting and useful combinatorial objects in bijective correspondence with triangulations of $n$-gons. Combinatorial objects counted by the Catalan numbers are referred to as \emph{Catalan objects}.   Richard Stanley's book \emph{Catalan Numbers} gives hundreds of examples of Catalan objects  as well as a thorough history on the numbers and their study \cite{stanley2015Catalan}. This thesis will focus primarily on three Catalan objects: Dyck words, binary trees, and ordered trees. 
+% \matrix[column sep=0.8cm,row sep=0.5cm]
+% {
+%     \pslice{a/d,a/c} &
+%     \pslice{b/e,b/d} &
+%     \pslice{c/a,c/e} &
+%     \pslice{d/b,d/a} &
+%     \pslice{e/c,e/b} \\
+% };
+% \end{tikzpicture}
+% \end{center}
+%     \caption{The $\C_3=5$ triangulations of a polygon with $3+2=5$ sides.}
+% \label{fig:pentagontriangulations}
+% \end{figure}
+The Catalan numbers count a remarkable number of interesting and useful combinatorial objects that are in bijective correspondence with triangulations of $n$-gons. Combinatorial objects counted by the Catalan numbers are referred to as \emph{Catalan objects}.   Richard Stanley's book \emph{Catalan Numbers} gives hundreds of examples of Catalan objects  as well as a thorough history on the numbers and their study \cite{stanley2015Catalan}. This thesis will focus primarily on three Catalan objects: Dyck words, binary trees, and ordered trees. Sections \ref{sec:Dycks}, \ref{sec:bintrees}, and \ref{sec:otrees} consider Dyck words, binary trees, and ordered trees respectively.  Section \ref{sec:bijections} discusses bijections between Dyck words, binary trees, and ordered trees; the bijection in \ref{subsec:otree-dyck-bij} is particularly relevant to later results.  Section 2.5 discusses minimal changes in the context of Catalan objects. Section 2.6 gives additional background on the recursive derivation of the Catalan numbers with examples using several different Catalan objects.
 
 
 \section{Dyck Words and Paths} \label{sec:Dycks}
@@ -65,16 +65,15 @@ Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations 
     \caption{The $\C_4=14$ Dyck words of order 4 in lexicographic order}
     \label{fig:Dycks}
 \end{figure}
-\section{Binary Trees}
+\section{Binary Trees} \label{sec:bintrees}
 
 Binary trees are fundamental objects in computer science, and are commonly used for searching, sorting, and storing data hierarchically. A binary tree can be defined recursively as follows: The empty set $\phi$ is a binary tree. Otherwise a binary tree has a root vertex, a left subtree, and a right subtree, where each subtree is also a binary tree. A closely related object is an \emph{extended binary tree}, which is a binary tree for which every non-leaf node has exactly two children.  
 
 Binary trees and extended binary trees are both counted by the Catalan numbers: $\C_n$ is the number of binary trees with $n$ nodes and the number of extneded binary trees with $n$ internal nodes.  
 A binary tree $b$ with $n$ nodes can be constructed from an extended binary tree $e$ with n internal nodes by removing all leaves from the extended binary tree, leaving the $n$ internal nodes as the only remaining nodes.
-
 This process can be reversed to construct an extended binary tree with $n$ internal nodes from a binary tree with $n$ nodes. Given a binary tree $b$ with $n$ nodes, add two leaf children to every leaf in $b$ and add one leaf child to every node in $b$ with one child. Following these steps, every node originally in $b$ is now an internal node, and therefore the constructed tree is an extended binary tree with n internal nodes.
 
-\section{Ordered Trees}
+\section{Ordered Trees} \label{sec:otrees}
 
 An ordered tree is a tree for which each node can have an unrestricted number of children and the order of a node's children is significant.  An ordered tree can be defined recursively as follows:
 
@@ -84,6 +83,32 @@ An ordered tree is a tuple $(r,C)$ where $r$ is a root node and $C$ is either th
 The number of ordered trees with $n+1$ nodes is equal to $\C_n$.
 
 \begin{figure}
+    \begin{subfigure}[]{\textwidth}
+    \begin{center}
+
+\begin{tikzpicture}
+    \coordinate (a) at (-0,1);
+    \coordinate (b) at (0.951,0.309);
+    \coordinate (c) at (0.587,-0.809);
+    \coordinate (d) at (-0.587,-0.809);
+    \coordinate (e) at (-0.951,0.309);
+
+
+\matrix[column sep=0.8cm,row sep=0.5cm]
+{
+    \pslice{a/d,a/c} &
+    \pslice{b/e,b/d} &
+    \pslice{c/a,c/e} &
+    \pslice{d/b,d/a} &
+    \pslice{e/c,e/b} \\
+};
+\end{tikzpicture}
+    \end{center}
+    \caption{The $\C_3=5$ triangulations of a polygon with $3+2=5$ sides.  }
+    \label{fig:pentagontriangulations}
+    \end{subfigure}
+    
+    
     \begin{subfigure}[]{\textwidth}
 	\centering
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=6, level distance=20]
@@ -165,14 +190,14 @@ The number of ordered trees with $n+1$ nodes is equal to $\C_n$.
 
 
 
-\section{Bijections}
+\section{Bijections} \label{sec:bijections}
 
-Since Dyck Words, binary trees, and ordered trees are all Catalan objects, all three sets of objects are in bijective correspondence with each other.  For convenience, we will use the $\mathbf{D}_n$, $\mathbf{B}_n$, $\mathbf{E}_n$, and $\mathbf{T}_n$ to refer to the set of Dyck words of order $n$, the set of binary trees with $n$ nodes, the set of extended binary trees with $n$ internal nodes, and the set of ordered trees with $n+2$ nodes respectively.  
+Since Dyck words, binary trees, and ordered trees are all Catalan objects, all three sets of objects are in bijective correspondence with each other.  For convenience, we will use the $\mathbf{D}_n$, $\mathbf{B}_n$, $\mathbf{E}_n$, and $\mathbf{T}_n$ to refer to the set of Dyck words of order $n$, the set of binary trees with $n$ nodes, the set of extended binary trees with $n$ internal nodes, and the set of ordered trees with $n+2$ nodes respectively.  Section \ref{subsec:bintree-dyck-bij} discusses the bijection between Dyck words and binary trees; \ref{subsec:otree-dyck-bij} discusses the bijection between Dyck words and ordered trees.  It is interesting to note that the bijection between $\mathbf{D}_n$ and $\mathbf{E_n}$ is based on the nodes of the extended binary tree, while the bijection between $\mathbf{D}_n$ and $\mathbf{T}_n$ is based on the edges of the ordered tree.
 
-\subsection{Binary Trees and Dyck Words}
+\subsection{Binary Trees and Dyck Words} \label{subsec:bintree-dyck-bij}
 
 The bijection between extended binary trees and Dyck words is particularly elegant: 
-For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each internal node; record a $0$ for each leaf ignoring the final leaf. The resulting binary sequence is a Dyck word  $D \in \mathbf{D}_n $ corresponding to the extended binary tree $e$.  This process can be reversed to go from $\mathbf{D}_n$ to $\mathbf{E}_n$.
+For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each internal node; record a $0$ for each leaf ignoring the final leaf. The resulting binary sequence is a Dyck word  $D \in \mathbf{D}_n $ corresponding to the extended binary tree $e$.  This process can be reversed to go from $\mathbf{D}_n$ to $\mathbf{E}_n$.  See figure \ref{fig:binarytreesbijection} for an illustration of this process: traversing the extended binary tree on the right in preorder yields its corresponding Dyck word.
 
 \begin{figure}
     \centering
@@ -201,17 +226,11 @@ For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each int
 
 \subsection{Ordered Trees and Dyck Words} \label{subsec:otree-dyck-bij}
 The bijection between ordered trees and Dyck words is particularly relevant to this paper's results, as it is central to the loopless ordered tree generation algorithm given in Chapter \ref{chap:otree-graycode}.
-This algorithm will use the bijection between ordered trees and Dyck words specified in Richard Stanley's \emph{Catalan Objects} \cite{stanley2015Catalan}. Figure \ref{ordered_tree_bijection_illustration} illustrates both directions of the bijection.
-The bijection can be formalized as follows:
-\footnote{ Stanley's text refers to ordered trees as \emph{plane trees} and Dyck words as \emph{ballot sequences}} 
-
-
+This algorithm will use the bijection between ordered trees and Dyck words specified in \emph{Catalan Objects} \cite{stanley2015Catalan}. Figure \ref{ordered_tree_bijection_illustration} illustrates both directions of the bijection.
+The bijection can be formalized as follows:\footnote{ Stanley's text refers to ordered trees as \emph{plane trees} and Dyck words as \emph{ballot sequences}.} 
 Given an ordered tree T with $n+1$ nodes: Traverse T in preorder.  Whenever going ``down" an edge, or away from the root, record a 1.  Whenever going ``up" an edge, or towards the root, record a 0.  The resulting binary sequence is a Dyck word D corresponding to the ordered tree T. 
-
 This process can be inverted as follows: 
-
-Let $D=d_1...d_{2n}$ be a Dyck word of order $n$ with $n > 0$. Construct an ordered tree T via the following steps. 
-
+Let $D=d_1...d_{2n}$ be a Dyck word of order $n$ with $n > 0$. Construct an ordered tree T via the following steps.
 Let T be an ordered tree with root $r$.  Keep track of a current node $c$ and set $c$ equal to the root $r$.
 
 \begin{itemize}
@@ -234,7 +253,9 @@ Following the execution of these steps, $r$ is the root of an ordered tree with 
 \end{figure}
 
 \section{Minimal Changes}
-Much of this thesis's content concerns minimal change orderings for Catalan objects.  Notably, our notion of a minimal change must differ for different Catalan objects: a minimal change between two Catalan objects of one type will not necessarily correspond to a minimal change between two Catalan objects of a different type.  Figure \ref{fig:badminimalchange} gives an example where a single bit transposition in a Dyck word results in updating worst-case $O(n)$ nodes in an ordered tree.  This makes the goal of creating an ordering that is a Gray code for multiple different combinatorial objects difficult, as it has to be a minimal change ordering for each object being generated.  We refer to orderings that are Gray codes for multiple combinatorial objects as \emph{simultaneous Gray codes}.  Ruskey and Williams showed that the cool-lex order for Dyck words is a simultaneous Gray code for Dyck words and binary trees \cite{ruskey2008generating}.  Another example of a simultaneous Gray code is the TODO: name? simultaneous Gray code for Baxter permutations and rectangulations given by (Hartung and Merino?) \cite{hartung2020combinatorial} \cite{merino2021efficient}.  Chapter \ref{chap:otree-graycode}, we show that the cool-lex order for Dyck words and binary trees is also a Gray code for Ordered trees, thus completing a single Gray-code ordering for three of the most important Catalan structures.
+Much of this thesis's content concerns minimal change orderings for Catalan objects.  However, our notion of a minimal change must differ for different Catalan objects.  This is because a minimal change between two Catalan objects of one type will not necessarily correspond to a minimal change between two Catalan objects of a different type.  Figure \ref{fig:badminimalchange} gives an example where a single bit transposition in a Dyck word results in updating $O(n)$ nodes in an ordered tree.  This makes the goal of creating an ordering that is a Gray code for multiple different combinatorial objects difficult, as it has to be a minimal change ordering for each object being generated.  
+
+We refer to orderings that are Gray codes for multiple combinatorial objects as \emph{simultaneous Gray codes}.  Ruskey and Williams showed that the cool-lex order for Dyck words is a simultaneous Gray code for Dyck words and binary trees \cite{ruskey2008generating}.  Their result represented the first simultaneous Gray code between Dyck words and binary trees. More recently, additional simultaneous Gray codes have been discovered, including a simultaneous Gray code for Baxter permutations and rectangulations given by Hartung and Merino \cite{hartung2020combinatorial} \cite{merino2021efficient}.  In Chapter \ref{chap:otree-graycode}, we show that the cool-lex order for Dyck words and binary trees is also a Gray code for ordered trees, thus completing a single Gray-code ordering for three of the most important Catalan structures.
 
 \begin{figure}[]
 
@@ -261,7 +282,7 @@ Much of this thesis's content concerns minimal change orderings for Catalan obje
     [.\node[style={fill=midishgreen}]{}; ] [.\node[style={fill=midishgreen}]{}; ] [.\node[style={fill=midishgreen}]{}; ] ] ] 
 \end{tikzpicture}
 
-        \caption{A single bit transposition in a Dyck word resulting in an ordered tree change that would require updating several pointers in a link-based representation.\\
+        \caption{A single bit transposition in a Dyck word resulting in an ordered tree change that would require updating several pointers in a link-based representation.
         In particular, if this example were generalized to the case where the initial Dyck word is 
         $1(10)^n0$, the corresponding ordered tree's first non-root node will have $n$ children.  In that case, transposing bits $n+1$ and $n+2$ in the Dyck word would require updating at least $n/2$ pointers in a link-based tree representation.
         }
@@ -274,14 +295,15 @@ Much of this thesis's content concerns minimal change orderings for Catalan obje
 To gain more insight into Catalan objects, we conclude this chapter by considering an alternate formula for enumerating the Catalan objects and illustrate the formula for several specific objects.
 
 The Catalan numbers can also be expressed through a summation that hints at the recursive structure of many of the Catalan objects.  
+The recursive formula appears below, with $\C_0=1$.
 
 \begin{align}
-    \C_{n+1} &= \sum_{k=0}^{n}{\C_{k}\C_{n-k}} \textrm{,   }  \C_0=1
+    \C_{n+1} &= \sum_{k=0}^{n}{\C_{k}\cdot\C_{n-k}}
 \end{align} 
 
 In the case of triangulated polygons, this summation can be derived as follows:
 
-$\C_{n+1}$ is the way of triangulating a convex polygon with $n+3$ sides.  Let $\mathcal{P}_{n+3}$ be a convex $(n+3)$-gon and let $\mathcal{T}$ be a triangulation of $\mathcal{P}_{n+3}$. Fix an edge $e$ in $\mathcal{P}_{n+3}$.  Note that $e$ lies between two vertices of $\mathcal{P}_{n+3}$. $e$ must be in exactly one triaingle in $\mathcal{T}$.  Let $T_{i}$ be the triangle in $\mathcal{T}$ that contains $e$.  $T_{i}$ must have two of its vertices on the two vertices of $e$ and one vertex that is another vertex in $\mathcal{P}_{n+3}$.  There are $n+1$ other vertices of $\mathcal{P}_{n+3}$.  Suppose the third vertex of $T_i$ is $k+1$ vertices clockwise of $e$, where $0\le k \le n$. Drawing $T_i$ divides $\mathcal{P}_{n+3}$ into 3 polygons: $T_i$, a $(k+2)$-gon clockwise of $T_i$, and a $(n-k+2)$-gon counterclockwise of $T_i$. This means that for each possible value of k, there is one way of triangulating $T_i$, $\C_k$ ways of triangulating the polygon clockwise of $T_i$, and $\C_{n-k}$ ways of triangulating the polygon counterclockwise of $T_i$.  Therefore, there are $C_k*C_{n-k}$ ways of triangulating $\mathcal{P}_{n+3}$ for each value of k.  Therefore, there are $\C_{n+1}=\sum_{k=0}^{n}{\C_{k}\C_{n-k}}$ total ways of triangulating $\mathcal{P}_{n+3}$. Figure \ref{fig:recursiveTriangulations} illustrates this process for the case of $n+1=6$.
+$\C_{n+1}$ is the number of ways of triangulating a convex polygon with $n+3$ sides.  Let $\mathcal{P}_{n+3}$ be a convex $(n+3)$-gon and let $\mathcal{T}$ be a triangulation of $\mathcal{P}_{n+3}$. Fix an edge $e$ in $\mathcal{P}_{n+3}$.  Note that $e$ lies between two vertices of $\mathcal{P}_{n+3}$. $e$ must be in exactly one triaingle in $\mathcal{T}$.  Let $T_{i}$ be the triangle in $\mathcal{T}$ that contains $e$.  $T_{i}$ must have two of its vertices on the two vertices of $e$ and one vertex that is another vertex in $\mathcal{P}_{n+3}$.  There are $n+1$ other vertices of $\mathcal{P}_{n+3}$.  Suppose the third vertex of $T_i$ is $k+1$ vertices clockwise of $e$, where $0\le k \le n$. Drawing $T_i$ divides $\mathcal{P}_{n+3}$ into 3 polygons: $T_i$, a $(k+2)$-gon clockwise of $T_i$, and a $(n-k+2)$-gon counterclockwise of $T_i$. This means that for each possible value of k, there is one way of triangulating $T_i$, $\C_k$ ways of triangulating the polygon clockwise of $T_i$, and $\C_{n-k}$ ways of triangulating the polygon counterclockwise of $T_i$.  Therefore, there are $C_k\cdot C_{n-k}$ ways of triangulating $\mathcal{P}_{n+3}$ for each value of k.  Therefore, there are $\C_{n+1}=\sum_{k=0}^{n}{\C_{k}\C_{n-k}}$ total ways of triangulating $\mathcal{P}_{n+3}$. Figure \ref{fig:recursiveTriangulations} illustrates this process for the case of $n+1=6$.
 
 \begin{figure}
     \centering
@@ -291,20 +313,20 @@ $\C_{n+1}$ is the way of triangulating a convex polygon with $n+3$ sides.  Let $
     \octoSliceTableD & \octoSliceTableC  & \octoSliceTableB  & \octoSliceTableA & \octoSliceTableH  & \octoSliceTableG   \\
     $\dycksplit{0}{5}$ & $\dycksplit{1}{4}$ & $\dycksplit{2}{3}$ & $\dycksplit{3}{2}$& $\dycksplit{4}{1}$& $\dycksplit{5}{0}$\\
     2-gon; 7-gon & 3-gon; 6-gon& 4-gon; 5-gon&5-gon; 4-gon & 6-gon; 3-gon& 7-gon; 2-gon& \\
-    $\textcolor{catleft}{\C_0} *\textcolor{catright}{\C_5}$ & $\textcolor{catleft}{\C_1} *\textcolor{catright}{\C_4}$&$\textcolor{catleft}{\C_2} *\textcolor{catright}{\C_3}$ & $\textcolor{catleft}{\C_3} *\textcolor{catright}{\C_2}$&$\textcolor{catleft}{\C_4} *\textcolor{catright}{\C_1}$ & $\textcolor{catleft}{\C_5} *\textcolor{catright}{\C_0}$ \\
+    $\textcolor{catleft}{\C_0} \cdot\textcolor{catright}{\C_5}$ & $\textcolor{catleft}{\C_1} \cdot\textcolor{catright}{\C_4}$&$\textcolor{catleft}{\C_2} \cdot\textcolor{catright}{\C_3}$ & $\textcolor{catleft}{\C_3} \cdot\textcolor{catright}{\C_2}$&$\textcolor{catleft}{\C_4} \cdot\textcolor{catright}{\C_1}$ & $\textcolor{catleft}{\C_5} \cdot\textcolor{catright}{\C_0}$ \\
 
-    $1 *42$ & $1 * 14$&$2*5$ & $5*2$&$14*1$ & $42*1$ \\
+    $1 \cdot42$ & $1 \cdot 14$&$2\cdot5$ & $5\cdot2$&$14\cdot1$ & $42\cdot1$ \\
     $42$ & $14$ & $10$ & $10$ & $14$ & $42$
 \end{tabular}
 
 \bigskip
 
 
-$C_6=\sum_{k=0}^5\C_k\C_{n-k}=42 + 14 + 10 + 10 + 14 + 42 = 132$
+$C_6=\sum_{k=0}^5\C_k \cdot \C_{n-k}=42 + 14 + 10 + 10 + 14 + 42 = 132$
 \end{center}
     \caption{Constructing $\C_6$ recursively using polygons and Dyck words.
-    In the case of triangulated polygons, the blue region is a polygon with $k+2$ sides, the gray region is a triangle, and the red region is a polygon with $n-k+2$ sides.  The blue region can be triangulated $\C_k$ ways, the gray region is already a triangle and therefore can be triangulated 1 way, and the red region can be triangulated $C_{n-k}$ ways. Note again the special case of $k=0$ or $n-k=0$.  We define a 2-gon as having one triangulation, so $C_{0}=0$
-    In the case of Dyck words, each $\{\D_i\}$ can expand to any of the $\C_i$ Dyck words of order $i$.  Thus, the expression $(\{\D_k\})\{\D_{n-k}\}$ has $\C_{k}*\C_{n-k}$ possible expansions.  Note that we define $\D_0$ as having only one possible expansion, the empty string.
+    In the case of triangulated polygons, the blue region is a polygon with $k+2$ sides, the black region is a triangle, and the red region is a polygon with $n-k+2$ sides.  The blue region can be triangulated $\C_k$ ways, the black region is already a triangle and therefore can be triangulated 1 way, and the red region can be triangulated $C_{n-k}$ ways. Note again the special case of $k=0$ or $n-k=0$, where we define a 2-gon as having one triangulation, so $C_{0}=0$
+    In the case of Dyck words, each $\{\D_i\}$ can expand to any of the $\C_i$ Dyck words of order $i$.  Thus, the expression $(\{\D_k\})\{\D_{n-k}\}$ has $\C_{k}\cdot\C_{n-k}$ possible expansions.  Note that we define $\D_0$ as having only one possible expansion, the empty string.
 }
     \label{fig:recursiveTriangulations}
 \end{figure}
