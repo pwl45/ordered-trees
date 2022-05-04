@@ -20,6 +20,7 @@
 \newcommand{\D}{\mathbf{D}}
 \newcommand{\luka}[1]{\overleftarrow{\text{luka}}(#1)}
 
+\usepackage{psfrag}
 \newcommand{\octoSliceTable}[1]{
 
     \begin{tikzpicture}
@@ -350,6 +351,7 @@
 
 \usepackage{colortbl}
 
+% \usepackage{algorithmic}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 
@@ -522,6 +524,77 @@
 \DeclareMathOperator{\tail}{tail}
 \DeclareMathOperator{\nextTreez}{nextTree}
 \DeclareMathOperator{\coolCatz}{coolCat}
+
+% MULTISODA THINGS
+\newcommand{\element}[1]{e_{#1}}
+\newcommand{\distinct}[1]{d_{#1}}
+\newcommand{\freq}[1]{f_{#1}}
+\newcommand{\cfreq}[1]{\overrightarrow{f_{#1}}}
+\newcommand{\frequency}[1]{f_{#1}}
+\newcommand{\df}[2][]{\distinct{#2}^{\frequency{#2} #1}}
+\newcommand{\dfrange}[3][]{\df{#1} \df{#2} \ldots \df{#3}}
+
+\newcommand{\comma}{, \:}
+\newcommand{\listcomma}{, \:}
+
+\newcommand{\SET}[1]{\mathsf{#1}}
+  \newcommand{\mymin}[2][]{\min_{#1}(#2)}
+  \newcommand{\E}{\SET{E}}
+
+  % \newcommand{\tail}[2][]{\textstyle \mathsf{tail}_{#1}(#2)}
+% \newcommand{\scut}[2]{\mathsf{scut}(#1,#2)}
+
+\newcommand{\STRING}[1]{\boldsymbol{#1}}
+  \newcommand{\concatsymbol}{\cdot}
+  \newcommand{\concat}[2]{#1 \concatsymbol #2}
+  \newcommand{\concatcat}[3]{#1 \concatsymbol #2 \concatsymbol #3}
+  \newcommand{\concatcatcat}[4]{#1 \concatsymbol #2 \concatsymbol #3 \concatsymbol #4}
+  \newcommand{\s}{\STRING{s}}
+  \newcommand{\z}{\STRING{z}}
+  \newcommand{\p}{\STRING{p}}
+
+
+\newcommand{\LANG}[1]{\mathbb{#1}}
+  \newcommand{\Multi}[1]{\LANG{M}_{#1}}
+
+\newcommand{\LIST}[1]{\mathcal{#1}}
+  \newcommand{\first}[1]{first(#1)}
+  \newcommand{\last}[1]{last\left(#1\right)}
+  \newcommand{\emptylist}{\mathcal{\varepsilon}}
+  \newcommand{\appendlistsymbol}{\bigoplus}
+  \newcommand{\appendlist}[3]{\displaystyle \appendlistsymbol_{#1}^{#2} #3}
+  \newcommand{\Lex}[1]{\LIST{L}_{#1}}
+  \newcommand{\Cool}[1]{\LIST{R}_{#1}}
+  \newcommand{\Coolreverse}[1]{\LIST{C}_{#1}}
+
+\newcommand{\size}[1]{\left| #1 \right|}
+
+\newcommand{\coolnext}[2][]{\rhd^{#1}\left(#2\right)}
+\newcommand{\coolnextsymbol}{\rhd}
+\newcommand{\coolprev}[2][]{\lhd^{#1}\left(#2\right)}
+\newcommand{\coolprevsymbol}{\lhd}
+\newcommand{\noninc}[1]{\nonincsymbol\left( #1 \right)}
+\newcommand{\nonincsymbol}{\reflectbox{\small{$\angle$}}}
+\newcommand{\shift}[3]{shift(#1, #2, #3)}
+\newcommand{\lengthprev}[1]{\pi(#1)}
+
+\newcommand{\VAR}[1]{\mathtt{#1}}
+\newcommand{\mynull}{\phi}
+\newcommand{\myinit}{\mathtt{init}}
+% \newcommand{\visit}[1]{\mathtt{visit}(#1)}
+
+% Sometimes the counters get messed up when changing the newtheorems below.
+% If so, delete the .aux files and move these newtheorems to the main file.
+% Also, unfortunately newtheorem{def} is not possible.
+% \newtheorem{thm}{Theorem}[section]
+% \newtheorem{lem}[thm]{Lemma}
+% \newtheorem{deaf}[thm]{Definition}
+% \newtheorem{question}{Question}
+% \theoremstyle{definition}
+
+% \renewcommand{\algorithmicthen}{}
+% \renewcommand{\algorithmicendif}{\textbf{end}}
+% \renewcommand{\algorithmicendwhile}{\textbf{end}}
 
 
 \def\pcolor{\node[style={fill=lightpurple}]{P};}

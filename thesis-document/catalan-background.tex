@@ -33,7 +33,7 @@ The Catalan numbers count a remarkable number of interesting and useful combinat
 
 \section{Dyck Words and Paths} \label{sec:Dycks}
 
-The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to $\C_n$.  Dyck words with $n$ ones and $n$ zeroes are frequently referred to as Dyck words of \emph{order n}.
+The language of binary Dyck words is the set of binary strings that satisfy the following conditions: The string has an equal number of ones and zeroes and each prefix of the string has at least as many ones as zeroes.  The number of distinct Dyck words with $n$ ones and $n$ zeroes is equal to the $n\thh$ Catalan nummber, $\C_n$.  Dyck words with $n$ ones and $n$ zeroes are frequently referred to as Dyck words of \emph{order n}.
 For example, the $\C_2=2$ Dyck words of order 2 are $1100$ and $1010$.
 
 % TODO: don't love this phrasing
@@ -67,7 +67,7 @@ Figure $\ref{fig:Dycks}$ gives an illustration of each of these interpretations 
 \end{figure}
 \section{Binary Trees} \label{sec:bintrees}
 
-Binary trees are fundamental objects in computer science, and are commonly used for searching, sorting, and storing data hierarchically. A binary tree can be defined recursively as follows: The empty set $\phi$ is a binary tree. Otherwise a binary tree has a root vertex, a left subtree, and a right subtree, where each subtree is also a binary tree. A closely related object is an \emph{extended binary tree}, which is a binary tree for which every non-leaf node has exactly two children.  
+Binary trees are fundamental objects in computer science, and are commonly used for searching, sorting, and storing data hierarchically. A binary tree can be defined recursively as follows: A binary tree either is the empty tree or 3-tuple $(L,S,R)$, where $S$ is the root of the tree, $L$ is a left subtree, and $R$ is a right subtree. A closely related object is an \emph{extended binary tree}, which is a binary tree for which every non-leaf node has exactly two children.  
 
 Binary trees and extended binary trees are both counted by the Catalan numbers: $\C_n$ is the number of binary trees with $n$ nodes and the number of extneded binary trees with $n$ internal nodes.  
 A binary tree $b$ with $n$ nodes can be constructed from an extended binary tree $e$ with n internal nodes by removing all leaves from the extended binary tree, leaving the $n$ internal nodes as the only remaining nodes.
