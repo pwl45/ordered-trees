@@ -151,67 +151,86 @@ In particular, Gray codes for many binary languages can be obtained by listing a
 
 \section{Cool-Lex Order} \label{sec:coolIntro}
 
-Cool-lex order can most easily be introduced using marbles on a ramp. Suppose one has $n$ marbles on a ramp, with each marble colored black or white.  If $m$ is the first black marble that follows a white  marble, picking up and moving marble $m+1$ to the top of the ramp will eventually yield all possible marble arrangements (with no distinction made between individual black and white marbles). If no black marble follows a white marble, i.e. all black marbles come before all white marbles, shift the last marble to the top of the ramp. 
+Cool-lex order can most easily be introduced using marbles on a ramp. Suppose one has $n$ marbles on a ramp, with each marble colored black or white.  
 
-\begin{figure}
+\includegraphics[width=.3\textwidth]{figures/marbles_first.pdf} 
 
-\begin{subfigure}[]{\textwidth}
-\begin{center}
-\includegraphics[width=.3\textwidth]{figures/marbles_first_arrow.pdf} 
-  
-\end{center}
-\caption{Marble 2 is the first black marble following a white marble; marble 3 is moved.}
-\label{fig:marble1}
-\end{subfigure}
 
-\begin{subfigure}[]{\textwidth}
-\begin{center}
-\includegraphics[width=.3\textwidth]{figures/marbles_second_arrow.pdf} 
-  
-\end{center}
-\caption{Marble 3 is the first black marble following a white marble; marble 4 is moved.}
-\label{fig:marble2}
-\end{subfigure}
+Let $x$ be the first black marble that follows a white marble. Consider picking up and moving marble $x+1$ to the top of the ramp. This yields a new configuration.
 
-\begin{subfigure}[]{\textwidth}
-\begin{center}
+\includegraphics[width=.3\textwidth]{figures/marbles_first_arrow.pdf} $\implies$
+\includegraphics[width=.3\textwidth]{figures/marbles_second.pdf} 
 
-\includegraphics[width=.3\textwidth]{figures/marbles_third_arrow.pdf} 
-  
-\end{center}
-\caption{Marble 4 is the first black marble following a white marble; marble 5 is moved.}
-\label{fig:marble3}
-\end{subfigure}
-\begin{subfigure}[]{\textwidth}
-\begin{center}
+Now, consider performing the same move again: finding $x$, the first black marble that follows a white marble, and moving marble $x+1$ to the top of the ramp. This yields a third configuration.
 
-\includegraphics[width=.3\textwidth]{figures/marbles_fourth_arrow.pdf} 
-  
-\end{center}
-    \caption{Marble 2 is the first black marble following a white marble; marble 3 is moved.  Repeatedly executing this rule will eventually yield the following configuration in \ref{fig:marblelast}}
-\label{fig:marble4}
-\end{subfigure}
+\includegraphics[width=.3\textwidth]{figures/marbles_second_arrow.pdf} $\implies$
+\includegraphics[width=.3\textwidth]{figures/marbles_third.pdf} 
 
+Amazingly, repeatedly performing this operation will eventually generate all possible marble arrangements (with no distinction made between individual black and white marbles). 
+
+
+To make the order cyclic, add an additional rule for the case where 
+no black marble follows a white marble (all black marbles come before all white marbles).  In this case, shift the last marble to the top of the ramp.
+
+% \begin{figure}
+
+% \begin{subfigure}[]{\textwidth}
 % \begin{center}
-%     $\cdots$ 
-
-%     Repeatedly executing this rule will eventually yield the following configuration:
-% \end{center}
-
-\begin{subfigure}[]{\textwidth}
-\begin{center}
-
-
-\includegraphics[width=.3\textwidth]{figures/marbles_last_arrow.pdf} 
+% \includegraphics[width=.3\textwidth]{figures/marbles_first_arrow.pdf} 
   
-\end{center}
-    \caption{No black marble follows a white marble; the last marble is moved.  Note that this returns the marbles to the initial configuration in \ref{fig:marble1}}
-\label{fig:marblelast}
-\end{subfigure}
+% \end{center}
+% \caption{Marble 2 is the first black marble following a white marble; marble 3 is moved.}
+% \label{fig:marble1}
+% \end{subfigure}
 
-\caption{Cool-lex order illustrated via marbles on a ramp.}
-\label{fig:coolmarbles}
-\end{figure}
+% \begin{subfigure}[]{\textwidth}
+% \begin{center}
+% \includegraphics[width=.3\textwidth]{figures/marbles_second_arrow.pdf} 
+  
+% \end{center}
+% \caption{Marble 3 is the first black marble following a white marble; marble 4 is moved.}
+% \label{fig:marble2}
+% \end{subfigure}
+
+% \begin{subfigure}[]{\textwidth}
+% \begin{center}
+
+% \includegraphics[width=.3\textwidth]{figures/marbles_third_arrow.pdf} 
+  
+% \end{center}
+% \caption{Marble 4 is the first black marble following a white marble; marble 5 is moved.}
+% \label{fig:marble3}
+% \end{subfigure}
+% \begin{subfigure}[]{\textwidth}
+% \begin{center}
+
+% \includegraphics[width=.3\textwidth]{figures/marbles_fourth_arrow.pdf} 
+  
+% \end{center}
+%     \caption{Marble 2 is the first black marble following a white marble; marble 3 is moved.  Repeatedly executing this rule will eventually yield the following configuration in \ref{fig:marblelast}}
+% \label{fig:marble4}
+% \end{subfigure}
+
+% % \begin{center}
+% %     $\cdots$ 
+
+% %     Repeatedly executing this rule will eventually yield the following configuration:
+% % \end{center}
+
+% \begin{subfigure}[]{\textwidth}
+% \begin{center}
+
+
+% \includegraphics[width=.3\textwidth]{figures/marbles_last_arrow.pdf} 
+  
+% \end{center}
+%     \caption{No black marble follows a white marble; the last marble is moved.  Note that this returns the marbles to the initial configuration in \ref{fig:marble1}}
+% \label{fig:marblelast}
+% \end{subfigure}
+
+% \caption{Cool-lex order illustrated via marbles on a ramp.}
+% \label{fig:coolmarbles}
+% \end{figure}
 
 
 
@@ -220,9 +239,9 @@ $\cdots$
 
 
 
-This rule for marbles on a ramp can be translated to binary strings to create a successor rule that generates all binary strings with fixed content.  We refer to this operation of moving a single marble to the front of the ramp as a \emph{left shift}
+This rule for marbles on a ramp can be translated to binary strings to create a successor rule that generates all binary strings with fixed content.  We refer to this operation of moving a single marble to the top of the ramp as a \emph{left-shift}.
 The order described by this rule is 
-cool-lex order, a variation of co-lexicographic order that was first introduced for $(s,t)$-combinations by Ruskey and Williams \cite{ruskey2005generating} \cite{ruskey2008generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \ref{eq:BRGC-rule}. To generate all binary strings of a given length instead of all binary strings with a fixed set of content, one only needs to change the rule slightly.  In the case where there is no black marble following a white marble, 
+cool-lex order, a variation of co-lexicographic order that was first introduced for $(s,t)$-combinations by Ruskey and Williams \cite{ruskey2005generating} \cite{ruskey2008generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \ref{eq:BRGC-rule}. To generate all binary strings of a given length instead of all binary strings with a fixed set of content, one only needs to change the rule slightly.  In the case where there is no black marble following a white marble, move the last marble to the top of the ramp and change its color.  In binary strings, this rule corresponds to left-shifting the last bit to the front of the string and complementing it.
 
 Cool-lex order has some advantages of both lexicographic orderings and Gray codes.  Like lexicographic orders, cool-lex order has a simple recursive structure that is easy to understand at  high level.  
 Like the binary reflected Gray code, cool-lex orders often lead to generation algorithms that are simpler and more efficient than lexicographic orders.   %Figure \ref{fig:marbles} gives an example of the type of simple prefix shifts often employed by cool-lex order.
@@ -231,12 +250,7 @@ Cool-lex orders often lead to algorithms that are significantly more efficient t
 
 % In addition to these, applications of cool-lex order are rapidly growing and new cool-lex algorithms are being discovered every year.  
 
-Two common threads in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string and their use of \emph{left-shifts} for minimal changes.  Mentioned previously in section \ref{sec:intro_Graycodes}, a left shift can be defined formally as follows:
 
-If $\alpha = a_1 a_2 \ldots a_n$ is a string and $i < j$, then we let
-\begin{equation}
-    \lshiftindex[\alpha]{i}{j} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n. \label{eq:leftdef}
-\end{equation}
 
 
 \subsection{Cool-Lex Sublists}

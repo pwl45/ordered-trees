@@ -1,144 +1,220 @@
-This chapter will give background information on cool-lex order and the sets it has been used to enumerate.  
+This chapter will give background information on cool-lex order and the sets it has been used to exhaustively generate.  Section \ref{sec:shiftsandprefixes} will discuss definitions and terminology relevant to the cool-lex algorithms discussed in this chapter.  Section \ref{sec:coolCombo} will discuss the cool-lex algorithm for generating $(s,t)-$combinations.  Section \ref{sec:coolDyck} will discuss generating Dyck words and binary trees in cool-lex order.  \ref{sec:coolDyck} is of particular relvance to the result for generating ordered trees in \ref{chap:otree-graycode}.  Section \ref{sec:coolPerms} discusses generating multiset permutations in cool-lex order.  Figure \ref{fig:coolAll} illustrates all three of these orders. Each section will also discuss efficient implementations of these algorithms.  Specifically, each of these orders can be implemented looplessly with a careful implementation.
+
+
+\section{Shifts and Non-Increasing Prefixes} \label{sec:shiftsandprefixes}
+Two common threads in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string and their use of \emph{left-shifts} for minimal changes.  This section will define these terms and discuss their relevance to cool-lex order.
+
+\subsection{Left-Shifts}
+  Mentioned previously in section \ref{sec:coolIntro}, a left-shift shifts a single symbol somewhere earlier (left) in a string.  Given a string $\alpha = a_1 a_2 \ldots a_n$, we define $\lshiftindex[\alpha]{i}{j}$ with $i < j$ as removing the symbol $\alpha_j$ and inserting it at position $i$, shifting symbols $\alpha_i$ through $\alpha_{j-1}$ one position to the right.  A formal definition of $\lshiftindex[\alpha]{i}{j}$ is given below in equation \ref{eq:lshiftdef}.
+
+\begin{equation} \label{eq:lshiftdef}
+    \lshiftindex[\alpha]{i}{j} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n.
+\end{equation}
+
+Note that the left-shift operation preserves the set of content comprising $\alpha$.  Specifically, it re-orders symbols within $\alpha$ but does not remove symbols from $\alpha$ or add any new symbols to $\alpha$.
+
+Cool-lex orders frequently left-shift a single symbol to the front (position 1) of the string.  Thus, we also define a simplified left-shift operation which left-shifts a single symbol to position 1.  
+\begin{equation} \label{eq:simplelshiftdef}
+\leftshift[\alpha]{j}=\lshiftindex[\alpha]{1}{j}
+\end{equation}
+
+
+
+\subsection{Non-Increasing Prefixes}
+Cool-lex algorithms  shift symbols shortly after a string's non-increasing prefix.  A non-increasing prefix is simply the longest prefix of a string such that each symbol is no larger than the previous symbol in the string.  We define the the the non-increasing prefix of $\alpha$ as $\alpha_1,\alpha_2,\cdots\alpha_m$ where $m$ is 
+the maximum value such that $\alpha_{i} \le \alpha_{i+1}$ for all $1 \le i < m$. Note that $\alpha_m < \alpha_{m+1}$. 
+
+The non-increasing prefix of a binary string is always $1^a0^b$ for some $1 \le a,b$, where exponentiation denotes repeated symbols.  This property will be especially convenient for cool-lex rules for binary langues in sections \ref{sec:coolCombo} and \ref{sec:coolDyck} as it will allow for implementations of left-shifts that transpose a constant number of bits instead of shifting an arbitrary number of symbols.
+
 \section{$(s,t)$-Combinations: Fixed-Weight Binary Strings} \label{sec:coolCombo}
-Generating all binary strings with $s$ zeroes and $t$ ones is often referred to as $(s,t)$-combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph. D thesis and is as follows \cite{williams2009shift}:
+Recall the marble enumeration rule from \ref{sec:coolIntro}.  That rule can equivalently be used to generate all binary strings with a fixed set of content.  
+Binary strings with $s$ zeroes and $t$ ones are often referred to as $(s,t)$-combinations, since each string can be used to represent a choice of $t$ elements from a set of size of $s+t$.  The cool-lex successor rule for generating all fixed-weight binary strings was given by Aaron Williams in his Ph.\ D thesis \cite{williams2009shift} and is the same as the aforementioned rule for marbles.
 
  Let $\alpha$ be a binary string of length $n$.
-
- Let $y$ be the position of the leftmost zero in $\alpha$ and $x$ be the position of the leftmost 1 in $\alpha$ such that $x > y$.  If there is no such 1, let $x=n$.
+ Let $y$ be the position of the leftmost zero in $\alpha$ and $x$ be the position of the leftmost 1 in $\alpha$ such that $x > y$. Note that $x$ is the first 1 that follows a 0; the analogue of marble $x$ in section \ref{sec:coolIntro}
 
  Note that $\alpha_1...\alpha_{x-1}$ is the non-increasing prefix of $\alpha$.
 
  Let $\leftshift[\alpha]{i}$ be a simplified version of the left shift function defined in equation \ref{eq:leftdef}:  $\leftshift[\alpha]{i}$ shifts the $i\thh$ symbol of $\alpha$ into the first position.  Thus, $\leftshift[\alpha]{i}=\lshiftindex[\alpha]{1}{i}$.
 
-% function that shifts the $i\thh$ bit of $\alpha$ into the rotates the first i bits of a string $\alpha$ right circularly by one.
+ \begin{equation} \label{eq:coolCombo}
+     \overleftarrow{\text{cool}}(\alpha) = \leftshift[\alpha]{x+1}
+ \end{equation}
 
-% More formally, 
-%  $\leftshift[\alpha]{i}=\alpha_2,\alpha_3,...,\alpha_i,\alpha_1,\alpha_{i-1},\alpha_{i+1},\alpha_{i+2},...,\alpha_{2n}$
-\begin{equation*}
+ To make this order cyclic, an additional case can be added for when there is no 1 following a zero. In this case, shift the last marble to the front of the list. Note that in this case all ones must follow all zeroes, and therefore $\alpha=1^t0^s$.  
+
+\begin{equation}\label{eq:coolComboCyclic}
     \overleftarrow{\text{cool}}(\alpha) = \begin{cases}
-	\leftshift[\alpha]{x} & \text{if $\alpha_{x+1}=1$}\\
-	\leftshift[\alpha]{x+1} & otherwise\\
+	\leftshift[\alpha]{n} & \text{if } \alpha=1^t0^s \\
+	\leftshift[\alpha]{x+1} & otherwise
 \end{cases}
-\end{equation*}
-
-Figure \ref{subfig:coolcombo} demonstrates this rule being used to enumerate combinations of 4 zeroes and 2 ones.
+\end{equation}
 
 
-The restriction that the first $x$ symbols of the string are non-increasing allows for simplification of the left shift operation.  Note that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$, where exponentiation denotes repeated symbols.  Because of this, the two left-shift operations can be replaced with can be replaced with either one or two symbol transpositions.
+Figure \ref{subfig:coolcombo} demonstrates this rule being used to enumerate $(4,2)$ combinations.
+
+\subsection{Efficient Implementation}
+
+At first glance, $\leftshift[\alpha]{x+1}$ seems like an $O(n)$ opeartion, as $x$ can be up to the length of $\alpha$ and the left shift operation requires shifting each symbol from $\alpha_1$ to $\alpha_{x}$ down.  However, 
+the property that the first $x$ symbols of the string are non-increasing allows for simplification of the left shift operation. Note that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$, as previously mentioned in \ref{sec:shiftsandprefixes}. Because of this, each left-shift operations can be replaced with with either one or two symbol transpositions. 
 
  Let $\transpose{\alpha}{i}{j}$ with $1 \le i \le j \le n$ be a function that swaps $\alpha_i$ an $\alpha_j$.  More formally, $\transpose{\alpha}{i}{j}=\alpha_1,\alpha_2,\dots,\alpha_{i-1},\alpha_{j}\alpha_{i+1}\dots \alpha_{j-1}\alpha_i \alpha_{j+1}\dots \alpha_n$
-The left-shift rule can be re-stated as follows:
 
-\begin{equation*}
+Equation \ref{eq:coolComboTranspose} re-states the successor rule for combinations using transposes, with separte cases for whether a 1 or a 0 is left-shifted.
+% The left-shift rule can be re-stated as follows, with separate cases for shifting a 1 and shifting a 0.
+
+\begin{equation}\label{eq:coolComboTranspose}
     \overleftarrow{\text{cool}}(\alpha) = \begin{cases}
 	\transpose{\alpha}{y}{x} & \text{if $\alpha_{x+1}=1$}\\
 	\transpose{\transpose{\alpha}{y}{x}}{1}{x+1} & otherwise\\
 \end{cases}
-\end{equation*}
+\end{equation}
 
+Moreover, scanning the string to find values for $x$ and $y$ is not necessary.  Recall that $\alpha_{x-1} < \alpha_{x}$.  Since $\alpha_{x+1}$ is always being shifted, the increase from $\alpha_{x-1}$ to $\alpha{x}$ is maintained, but shited one position to the right.  Therefore, if $\alpha_{x+1}=0$ and $\alpha_{1}=1$, the new value of $x$ is 2, as the $1$ at index $2$ follows a zero.  Otherwise, if $\alpha_{x+1}=1$ or $\alpha_{x+1}=0$ and $\alpha_{1}=0$, $x$ can be incremented by one to obtain the value of $x$ for the next string.  Similarly, $y$ is incremented by 1 if $\alpha_{x+1}=1$ and set to 1 if $\alpha_{x+1}=0$
 
-TODO: FIX WIDTHS, HSPACE BEFORE VERBATIM
+Figure \ref{fig:coolComboCode} gives psuedocode for implementing this successor rule looplessly.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.275\textwidth}
+        \centering
+        \begin{algorithm}[H]
+        \begin{algorithmic}
+        %\Function{coolCombo}{$s,t$}
+        %\EndFunction{}
+        \State \textsc{coolCombo}$(s,t)$
+        \State $n \gets s+t$
+        \State $b \gets 1^t 0^s$
+        \State $x \gets t$
+        \State $y \gets t$
+        \State \visit{$b$}
+        
+        \While{$x < n$}
+            \State $b_x=0$
+            \State $b_y=1$
+            \State $x \gets x+1$
+            \State $y \gets y+1$
+            
+            \If{$b_x = 0$}
+                \State $b_x \gets 1$ % Wrong in early draft ... corrected
+                \State $b_1 \gets 0$ % Wrong in early draft ... corrected
+                \If{$y > 2$} % This differs from coolestDM ... corrected
+                    \State $x \gets 2$
+                \EndIf
+                \State $y \gets 1$
+            \EndIf
+        \visit{$b$}
+        \EndWhile
+        \end{algorithmic}
+        \end{algorithm}
+
+    \end{subfigure}
+    \caption{Pseudocode for generating $(s,t)-$combinations in cool-lex order.}
+    \label{fig:coolComboCode}
+\end{figure}
+
 \begin{figure}
+% TODO: FIX WIDTHS, HSPACE BEFORE VERBATIM
     \begin{center}
-	\begin{subfigure}[]{.25\textwidth}
+	\begin{subfigure}[]{.34\textwidth}
             \begin{center}
-\begin{Verbatim}[commandchars=\\\{\}]
-[0, \textcolor{red}{\underline{1}}, 1, 0, 0, 0]
- |<-|
-[1, 0, \textcolor{red}{\underline{1}}, 0, 0, 0]
- |<-------|
-[0, \textcolor{red}{\underline{1}}, 0, 1, 0, 0]
- |<----|
-[0, 0, \textcolor{red}{\underline{1}}, 1, 0, 0]
- |<----|
-[1, 0, 0, \textcolor{red}{\underline{1}}, 0, 0]
- |<----------|
-[0, \textcolor{red}{\underline{1}}, 0, 0, 1, 0]
- |<----|
-[0, 0, \textcolor{red}{\underline{1}}, 0, 1, 0]
- |<-------|
-[0, 0, 0, \textcolor{red}{\underline{1}}, 1, 0]
- |<-------|
-[1, 0, 0, 0, \textcolor{red}{\underline{1}}, 0]
- |<-------------|
-[0, \textcolor{red}{\underline{1}}, 0, 0, 0, 1]
- |<----|
-[0, 0, \textcolor{red}{\underline{1}}, 0, 0, 1]
- |<-------|
-[0, 0, 0, \textcolor{red}{\underline{1}}, 0, 1]
- |<----------|
-[0, 0, 0, 0, \textcolor{red}{\underline{1}}, 1]
- |<----------|
-[1, 0, 0, 0, 0, \textcolor{red}{\underline{1}}]
- |<-------------|
-[1, 1, 0, 0, 0, 0]
+                \begin{Verbatim}[commandchars=\\\{\}]
+\hspace{2.4em}[0, \textcolor{red}{\underline{1}}, 1, 0, 0, 0]
+\hspace{2.4em} |<-|
+\hspace{2.4em}[1, 0, \textcolor{red}{\underline{1}}, 0, 0, 0]
+\hspace{2.4em} |<-------|
+\hspace{2.4em}[0, \textcolor{red}{\underline{1}}, 0, 1, 0, 0]
+\hspace{2.4em} |<----|
+\hspace{2.4em}[0, 0, \textcolor{red}{\underline{1}}, 1, 0, 0]
+\hspace{2.4em} |<----|
+\hspace{2.4em}[1, 0, 0, \textcolor{red}{\underline{1}}, 0, 0]
+\hspace{2.4em} |<----------|
+\hspace{2.4em}[0, \textcolor{red}{\underline{1}}, 0, 0, 1, 0]
+\hspace{2.4em} |<----|
+\hspace{2.4em}[0, 0, \textcolor{red}{\underline{1}}, 0, 1, 0]
+\hspace{2.4em} |<-------|
+\hspace{2.4em}[0, 0, 0, \textcolor{red}{\underline{1}}, 1, 0]
+\hspace{2.4em} |<-------|
+\hspace{2.4em}[1, 0, 0, 0, \textcolor{red}{\underline{1}}, 0]
+\hspace{2.4em} |<-------------|
+\hspace{2.4em}[0, \textcolor{red}{\underline{1}}, 0, 0, 0, 1]
+\hspace{2.4em} |<----|
+\hspace{2.4em}[0, 0, \textcolor{red}{\underline{1}}, 0, 0, 1]
+\hspace{2.4em} |<-------|
+\hspace{2.4em}[0, 0, 0, \textcolor{red}{\underline{1}}, 0, 1]
+\hspace{2.4em} |<----------|
+\hspace{2.4em}[0, 0, 0, 0, \textcolor{red}{\underline{1}}, 1]
+\hspace{2.4em} |<----------|
+\hspace{2.4em}[1, 0, 0, 0, 0, \textcolor{red}{\underline{1}}]
+\hspace{2.4em} |<-------------|
+\hspace{2.4em}[1, 1, 0, 0, 0, 0]
 \end{Verbatim}
             \end{center}
 	    \caption{$(s-t)$-combinations with $s=4$ zeroes and $t=2$ ones}
             \label{subfig:coolcombo}
         \end{subfigure}
-        \begin{subfigure}[]{.32\textwidth}
+        \begin{subfigure}[]{.40\textwidth}
             \begin{center}
 \begin{Verbatim}[commandchars=\\\{\}]
-[1, 0, \textcolor{red}{\underline{1}}, 1, 1, 0, 0, 0]
-    |<-|
-[1, 1, 0, \textcolor{red}{\underline{1}}, 1, 0, 0, 0]
-    |<----|
-[1, 1, 1, 0, \textcolor{red}{\underline{1}}, 0, 0, 0]
-    |<----------|
-[1, 0, \textcolor{red}{\underline{1}}, 1, 0, 1, 0, 0]
-    |<-|
-[1, 1, 0, \textcolor{red}{\underline{1}}, 0, 1, 0, 0]
-    |<-------|
-[1, 0, \textcolor{red}{\underline{1}}, 0, 1, 1, 0, 0]
-    |<-|
-[1, 1, 0, 0, \textcolor{red}{\underline{1}}, 1, 0, 0]
-    |<-------|
-[1, 1, 1, 0, 0, \textcolor{red}{\underline{1}}, 0, 0]
-    |<-------------|
-[1, 0, \textcolor{red}{\underline{1}}, 1, 0, 0, 1, 0]
-    |<-|
-[1, 1, 0, \textcolor{red}{\underline{1}}, 0, 0, 1, 0]
-    |<-------|
-[1, 0, \textcolor{red}{\underline{1}}, 0, 1, 0, 1, 0]
-    |<-|
-[1, 1, 0, 0, \textcolor{red}{\underline{1}}, 0, 1, 0]
-    |<-------|
-[1, 1, 1, 0, 0, 0, \textcolor{red}{\underline{1}}, 0]
-    |<-------------|
-[1, 1, 1, 1, 0, 0, 0, 0]
+\hspace{2.2em}[1, 0, \textcolor{red}{\underline{1}}, 1, 1, 0, 0, 0]
+\hspace{2.2em}    |<-|
+\hspace{2.2em}[1, 1, 0, \textcolor{red}{\underline{1}}, 1, 0, 0, 0]
+\hspace{2.2em}    |<----|
+\hspace{2.2em}[1, 1, 1, 0, \textcolor{red}{\underline{1}}, 0, 0, 0]
+\hspace{2.2em}    |<----------|
+\hspace{2.2em}[1, 0, \textcolor{red}{\underline{1}}, 1, 0, 1, 0, 0]
+\hspace{2.2em}    |<-|
+\hspace{2.2em}[1, 1, 0, \textcolor{red}{\underline{1}}, 0, 1, 0, 0]
+\hspace{2.2em}    |<-------|
+\hspace{2.2em}[1, 0, \textcolor{red}{\underline{1}}, 0, 1, 1, 0, 0]
+\hspace{2.2em}    |<-|
+\hspace{2.2em}[1, 1, 0, 0, \textcolor{red}{\underline{1}}, 1, 0, 0]
+\hspace{2.2em}    |<-------|
+\hspace{2.2em}[1, 1, 1, 0, 0, \textcolor{red}{\underline{1}}, 0, 0]
+\hspace{2.2em}    |<-------------|
+\hspace{2.2em}[1, 0, \textcolor{red}{\underline{1}}, 1, 0, 0, 1, 0]
+\hspace{2.2em}    |<-|
+\hspace{2.2em}[1, 1, 0, \textcolor{red}{\underline{1}}, 0, 0, 1, 0]
+\hspace{2.2em}    |<-------|
+\hspace{2.2em}[1, 0, \textcolor{red}{\underline{1}}, 0, 1, 0, 1, 0]
+\hspace{2.2em}    |<-|
+\hspace{2.2em}[1, 1, 0, 0, \textcolor{red}{\underline{1}}, 0, 1, 0]
+\hspace{2.2em}    |<-------|
+\hspace{2.2em}[1, 1, 1, 0, 0, 0, \textcolor{red}{\underline{1}}, 0]
+\hspace{2.2em}    |<-------------|
+\hspace{2.2em}[1, 1, 1, 1, 0, 0, 0, 0]
 
 \end{Verbatim}
             \end{center}
             \caption{Dyck words of order 4}
-            \label{fig:}
+            \label{subfig:coolDyck}
         \end{subfigure}
-        \begin{subfigure}[]{.15\textwidth}
+        \begin{subfigure}[]{.24\textwidth}
             \begin{center}
 \begin{Verbatim}[commandchars=\\\{\}]
-[1, \textcolor{red}{\underline{3}}, 3, 2]
- |<-|
-[3, 1, \textcolor{red}{\underline{3}}, 2]
- |<----|
-[3, 3, 1, \textcolor{red}{\underline{2}}]
- |<-------|
-[2, \textcolor{red}{\underline{3}}, 3, 1]
- |<-|
-[3, 2, \textcolor{red}{\underline{3}}, 1]
- |<-------|
-[1, \textcolor{red}{\underline{3}}, 2, 3]
- |<-|
-[3, 1, \textcolor{red}{\underline{2}}, 3]
- |<----|
-[2, \textcolor{red}{\underline{3}}, 1, 3]
- |<----|
-[1, \textcolor{red}{\underline{2}}, 3, 3]
- |<-|
-[2, 1, \textcolor{red}{\underline{3}}, 3]
- |<----|
-[3, 2, 1, \textcolor{red}{\underline{3}}]
- |<-------|
-[3, 3, 2, 1]
+\hspace{1.8em}[1, \textcolor{red}{\underline{3}}, 3, 2]
+\hspace{1.8em} |<-|
+\hspace{1.8em}[3, 1, \textcolor{red}{\underline{3}}, 2]
+\hspace{1.8em} |<----|
+\hspace{1.8em}[3, 3, 1, \textcolor{red}{\underline{2}}]
+\hspace{1.8em} |<-------|
+\hspace{1.8em}[2, \textcolor{red}{\underline{3}}, 3, 1]
+\hspace{1.8em} |<-|
+\hspace{1.8em}[3, 2, \textcolor{red}{\underline{3}}, 1]
+\hspace{1.8em} |<-------|
+\hspace{1.8em}[1, \textcolor{red}{\underline{3}}, 2, 3]
+\hspace{1.8em} |<-|
+\hspace{1.8em}[3, 1, \textcolor{red}{\underline{2}}, 3]
+\hspace{1.8em} |<----|
+\hspace{1.8em}[2, \textcolor{red}{\underline{3}}, 1, 3]
+\hspace{1.8em} |<----|
+\hspace{1.8em}[1, \textcolor{red}{\underline{2}}, 3, 3]
+\hspace{1.8em} |<-|
+\hspace{1.8em}[2, 1, \textcolor{red}{\underline{3}}, 3]
+\hspace{1.8em} |<----|
+\hspace{1.8em}[3, 2, 1, \textcolor{red}{\underline{3}}]
+\hspace{1.8em} |<-------|
+\hspace{1.8em}[3, 3, 2, 1]
 \end{Verbatim}
             \end{center}
 	    \caption{Permutations of the multiset \{1,2,3,3\}}
@@ -146,12 +222,13 @@ TODO: FIX WIDTHS, HSPACE BEFORE VERBATIM
         \end{subfigure}
 \end{center}
 \caption{Cool-lex order for $(s,t)$-combinations, Dyck words, and multiset permutations. The symbol immediately following each string's non-increasing prefix, or the \emph{first increase} of each string is highlighted in red.  The arrows beneath each string show the shift that translates each string to its successor.  Note that in all cases, either the first increase or the symbol immediately following it is left-shifted.  For $(s,t)$-combinations and multiset permutations, symbols are always shifted to position 1.  For Dyck words, symbols are always shifted to position 2.}
-\label{fig:}
+\label{fig:coolAll}
 \end{figure}
 
-\section{Cool Lex Order on Dyck Words and Binary Trees}
+\section{Cool Lex Order on Dyck Words and Binary Trees} \label{sec:coolDyck}
 
-Ruskey and Williams found the following successor rule for enumerating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}:
+Ruskey and Williams found the following algorithm for generating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}.
+
 We will use $\mathbf{D}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{D}_n$ is therefore $2n$.
 
  Let $D \in \mathbf{D}_n$
@@ -164,52 +241,93 @@ We will use $\mathbf{D}_n$ to denote binary Dyck words with $n$ ones and $n$ zer
 
 
 
- Let $k$ be the index of the 1 in the leftmost $01$ substring in $D$ if it exists and $2n$ if $D$ has no $01$ substring. Note that if $D$ has no $01$ substring, then $D=1^n0^n$.
-Furthermore, note that this definition of $k$ is equivalent to the definition of $x$ in \ref{sec:coolCombo}
-The successor rule for $D$ is as follows:
+ % Let $x$ be the index of the 1 in the leftmost $01$ substring in $D$ if it exists and $2n$ if $D$ has no $01$ substring. Note that if $D$ has no $01$ substring, then $D=1^n0^n$.
 
+ Let $y$ be the index of the first $0$ in D and $x$ be the index of the first $1$ following a $0$ in D as in section \ref{sec:coolCombo}.
+% Furthermore, note that this definition of $x$ is equivalent to the definition of $x$ in \ref{sec:coolCombo}
+ Equation \ref{eq:prefixDyck_simple} gives the successor rule for Dyck words.
 
 \begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck_simple}}
-	% \preshift{D}{2n} & \text{if $D$ has no $01$ substring}\\
-	\preshift{D}{k+1} & if $\preshift{D}{k+1} \in \mathbf{D}_n$\\
-	\preshift{D}{k} & otherwise
+	\preshift{D}{x+1} & if $\preshift{D}{x+1} \in \mathbf{D}_n$\\
+	\preshift{D}{x} & otherwise
 \end{subnumcases}
+
+Figure \ref{subfig:coolDyck} shows this successor rule being used to geneate Dyck words of order 4.
 
 Ruskey and Williams's algorithm can also enumerate a broader set of strings: The algorithm enumerates any set $\mathbf{D}_{s,t}$ where any $D \in \mathbf{D}_{s,t}$ has s zeroes and t ones and satisfies the constraint that each prefix of D has as many ones as zeroes.  This is slightly broader than the language of Dyck words, as it does not have the requirement that a string have an equal number of ones and zeroes.
 We will focus on $\mathbf{D}_n$  languages due to their correspondce with Dyck words and therefore other Catalan objects.
 
-Evaluating whether $\preshift{D}{k+1} \in \mathbf{D}_n$ can be determined by looking at $D_{k+1}$ and the the first $k-1$ symbols of D: 
+\subsection{Efficient Implementation}
+Evaluating whether $\preshift{D}{x+1} \in \mathbf{D}_n$ can be determined by looking at $D_{x+1}$ and the the first $x-1$ symbols of D: 
 
-If $D_{k+1}=1$, then shifting it into the second position is valid.  If $D_{k+1}=0$ and $D$ starts with at least $\frac{k-1}{2}$ ones, then shifting a 0 into the second position will not invalidate the condition that all prefixes of $D$ have at least as many ones as zeroes.   Therefore, the successor rule in \ref{eq:prefixDyck_simple} can be simplified to the following: 
+If $D_{x+1}=1$, then shifting it into the second position is valid.  If $D_{x+1}=0$ and $D$ starts with at least $\frac{x-1}{2}$ ones, then shifting a 0 into the second position will not invalidate the condition that all prefixes of $D$ have at least as many ones as zeroes.   Therefore, the successor rule in \ref{eq:prefixDyck_simple} can be simplified to the following: 
 
 \begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck}}
     % \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:prefixDyck_n}\\
-	\preshift{D}{k+1} & $D_{k+1}=1$ or $D$ starts with at least $\lfloor \frac{k-1}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
-	\preshift{D}{k} & otherwise \label{eq:prefixDyck_k}
+	\preshift{D}{x+1} & $D_{x+1}=1$ or $D$ starts with at least $\lfloor \frac{x-1}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
+	\preshift{D}{x} & otherwise \label{eq:prefixDyck_k}
 \end{subnumcases}
 
 
-$\preshift{D}{k+1} \in \mathbf{D}_{n} \iff$ $D$ starts with more than $\lfloor \frac{k-1}{2} \rfloor$ ones
+$\preshift{D}{x+1} \in \mathbf{D}_{n} \iff$ $D$ starts with more than $\lfloor \frac{x-1}{2} \rfloor$ ones
 
 Ruskey and Williams provided a loopless pseudocode implementation of CoolCat that utilized this fact to enumerate any $\mathbf{D}_{s,t}$ using at most 2 conditionals per successor \cite{ruskey2008generating}. Using the bijection between Dyck words and binary trees, Ruskey and Williams also showed that their successor rule can be translated to a loopless algorithm for generating all binary trees with $n$ nodes. 
 
 An an additional simplifying observation is that all Dyck words start with 1.  Thus, a conceivable representation of a Dyck word of order $n$ would be a binary string of length $2n-1$, where the $2n-1$ bits of the representation correspond to bits $2$ through $2n$ of the actual Dyck word, and the leading $1$ is implied.  In this case, each $\preshift[D]{i}$ can be replaced with $\leftshift[D]{i}$, each shift now shifts a symbol to index 1. 
 
 
-With $D$ redefined as above and $k$ defined as before with respect to the updated representation of $D$, the successor rule for Dyck words can be further simplified to the following:
+With $D$ redefined as above and $x$ defined as before with respect to the updated representation of $D$, the successor rule for Dyck words can be further simplified to the following:
 
 \begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck_lshift}}
     % \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:prefixDyck_n}\\
-	\leftshift[D]{k+1} & $D_{k+1}=1$ or $D$ starts with at least $\lfloor \frac{k-2}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
-	\leftshift[D]{k} & otherwise \label{eq:prefixDyck_k}
+	\leftshift[D]{x+1} & $D_{x+1}=1$ or $D$ starts with at least $\lfloor \frac{x-2}{2} \rfloor$ ones \label{eq:prefixDyck_k1}\\
+	\leftshift[D]{x} & otherwise \label{eq:prefixDyck_k}
 \end{subnumcases}
 
-% TODO: binary trees algorithm
+Similarly to the rule for combinations in \ref{eq:coolComboTranspose}, the left-shifts in $\overleftarrow{\mathsf{coolCat}}$ can be implemented looplessly using transposes. Moreover values for $x$ and $y$ can be kept track of based on which values are shfited.  Pseudocode for implementing $\overleftarrow{\mathsf{coolCat}}$ looplessly is given in figure \ref{fig:coolDyckCode}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.3\textwidth}
+        \centering
+        \begin{algorithm}[H]
+        \begin{algorithmic}
+        % \Function{coolDyck}{$t$}
+        % \EndFunction{}
+        \State \textsc{coolDyck}$(t)$
+        \State $n \gets 2 \cdot t$
+        \State $b \gets 1^t 0^t$
+        \State $x \gets t$
+        \State $y \gets t$
+        \State \visit{$b$}
+        
+        \While{$x < n$}
+            \State $b_x=0$
+            \State $b_y=1$
+            \State $x \gets x+1$
+            \State $y \gets y+1$
+            
+            \If{$b_x = 0$}
+                \If{$x \ge 2 \cdot y-2$}
+                \State $x \gets x+1$
+                \Else
+                \State $b_x \gets 1$     
+                \State $b_2 \gets 0$     
+                \State $x \gets 3$
+                \State $y \gets 2$
+                \EndIf
+            \EndIf
+            
+            \State \visit{$b$}
+        \EndWhile
+        \end{algorithmic}
+        \end{algorithm}
+    \end{subfigure}
+    \caption{Pseudocode for generating Dyck words in cool-lex order.}
+     \label{fig:coolDyckCode}
+\end{figure}
 
 Due to its simplicity and efficiency, Don Knuth included the cool-lex algorithm for Dyck words in his 4th volume of \emph{The Art of Computer Programming} and also provided an implementation of it for his theoretical MMIX processor architecture \cite{knuth2015art}. Figure \ref{fig:CoolDycks} gives demonstrates the iteration of coolCat on Dyck words of order $4$.
-
-
-
 
 \begin{figure}[H]
     \centering
@@ -235,21 +353,33 @@ Due to its simplicity and efficiency, Don Knuth included the cool-lex algorithm 
     \label{fig:CoolDycks}
 \end{figure}
 
-\section{Multiset Permutations}
+\section{Multiset Permutations} \label{sec:coolPerms}
 
-Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams is as follows \cite{williams2009loopless}:
+Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams can be described via a simple algorithm that uses one left shift per generated string  \cite{williams2009loopless}.
+
+First, recall equation \ref{eq:coolComboCyclic} for $(s,t)-$combinations.  Equation \ref{eq:coolComboExpanded} gives an expanded version of the successor rule for $(s,t)-$combinations that differentiates between whether a $0$ or a $1$ is being shifted. Note that left-shifting position $x$ and position $x+1$ are equivalent when $\alpha_{x+1}=1$, since $\alpha{x}$ is the first one that follows a zero and therefore $\alpha_{x+1}=\alpha_{x}=1$.
+
+\begin{equation} \label{eq:coolComboExpanded}
+    \overleftarrow{\text{cool}}(\alpha) = \begin{cases}
+	\leftshift[\alpha]{n} & \text{if $\alpha=1^t0^s$}\\
+	\leftshift[\alpha]{x} & \text{if $\alpha_{x+1}=1$}\\
+	\leftshift[\alpha]{x+1} & \text{if $\alpha_{x+1}=0$}\\
+\end{cases}
+\end{equation}
+
 
  Let $\alpha$ be a multiset of length $n$.
 
  Let $i$ be the maximum value such that $\alpha_{j-1} \ge s_j$ for all $2 \le j \le i$.  In other words, $i$ is the length of the non-increasing prefix of $\alpha$.  
 
-Recall the definition of $\leftshift[\alpha]{i}$ from section $\ref{sec:coolCombo}$
-
-%  Let $\sigma_j(\alpha)$ be a function that shifts the $i\thh$ value of $\alpha$ into the first position, or equivalently rotates the first i elements of $\alpha$ right circularly.  More formally, 
-
-%  $\sigma_j(\alpha)=\alpha_j,\alpha_1,\alpha_1,\dots,\alpha_{j-1},\alpha_{j+1},\dots,\alpha_n $
-
-Then
+\begin{equation}\label{eq:coolPerms}
+    \text{nextPerm}(\alpha) = \begin{cases}
+	\leftshift[\alpha]{n} & \text{$\alpha$ is in descending order}\\
+	\leftshift[\alpha]{x} & \alpha_{x+1} > \alpha_{x-1}\\
+	\leftshift[\alpha]{x+1} & otherwise\\
+	% \leftshift[\alpha]{x+1} & \text{$\alpha_{x+1} \le \alpha_{x-1}$}\\
+\end{cases}
+\end{equation}
 
 \begin{equation*}
     \text{nextPerm}(\alpha) = \begin{cases}
@@ -262,6 +392,7 @@ Then
 
 See Fig. \ref{fig:permutations} for an example comparison of cool-lex and lexicographic order for two multisets.
 
+\subsection{Efficient Implementation}
 This successor rule has the convenient property of ensuring that length of the successor's non-increasing prefix is easy to find.
 
 In particular, if $\alpha_{i+2}$ is shifted, then the length of the non-increasing prefix is either 1 if $\alpha_{i+2}\le \alpha_1$ or $i+1$ otherwise. 
@@ -269,8 +400,12 @@ In particular, if $\alpha_{i+2}$ is shifted, then the length of the non-increasi
 Similarly, if $\alpha_{i+1}$ is shifted, then the length of the non-increasing prefix is either 1 if $\alpha_{i+1}\le \alpha_1$ or $i+1$ otherwise. 
 
 
-This property allows for a loopless implementation of the successor rule, as scanning the string to find the length of the non-increasing prefix is not required.  
+This property makes a loopless implementation of the sucessor rule possible, as scanning the string to find the length of the non-increasing prefix is not required.  
 A similar property regarding the length of successive non-increasing prefixes will allow for a loopless implementation of the shift Gray code for Lukasiewicz words in chapter \ref{chap:luka-implementation}.
+
+However, unlike the binary cool-lex rules, multiset permutations can have any number of distinct symbols in a non-increasing prefix.  Therefore, implementing a left-shift via transpositions would be more complicated and likely not a constant time operation.  Therefore, \cite{williams2009loopless} used a linked-list representation of a multiset to implement the rule in \ref{eq:coolPerms} looplessly.
+
+TODO: pseudocode for this.
 
 Due to the simplicity and efficiency of this rule, it is used in the ``multicool" package in R, which is used for generating multiset permutations, Bell numbers, and other combinatorial objects \cite{multicool_2021}.   Further information on the package is available here: https://www.rdocumentation.org/packages/multicool/versions/0.1-12
 
