@@ -406,7 +406,8 @@
 \newcommand{\popchild}[1]{\mathsf{popchild(} #1 \mathsf{)}}
 \newcommand{\pushchild}[2]{\mathsf{pushchild(} #1, #2 \mathsf{)}}
 % \newcommand{\poppush}[2]{\mathsf{poppush(} #1, #2 \mathsf{)}}
-\newcommand{\poppush}[3][]{\mathsf{poppush}_{#1}(#2,#3)}
+\newcommand{\poppush}[3][]{\mathsf{pull}_{#1}(#2,#3)}
+\newcommand{\pull}[3][]{\mathsf{pull}_{#1}(#2,#3)}
 % \newcommand{\poppushopt}[2][]{\mathsf{poppush}_{#1}( #2, #3 \mathsf{)}}
 
 
@@ -417,7 +418,7 @@
 
 
 \newcommand{\nextPrefix}[1]{\mathsf{next}{(#1)}}
-\newcommand{\nextTree}[1]{\mathsf{nextree}{(#1)}}
+\newcommand{\nextTree}[1]{\mathsf{nextree}{(\mathcal{#1})}}
 % \newcommand{\nextTree0}[0]{\mathsf{nextree}{}
 \newcommand{\coolCat}[1]{\overleftarrow{\mathsf{coolCat}}{(#1)}}
 % \newcommand{\coolCat0}[0]{\overrightarrow{\mathsf{coolCat}}{(#1)}}
@@ -426,7 +427,7 @@
 \newcommand{\dyckindex}[1]{\mathsf{DyckIndex}{(#1)}}
 
 \newcommand{\otreenode}[1]{\mathsf{OTreeNode}{(#1)}}
-\newcommand{\leftdown}[1]{\mathsf{leftpath}{(#1)}}
+\newcommand{\leftdown}[1]{\mathsf{leftpath}{(\mathcal{#1})}}
 \newcommand{\depth}[1]{\mathsf{Depth}{(#1)}}
 % \newcommand{\ithone}[2]{\mathsf{i^{\underline{th}}one}_{#1}{(#2)}}
 \newcommand{\oneindex}[2]{\mathsf{oneindex}({#1}, #2)}
@@ -582,6 +583,7 @@
 \newcommand{\mynull}{\phi}
 \newcommand{\myinit}{\mathtt{init}}
 % \newcommand{\visit}[1]{\mathtt{visit}(#1)}
+\newcommand{\tree}[1]{\mathcal{#1}}
 
 % Sometimes the counters get messed up when changing the newtheorems below.
 % If so, delete the .aux files and move these newtheorems to the main file.
