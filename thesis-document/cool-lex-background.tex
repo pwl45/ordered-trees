@@ -5,9 +5,9 @@ This chapter will give background information on cool-lex order and the sets it 
 Two common threads in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string and their use of \emph{left-shifts} for minimal changes.  This section will define these terms and discuss their relevance to cool-lex order.
 
 \subsection{Left-Shifts}
-  Mentioned previously in section \ref{sec:coolIntro}, a left-shift shifts a single symbol somewhere earlier (left) in a string.  Given a string $\alpha = a_1 a_2 \ldots a_n$, we define $\lshiftindex[\alpha]{i}{j}$ with $i < j$ as removing the symbol $\alpha_j$ and inserting it at position $i$, shifting symbols $\alpha_i$ through $\alpha_{j-1}$ one position to the right.  A formal definition of $\lshiftindex[\alpha]{i}{j}$ is given below in equation \ref{eq:lshiftdef}.
+  Mentioned previously in section \ref{sec:coolIntro}, a left-shift shifts a single symbol somewhere earlier (left) in a string.  Given a string $\alpha = a_1 a_2 \ldots a_n$, we define $\lshiftindex[\alpha]{i}{j}$ with $i < j$ as removing the symbol $\alpha_j$ and inserting it at position $i$, shifting symbols $\alpha_i$ through $\alpha_{j-1}$ one position to the right.  A formal definition of $\lshiftindex[\alpha]{i}{j}$ is given below in equation \ref{eq:leftdef}.
 
-\begin{equation} \label{eq:lshiftdef}
+\begin{equation} \label{eq:leftdef}
     \lshiftindex[\alpha]{i}{j} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n.
 \end{equation}
 
@@ -19,7 +19,7 @@ Note that the left-shift operation preserves the set of content comprising $\alp
 As a simple example, performing $\lshiftindex{2}{4}$ on the string $321\underline{0}21$ shifts the underlined zero to position 2 and therefore yields $302121$.
 
 Cool-lex orders frequently left-shift a single symbol to the front (position 1) of the string.  Thus, we also define a simplified left-shift operation which left-shifts a single symbol to position 1.  
-\begin{equation} \label{eq:simplelshiftdef}
+\begin{equation} \label{eq:simpleleftdef}
 \leftshift[\alpha]{j}=\lshiftindex[\alpha]{1}{j}
 \end{equation}
 

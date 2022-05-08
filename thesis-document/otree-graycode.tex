@@ -1,4 +1,7 @@
-This chapter presents a loopless algorithm for generating all ordered trees with $n$ nodes. Section \ref{sec:otree-otherresults} gives context on this algorithm's relationship to related results; Section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm; Section \ref{sec:otree-proof} gives a proof of our algorithm's correctness.
+This chapter presents a loopless Gray code for generating all ordered trees with $n$ nodes. 
+Sections \ref{sec:otree-otherresults} and \ref{sec:termsandcons} give context on this Gray code's relationship to related results and discuss terminology for this chapter's results. Section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm; Section \ref{sec:otree-proof} gives a proof of our algorithm's correctness.
+
+% Section \ref{sec:otree-otherresults} gives context on this Gray code's relationship to related results, section \ref{sec:termsandcons} discuss terminology for this chapter's results, section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm, and section \ref{sec:otree-proof} gives a proof of our algorithm's correctness.
 % Cooldyck was first loopless for Dyck and Binary; we now show also ordered
 % Give exampl  of bit change that messup tree (show for bin and o). 
 % \chapter{Test}
@@ -30,13 +33,19 @@ We use the term to mean the following:
 The first branching occurs when the preorder traversal goes up an edge, and then down an edge, for the first time.
 The node that is incident to both of these edges is the parent of the first branching.
 % For example, these first branches are highlighted in turquoise in Figure \ref{fig:trees6}.
-In particular, note that the subtree to the left of the first branch must be a path (see Remark \ref{rem:left-is-path}).
+In particular, note that the subtree to the left of the first branch must be a path (see Remark \ref{rem:left-is-path}). Moreover, note that the first branching is also the first time a second child is visited in a preorder traversal of $\tree{T}$.  All previously visted nodes in a pre-order traversal are either the root or the first child of their parent.
+
+% Another way of describing the first branching is as follows.  Let $\leftpath{T}$ be the unique path between 
 
 Another way of describing the first branching is as follows.
 Let $O$ be the first second-child node that is visited during a preorder traversal.
 If $P$ is the parent of $O$, then $P$ is the parent of the first branching.
+We frequently label the following nodes around the first branching: $O$ and $P$ are defined as above; $L$ is $P$'s first child, and $G$ is $P$'s parent. 
+Fig. \ref{fig:exampleotree} gives an example illustrating an ordered tree's first branching and the nodes $O,P,G,$ and $L$.
 
-The number of ordered trees with $n$ nodes is the $(n-1)$st Catalan number, $\C_{n-1}$.
+% The number of ordered trees with $n$ nodes is the $(n-1)$st Catalan number, $\C_{n-1}$.
+
+
 
 % Let $F$ be the leftmost leaf of T, or equivalently the leftmost descendant of the root. Consider the unique path between the root of T and $F$, denoted $\path{T}{root}{F}$. We will refer to this path as the left-down path of T, or $\leftdown{T}$
 
@@ -44,7 +53,6 @@ The number of ordered trees with $n$ nodes is the $(n-1)$st Catalan number, $\C_
 % Define the left-down path of an ordered tree T, denoted $\leftdown{T}$ to be the first $s+1$ nodes in a preorder traversal of T such that, for each $t_i$ with $0 \le i \le s$, $i=0$ or $t_i$ is the leftmost child of $t_{i-1}$.
 
 
-Fig. \ref{exampleotree} gives an example illustrating O,P,G,L,F, and the left-down path in an tree.
 \begin{figure}
     \centering
     $\tree{T}=$
@@ -56,21 +64,21 @@ Fig. \ref{exampleotree} gives an example illustrating O,P,G,L,F, and the left-do
     \end{tikzpicture}
 
     $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
-    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  The \emph{first branching} of $\tree{T}$ is from P to O.}
-    \label{exampleotree}
+    \caption{An ordered tree with 12 nodes corresponding to the Dyck word 1111110000110010011000.  The \emph{first branching} of $\tree{T}$ is from $P$ to $O$.}
+    \label{fig:exampleotree}
 \end{figure}
 
-Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the $\path{T}{root}{F}$. If $\path{T}{root}{F}=\tree{T}$, i.e. the entire tree is a single path, let O be the leaf of the tree. Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
+% Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the $\path{T}{root}{F}$. If $\path{T}{root}{F}=\tree{T}$, i.e. the entire tree is a single path, let O be the leaf of the tree. Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
 % Given an ordered tree T, let $\treeshift{T}{A}{B}$ be a function that shifts A to be the first child of B, with the restriction that A is a \emph{first-born}s, or the first child of its parents.
-Given an ordered tree T and an ordered tree node A in T, let $\popchild{A}$ be a function that removes and returns A's first child.  In other words, it pops A's first child.  
-
-Additionally, let $\pushchild{A}{B}$ be a function that makes B A's first child.  In other words, it pushes B onto A's list of children. 
-
-For convenience, we will also define $\poppush{A}{B}=\pushchild{B}{\popchild{A}}$, which removes the first child of A and makes it the new first child of B.
 
 \section{Successor Rule} \label{sec:otree-successor}
 
-The successor rule for enumerating ordered trees with n nodes can be stated as folows:
+Given an ordered tree $\tree{T}$ and an ordered tree node A in $\tree{T},$ let $\popchild{A}$ be a function that removes and returns $A$'s first child.  In other words, it pops A's first child.  
+
+Additionally, let $\pushchild{A}{B}$ be a function that makes B A's first child.  In other words, it pushes B onto A's list of children. 
+For convenience, we will also define $\poppush{A}{B}=\pushchild{B}{\popchild{A}}$, which removes the first child of A and makes it the new first child of B.
+
+The successor rule for enumerating ordered trees with $n$ nodes can be stated as folows:
 
 % $$
 \bigskip
@@ -100,7 +108,8 @@ Figure \ref{fig:otreeruledemo} gives a demonstration of the shifts in cases \ref
 To make the order cyclic, an additional rule can be added, modifying the successor rule to be:
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:otreeRule_cyclic}}
-    \poppush{P}{root} &  $\leftdown{T}=\tree{T}$ \label{eq:otree_noo_cyclic}\\
+    % \poppush{P}{root} &  $\leftdown{T}=\tree{T}$ \label{eq:otree_noo_cyclic}\\
+    \poppush{P}{root} &  $\tree{T}$ has no first branching \label{eq:otree_noo_cyclic}\\
     \poppush{P}{G};\poppush{P}{root}  &  $P \ne root $ and O has no children \label{eq:otree_zeroshift_cyclic}\\
     \poppush{P}{O} &  otherwise\label{eq:otree_oneshift_cyclic}
 \end{subnumcases}
@@ -219,12 +228,73 @@ $\implies$
     \label{fig:otreeruledemo}
 
 \end{figure}
-    \begin{figure}
-	\begin{center}
-	\end{center}
-    \end{figure}
 
-The following remarks can be derived from from the definition of the successor role and the nodes O,G,L, and T.
+%%%%%%%%%%%%%%% Figure from ESA %%%%%%%%%%%%%%%%%%%
+% \begin{figure}[ht]
+%     \centering
+%     \begin{subfigure}{.98\textwidth}
+%         \captionsetup[subfigure]{justification=centering}
+%         \begin{subfigure}[t]{.49\textwidth}
+%             \centering
+%     	    \includegraphics[scale=0.85]{nextTightOr011Before.pdf}
+%     	    \caption*{Current tree $\tree{T}$ where ${P} = {root}$ or ${O}$ is not a leaf.}
+%             \label{fig:next1_Before}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}[t]{.49\textwidth}
+%     	    \centering
+%     	    \includegraphics[scale=0.85]{nextTightOr011After.pdf}
+%     	    \caption*{New tree $\tree{T'}$ is obtained by $\pull[\tree{T}]{{O}}{{P}}$.}
+%             \label{fig:next1_Intermediate}
+%         \end{subfigure}
+% 	    \caption{Case \ref{eq:next0}.
+% 	    After the pull, the node ${O}$ is updated to be the new second-child of ${O}$ (if non-null) or the new second-child of ${P}$ (if non-null), or~${null}$.
+% 	    The pull is equivalent to $\pushchild{{O}}{\popchild{{P}}}$.}
+%         \label{fig:next1}
+%     \end{subfigure}    
+
+%     \vspace{1em}
+        
+%     \begin{subfigure}{.98\textwidth}
+%         \captionsetup[subfigure]{justification=centering}
+%         \begin{subfigure}[t]{.32\textwidth}
+%             \centering
+%     	    \includegraphics[scale=0.85]{next010Before.pdf}
+%     	    \caption*{Current tree $\tree{T}$ where ${P} \neq {root}$ and ${O}$ is a leaf.}
+%             \label{fig:next0_Before}
+%         \end{subfigure}
+%         \hfill
+%         \begin{subfigure}[t]{.32\textwidth}
+%     	    \centering
+%     	    \includegraphics[scale=0.85]{next010Intermediate.pdf}
+%     	    \caption*{Intermediate tree $\tree{I}$ is obtained by $\pull[\tree{T}]{{G}}{{P}}$.}
+%             \label{fig:next0_Intermediate}
+%         \end{subfigure}
+%         \begin{subfigure}[t]{.32\textwidth}
+%     	    \centering
+%     	    \includegraphics[scale=0.85]{next010After.pdf}
+%     	    \caption*{New tree $\tree{T'}$ is obtained by $\pull[\tree{I}]{{root}}{{P}}$.}
+%             \label{fig:next0_After}
+%         \end{subfigure}
+% 	    \caption{Case \ref{eq:next0}.
+% 	    After the pull, the node ${O}$ is updated to be the new second-child of ${root}$.
+% 	    The pull operations are equivalent to $\pushchild{{G}}{\popchild{{P}}}$ followed by $\pushchild{{root}}{\popchild{{P}}}$}
+%         \label{fig:next0}
+%     \end{subfigure}    
+    
+%     \caption{Our pull Gray code is generated by the two case successor rule in \eqref{eq:next}.
+%     This rule describes how to transform the current ordered tree $\tree{T}$ into the new next ordered tree $\tree{T'}$ using either one or two pulls.
+%     In these figures, ${O}$ is the first node in a preorder traversal that is not on the path from the root to the leftmost descendent, and ${P}$ is its parent, and ${G}$ is its grandparent (if applicable).
+%     White circles denote non-null nodes, and grey triangles denote an unspecified number of children and subtrees.
+%     The pull operations, which are always path-pulls, are highlighted.
+%     The first pulling node and pulled path are in gold, while the second are in purple.
+%     The captions also explain how to update the value of ${O}$.}
+%     \label{fig:next}
+% \end{figure}
+
+\section{Proof of Correctness} \label{sec:otree-proof}
+
+The following remarks can be derived from from the definition of the successor rule and the nodes P,O,G, and L.
 
 
 Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(k-s-1)$; $d_{k}=1$
@@ -266,9 +336,6 @@ Let $D=\dyck{T}$; $s$ be the number of consecutive ones to start D, and $z$ be t
 
 \end{proof}
 
-\section{Proof of Correctness} \label{sec:otree-proof}
-
-
 
 % \end{enumerate}
 
@@ -281,7 +348,7 @@ The bijection between ordered trees and Dyck Words given in \ref{subsec:otree-dy
 
 
 \begin{itemize}
-    \item Let $\otree{D}$ and $\dyck{T}$ be functions that convert a Dyck word to an ordered tree and an ordered tree to a Dyck word respectively via the above process.
+    \item Let $\otree{D}$ and $\dyck{T}$ be functions that convert a Dyck word to an ordered tree and an ordered tree to a Dyck word respectively via the process outlined in 
     \item Let $\depth{t_i}=$ length of the path between root and $t_i$. $\depth{root}=0$
     \item Let $\oneindex{D}{i}=$ be the index of the $i\thh{}$ one in D.
 \end{itemize}
