@@ -40,7 +40,7 @@ In particular, note that the subtree to the left of the first branch must be a p
 Another way of describing the first branching is as follows.
 Let $O$ be the first second-child node that is visited during a preorder traversal.
 If $P$ is the parent of $O$, then $P$ is the parent of the first branching.
-We frequently label the following nodes around the first branching: $O$ and $P$ are defined as above; $L$ is $P$'s first child, and $G$ is $P$'s parent. 
+We frequently label the following nodes around the first branching: $O$ and $P$ are defined as above; $L$ is $P$'s first child, and $G$ is $P$'s parent. Moreover, if $\tree{T}$ has no first branching, and therefore $\tree{T}$ is a path, we define $O$ to be $\tree{T}$'s unique leaf.
 Fig. \ref{fig:exampleotree} gives an example illustrating an ordered tree's first branching and the nodes $O,P,G,$ and $L$.
 
 % The number of ordered trees with $n$ nodes is the $(n-1)$st Catalan number, $\C_{n-1}$.
@@ -96,7 +96,7 @@ The successor rule for enumerating ordered trees with $n$ nodes can be stated as
 % \end{subnumcases}
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:otreeRule}}
-    \poppush{P}{G};\poppush{P}{root}  &  $P \ne root $ and O has no children \label{eq:otree_zeroshift}\\
+    \poppush{P}{G};\poppush{P}{root}  &  $P \ne root $ and $O$ has no children \label{eq:otree_zeroshift}\\
     \poppush{P}{O} &  otherwise\label{eq:otree_oneshift}
 \end{subnumcases}
 
@@ -110,7 +110,7 @@ To make the order cyclic, an additional rule can be added, modifying the success
 \begin{subnumcases}{\nextTree{T} = \label{eq:otreeRule_cyclic}}
     % \poppush{P}{root} &  $\leftdown{T}=\tree{T}$ \label{eq:otree_noo_cyclic}\\
     \poppush{P}{root} &  $\tree{T}$ has no first branching \label{eq:otree_noo_cyclic}\\
-    \poppush{P}{G};\poppush{P}{root}  &  $P \ne root $ and O has no children \label{eq:otree_zeroshift_cyclic}\\
+    \poppush{P}{G};\poppush{P}{root}  &  $P \ne root $ and $O$ has no children \label{eq:otree_zeroshift_cyclic}\\
     \poppush{P}{O} &  otherwise\label{eq:otree_oneshift_cyclic}
 \end{subnumcases}
 
@@ -126,27 +126,27 @@ To make the order cyclic, an additional rule can be added, modifying the success
 TODO: general illustration
 % THE BIGBOI FIGURE
 \begin{figure}
-    Triangles and dashed sections are a work in progress
+    % Triangles and dashed sections are a work in progress
 
     \begin{subfigure}[]{.5 \textwidth}
 	\begin{center}
 	    $1111100000\implies 1011110000$
 
-
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
     \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, dotted/.style={draw=gray,dashed,thick},edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-\Tree[.{} [.\node[dotted]{}; [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; ] ] ] ] ] ] 
+\Tree[.{} [.\node{}; [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; ] ] ] ] ] ] 
 \end{tikzpicture}
 $\implies$
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
 \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, dotted/.style={draw=gray,dashed,thick},edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-\Tree[.{} [.\node[style={fill=lightblue}]{O}; ] [.\node[dotted]{};  [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; ] ] ] ] ] 
+\Tree[.{} [.\node[style={fill=lightblue}]{O}; ] [.\node{};  [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; ] ] ] ] ] 
 \end{tikzpicture}
 
 	\end{center}
-	\caption{$\leftdown{T}=\tree{T}$ \\
+	\caption{$\tree{T}$ has no first branching \\
 	$\poppush{P}{root}$ \\
-	O becomes the first child of the root
+	O becomes the first child of the root \\
+	The new first branching is between the root and the root's second child.
 	}
 	\label{fig:}
     \end{subfigure}
@@ -156,18 +156,18 @@ $\implies$
 
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
 \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-    \Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.\node[regular polygon,regular polygon sides=3, draw, minimum size=1.2cm,fill=pink]{};  ] ] [.\node[style={fill=lightblue}]{O}; [.{} ] ] [.{} ] ] ] 
+    \Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.\node{};  ] ] [.\node[style={fill=lightblue}]{O}; [.{} ] ] [.{} ] ] ] 
 \end{tikzpicture}
 $\implies$
 \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
 \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
-\Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; [.\node[style={fill=pink}]{L}; [.\node[regular polygon,regular polygon sides=3, draw, minimum size=1.2cm,fill=pink]{};  ] ] [.{} ] ] [.{} ] ] ] 
+\Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; [.\node[style={fill=pink}]{L}; [.\node{};  ] ] [.{} ] ] [.{} ] ] ] 
 \end{tikzpicture}
 
 	\end{center}
 	\caption{$O$ has at least 1 child \\
 	$\poppush{P}{O}$ \\
-	$L$ becomes $O$'s first child
+	$L$ becomes $O$'s first child.  The new first branching is between $O$ and $O$'s second child.
 	}
 	\label{fig:}
     \end{subfigure}
@@ -191,8 +191,7 @@ $\implies$
 	\end{center}
 	\caption{ $P \ne root$, $O$ has no children: \\
 	$\poppush{P}{G};\poppush{P}{root}$ \\
-	$L$ becomes $G$'s first child; \\
-	$O$ becomes the first child of $root$\\
+	$L$ becomes $G$'s first child; $O$ becomes the first child of $root$.  The new first branching is between the root and the root's second child.\\
 	% test
 	}
 	\label{fig:}
@@ -216,13 +215,13 @@ $\implies$
 	\end{center}
 	\caption{$O$ has no children, $P = root$: \\
 	$\poppush{P}{O}$ \\
-	    $L$ becomes $O$'s first child
+	    $L$ becomes $O$'s first child. The new first branching is between $P$ and $P$'s second child.
 	}
 	\label{fig:}
     \end{subfigure}
 
     % TODO NEW: more robust caption
-    \caption{Illustrating the successor rule for generating a pop-push Gray code for ordered trees.  In these diagrams, $O$ is the first node in a preorder traversal of the tree that is not in the unique path between the root and the tree's leftmost leaf. \\
+    \caption{Illustrating the successor rule for generating a pop-push Gray code for ordered trees.  In these diagrams, $O$ is the child of the first branching in $\tree{T}$ or $\tree{T}$'s leaf if T has no first branching.  
     $P$ is $O$'s parent, $G$ is $P$'s parent (if it exists), and $L$ is $O$'s left sibling.
     }
     \label{fig:otreeruledemo}

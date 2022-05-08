@@ -1,35 +1,38 @@
-The algorithm described in this section has two primary implementations: The first implementation uses a linked structure for the nodes, where an ordered tree node stores pointers to its leftmost child and its right sibling.  Therefore, to access a node's 3rd child, one would use 
-
-\verb+node->left_child->right_sibling->right_sibling+ 
-
+This chapter provides two implementations of the Gray code in \ref{chap:otree-graycode}.  The first implementation uses a linked structure for the nodes, where an ordered tree node stores pointers to its leftmost child and its right sibling.  Therefore, to access a node's 3rd child, one would use \verb+node->first->right->right+.
 This has the advantages of space efficiency and $O(1)$ appending and prepending to a node's list of children, but the disadvantage of requiring $O(k)$ time to access a node's $k\thh$ child. 
 
-The second implementation uses an array-like approach to storing children.  This has the advantage of $O(1)$ access time for all children but the disadvantage of either requiring $O(n)$ space for each node or the additional cost of resizing arrays.  Each node also stores a counter for its number of children and an int keeping track of the maximum amount of children it can store (before requiring reallocation)).  This implementation stores the list of children ``backwards,'' so to access a node's $k\thh$ child, one would use \verb+node->children[(node->nch)-k]+.  Each \verb+node->children[0]+ is set to and kept as \verb+NULL+ for a null-termination like effect that is useful in the algorithm.
+The second implementation uses an array-like approach to storing children.  This has the advantage of $O(1)$ access time for all children but the disadvantage of either requiring $O(n)$ space for each node or the additional cost of resizing arrays.  Each node also stores a counter for its number of children and a number keeping track of the maximum amount of children it can store (before requiring reallocation)).  This implementation stores the list of children ``backwards,'' so to access a node's $k\thh$ child, one would use \verb_node->children[(node->nch)-k+1]_.  Each \verb+node->children[0]+ is set to and kept as \verb+NULL+ for a null-termination like effect that is useful in the algorithm.  Figure \ref{fig:otreeStarter} gives struct definitions for both tree representations and an implementation of $\pull{A}{B}$ for each.
+
 % TODO NEW: initial tree
-\begin{figure}
+\begin{figure}[H]
     \begin{subfigure}[t]{.5 \textwidth}
 	\begin{center}
 
 	    \begin{Verbatim}
 typedef struct node {
-    int data;
-    struct node* parent;
-    struct node* left_child;
-    struct node* right_sibling;
+  struct node* parent;
+  struct node* first;
+  struct node* right;
 } node;
 
-node* new_node(int data){
-    node* n = 
-	(node*)malloc(sizeof(node));
-    n->data=data;
-    n->parent=NULL;
-    n->left_child=NULL;
-    n->right_sibling=NULL;
-    return n;
+void pull(node *A, node *B){ 
+  // A pulls B's first child
+  node *pulled = B->first;
+  B->first = pulled->right;
+  pulled->right = A->first;
+  A->first = pulled;
+  pulled->parent = A;
 }
-	    \end{Verbatim}
-	\end{center}
 
+node* kthchild(node* parent, int k){
+  node* curr=parent->first;
+  for(int i = 1; i < k; i++){
+    curr=curr->right;
+  }
+  return curr;
+}
+\end{Verbatim}
+	\end{center}
 	\label{fig:}
     \end{subfigure}
     \begin{subfigure}[t]{.5 \textwidth}
@@ -43,31 +46,29 @@ typedef struct arraynode {
     struct arraynode** children;
 } anode;
 
-anode* new_anode(int maxch){
-    anode* n = 
-	(anode*)malloc(sizeof(anode));
-    n->maxch=maxch;
-    n->parent=NULL;
-    n->nch=0;
-    n->children =
-	(anode**)malloc(sizeof(anode*) * maxch+1);
-    n->children[0]=NULL; 
-    return n;
+void apull(anode* A, anode* B){ 
+    //A pulls B's first child
+    anode* pulled = B->children[B->nch--];
+    A->children[++(A->nch)]=pulled;
+    pulled->parent=A;
+}
+
+anode* kthchild(anode* parent, int k){
+  return parent->children[parent->nch-k+1];
 }
 	    \end{Verbatim}
 	\end{center}
-	% \caption{ $C$ implementation of coolOtree} 
 	\label{fig:}
     \end{subfigure}
 
     % TODO: change bit colors
-    \cprotect\caption{C code for two different ordered tree structures and functions to initialize a node.}
-    \label{fig:otreeCode}
+    \cprotect\caption{Struct definitions and implementations for $\pull{A}{B}$ and accessing a $k\thh$ child for each tree representation.}
+    \label{fig:otreeStarter}
 \end{figure}
 
-% TODO: QUESTION: Is this confusing? Using t like this simplifies the correspondence between ordered trees and Dyck words. But would it be clearer to have t just be the number of total nodes?
 
-% Verbatim (not verbatim) from fancyvrb package lets you do \ref inside of it. 
+The algorithms for both the linked-list and array representations of ordered trees take the following approach.  Given They begin by creating an initial tree $\tree{T}_1$ with $n+1$ nodes such that $\dyck{\tree{T}_1}=101^{n}0^{n}$.  This tree can be generated by creating a path with $n+1$ nodes and executing $\pull{root,P}$ where $P$ is the parent of the path's leaf. Both algorithms then repeatedly apply the successor rule from equation \ref{eq:otreeRule}.  
+
 
 \begin{figure}
     \centering
@@ -93,7 +94,7 @@ anode* new_anode(int maxch){
 \end{tikzpicture}
 
     \cprotect\caption{The initial trees returned by \verb$get_initial_tree$ in \verb$coolOtree$ with $t=1,2,3,$ and $4$ \\
-    Note the convenient feature that for each tree, O is equal to \verb$root->left_child->right_sibling$
+    Note the convenient feature that for each tree, O is equal to \verb$root->first->right$
     }
     \label{exampleotree}
 \end{figure}
@@ -110,21 +111,21 @@ anode* new_anode(int maxch){
     \Function{cool-ordered-trees}{$t$}
         % \vspace{0.75em}
         \LineComment{Generate initial tree} % TODO
-	\State $O\gets root.lchild$
+	\State $O\gets root.first$
 	\State \visit{root}
         \While{$O \ne NULL$}
 	    \State $P \gets O.parent$
-	    \If{$O.lchild \ne NULL$}
-		\State $\pushchild{O}{\popchild{P}}$
-		\State $O \gets O.lchild.rsibling$
+	    \If{$O.first \ne NULL$}
+		\State $\pull{O}{P}$
+		\State $O \gets O.first.right$
 	    \Else
-		\If{$O.parent == root$}
-		\State $\pushchild{O}{\popchild{P}}$
+		\If{$P == root$}
+		\State $\pull{O}{P}$
 		\Else
-		\State $\pushchild{O}{\popchild{P}}$
-		\State $\pushchild{root}{\popchild{P}}$
+		\State $\pull{O}{P}$
+		\State $\pull{root}{P}$
 		\EndIf
-		\State $O \gets O.rsibling$
+		\State $O \gets O.right$
 	    \EndIf
 	\State \visit{root}
         \EndWhile
@@ -142,34 +143,107 @@ anode* new_anode(int maxch){
 	    % \vspace{2.1em} % fun alignment
 \begin{Verbatim}[commandchars=\\\[\]]
 
-void coolOtree(int t, void (*visit)(node*)){
-    node* root = get_initial_tree(t);
-    node* o=root->left_child->right_sibling;
-    visit(root);
-    while(o){
-	node* p = o->parent;
-	if(o->left_child){ 
-	    pushchild(o,popchild(p));
-	    o=o->left_child->right_sibling;
-	}else{
-	    if(o->parent == root){ 
-		pushchild(o,popchild(p));
-	    }else{ 
-		pushchild(p->parent,popchild(p));
-		pushchild(root,popchild(p));
-	    }
-	    o=o->right_sibling;
-	}
-	visit(root);
+void coolOtree(int n) {
+  node* root = get_initial_tree(n);
+  node* o=root->first->right;
+  visit(root);
+  while (o) {
+    p=o->parent;
+    if (o->first) { // if o has a child, shift 1
+      pull(o,p);
+      o = o->first->right;
+    } else {
+      if (p == root) { // if the string is tight, shift a 1
+        pull(o,p);
+      } else { // if the string isn'n tight, shift a zero
+        pull(p->parent,p);
+        pull(root,p);
+      }
+      o = o->right;
     }
+    visit(root);
+  }
 }
+
 \end{Verbatim}
 	\end{center}
 	% \caption{ $C$ implementation of coolOtree} 
 	\label{fig:}
     \end{subfigure}
-
     % TODO: change bit colors
-    \cprotect\caption{Pseudocode and C implementation}
+    \cprotect\caption{Pseudocode and C implementation for linked-list tree representation.}
+    \label{fig:otreeCode}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{.49 \textwidth}
+	\begin{center}
+	    \begin{algorithm}[H] % What does the H do? it makes it work.
+	    \begin{algorithmic}
+    \Function{cool-ordered-trees}{$n$}
+        % \vspace{0.75em}
+        \LineComment{Generate initial tree} % TODO
+		\State $O\gets \kthchild{root}{2}$
+	\State \visit{root}
+        \While{$O \ne NULL$}
+	    \State $P \gets O.parent$
+	    \If{$O.nch > 0$}
+		\State $\pull{O}{P}$
+		\State $O \gets \kthchild{O}{2}$
+	    \Else
+		\If{$P == root$}
+		\State $\pull{O}{P}$
+		\Else
+		\State $\pull{P.parent,P}$
+		\State $\pull{root,P}$
+		\EndIf
+		\State $O \gets \kthchild{O.parent}{2}$
+	    \EndIf
+	\State \visit{root}
+        \EndWhile
+    \EndFunction
+	    \end{algorithmic}
+    \caption*{Generate all ordered trees with $n+1$ nodes}
+	\end{algorithm}
+	\end{center}
+	% \caption{Pseudoc}
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[t]{.5 \textwidth}
+	\begin{center}
+	    \vspace{.9em} % fun alignment
+	    % \vspace{2.1em} % fun alignment
+\begin{Verbatim}[]
+
+void coolAOtree(int t, void (*visit)(anode*)){
+  anode* root = get_initial_atree(t);
+  anode *p, *o=kthchild(root,2);
+  visit(root);
+  while(o){
+    p = o->parent;
+    if(o->nch){ //if o has a child, shift 1
+      apull(o,p);
+      o=kthchild(o,2);
+    }else{
+      if(p == root){ //if the string is tight, shift a 1
+	apull(o,p);
+      }else{ //if the string isn't tight, shift a zero
+	apull(p->parent,p);
+	apull(root,p);
+      }
+      o=kthchild(o->parent,2);
+    }
+    visit(root);
+  }
+}
+
+\end{Verbatim}
+	\end{center}
+	% \caption{ $C$ implementation of coolOtree} 
+	\label{fig:}
+    \end{subfigure}
+    % TODO: change bit colors
+    \cprotect\caption{Pseudocode and C implementation for array-based tree representation.}
     \label{fig:otreeCode}
 \end{figure}
