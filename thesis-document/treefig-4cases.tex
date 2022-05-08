@@ -1,0 +1,103 @@
+% included from otree-graycode.tex
+\begin{figure}
+    % Triangles and dashed sections are a work in progress
+
+    \begin{subfigure}[]{.5 \textwidth}
+	\begin{center}
+	    $11110001100100 \implies 11111000100100$
+
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+    \Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.\node{};  ] ] [.\node[style={fill=lightblue}]{O}; [.{} ] ] [.{} ] ] ] 
+\end{tikzpicture}
+$\implies$
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; [.\node[style={fill=pink}]{L}; [.\node{};  ] ] [.{} ] ] [.{} ] ] ] 
+\end{tikzpicture}
+
+	\end{center}
+	\caption{$O$ has at least 1 child: Case \eqref{eq:otree_oneshift}\\
+	$\poppush{P}{O}$ \\
+	$L$ becomes $O$'s first child.  The new first branching is between $O$ and $O$'s second child.
+	}
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[]{.49 \textwidth}
+	\begin{center}
+	    $11111000100100 \implies 10111100010100$
+
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O}; ] ] [.{} ] ] ] 
+\end{tikzpicture}
+$\implies$
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.{} [.\node[style={fill=lightblue}]{O}; ] [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightpurple}]{P}; ] [.{} ] ] ] 
+\end{tikzpicture}
+
+	\end{center}
+	\caption{ $P \ne root$, $O$ has no children: Case \eqref{eq:otree_zeroshift}\\
+	$\poppush{P}{G};\poppush{P}{root}$ \\
+	$L$ becomes $G$'s first child; $O$ becomes the first child of $root$.  The new first branching is between the root and the root's second child.\\
+	% test
+	}
+	\label{fig:}
+    \end{subfigure}
+
+\bigskip
+
+    \begin{subfigure}[]{.5 \textwidth}
+	\begin{center}
+	    $1110001010 \implies 1111000010$
+
+%1110001010
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=lightblue}]{O}; ] [.{} ] ] 
+\end{tikzpicture}
+$\implies$
+%1111000010
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; [.\node[style={fill=pink}]{L}; [.{} [.{} ] ] ] ] [.{} ] ] 
+\end{tikzpicture}
+
+	\end{center}
+	\caption{$O$ has no children, $P = root$: Case \eqref{eq:otree_oneshift}\\
+	$\poppush{P}{O}$ \\
+	    $L$ becomes $O$'s first child. The new first branching is between $P$ and $P$'s second child.
+	}
+	\label{fig:}
+    \end{subfigure}
+    \begin{subfigure}[]{.49 \textwidth}
+	\begin{center}
+	    $1111100000\implies 1011110000$
+
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+    \tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, dotted/.style={draw=gray,dashed,thick},edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.{} [.\node{}; [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; [.\node[style={fill=lightblue}]{O}; ] ] ] ] ] ] 
+\end{tikzpicture}
+$\implies$
+\begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+\tikzset{every tree node/.style={minimum width=1.5em,draw,circle}, blank/.style={draw=none}, dotted/.style={draw=gray,dashed,thick},edge from parent/.style= {draw,edge from parent path={(\tikzparentnode) -- (\tikzchildnode)}}, level distance=1.5cm}
+\Tree[.{} [.\node[style={fill=lightblue}]{O}; ] [.\node{};  [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightpurple}]{P}; ] ] ] ] ] 
+\end{tikzpicture}
+
+	\end{center}
+	\caption{$\tree{T}$ has no first branching: Case \eqref{eq:otree_noo_cyclic} \\
+	$\poppush{P}{root}$ \\
+	O becomes the first child of the root \\
+	The new first branching is between the root and the root's second child.
+	}
+	\label{fig:}
+    \end{subfigure}
+    % TODO NEW: more robust caption
+    \caption{Illustrating the pull shifts on specific trees.
+    %In these diagrams, $O$ is the child of the first branching in $\tree{T}$ or $\tree{T}$'s leaf if T has no first branching.  $P$ is $O$'s parent, $G$ is $P$'s parent (if it exists), and $L$ is $O$'s left sibling.
+    }
+    \label{fig:otreeruledemo}
+
+\end{figure}
+

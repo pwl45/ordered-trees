@@ -153,18 +153,18 @@ In particular, Gray codes for many binary languages can be obtained by listing a
 
 Cool-lex order can most easily be introduced using marbles on a ramp. Suppose one has $n$ marbles on a ramp, with each marble colored black or white.  
 
-\includegraphics[width=.3\textwidth]{figures/marbles_first.pdf} 
+\includegraphics[width=.3\textwidth]{marbles_first.pdf} 
 
 
 Let $x$ be the first black marble that follows a white marble. Consider picking up and moving marble $x+1$ to the top of the ramp. This yields a new configuration.
 
-\includegraphics[width=.3\textwidth]{figures/marbles_first_arrow.pdf} $\implies$
-\includegraphics[width=.3\textwidth]{figures/marbles_second.pdf} 
+\includegraphics[width=.3\textwidth]{marbles_first_arrow.pdf} $\implies$
+\includegraphics[width=.3\textwidth]{marbles_second.pdf} 
 
 Now, consider performing the same move again: finding $x$, the first black marble that follows a white marble, and moving marble $x+1$ to the top of the ramp. This yields a third configuration.
 
-\includegraphics[width=.3\textwidth]{figures/marbles_second_arrow.pdf} $\implies$
-\includegraphics[width=.3\textwidth]{figures/marbles_third.pdf} 
+\includegraphics[width=.3\textwidth]{marbles_second_arrow.pdf} $\implies$
+\includegraphics[width=.3\textwidth]{marbles_third.pdf} 
 
 Amazingly, repeatedly performing this operation will eventually generate all possible marble arrangements (with no distinction made between individual black and white marbles). To make the order cyclic, add an additional rule for the case where no black marble follows a white marble (all black marbles come before all white marbles).  In this case, shift the last marble to the top of the ramp.
 

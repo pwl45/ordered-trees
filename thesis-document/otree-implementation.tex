@@ -140,7 +140,7 @@ void coolOtree(int n) {
 \section{Storing Children in an Array}\label{sec:otree-arr}
 The second implementation uses an array-like approach to storing children.  This has the advantage of $O(1)$ access time for all children but the disadvantage of either requiring $O(n)$ space for each node or the additional cost of resizing arrays.  Each node also stores a counter for its number of children and a number keeping track of the maximum amount of children it can store (before requiring reallocation)).  This implementation stores the list of children ``backwards,'' so to access a node's $k\thh$ child, one would use \verb_node->children[(node->nch)-k+1]_.  Each \verb+node->children[0]+ is set to and kept as \verb+NULL+ for a null-termination like effect that is useful in the algorithm.  
 
-Figure \ref{fig:otreestarter-arr} provides the C struct definition for this ordered tree definition as well as an implementation of $\pull{A}{B}$ and a helper function for accessing a node's $k\thh$ child. 
+Figure \ref{fig:otreestarter-arr} provides the C struct definition for this ordered tree definition as well as an implementation of $\pull{A}{B}$ and a helper function for accessing a node's $k\thh$ child. Figure \ref{fig:otreeCode}
     \begin{figure}
     % \end{subfigure}
     % \begin{subfigure}[t]{.5 \textwidth}
@@ -220,13 +220,13 @@ void coolAOtree(int t, void (*visit)(anode*)){
   visit(root);
   while(o){
     p = o->parent;
-    if(o->nch){ //if o has a child, shift 1
+    if(o->nch){
       apull(o,p);
       o=kthchild(o,2);
     }else{
-      if(p == root){ //if the string is tight, shift a 1
+      if(p == root){
 	apull(o,p);
-      }else{ //if the string isn't tight, shift a zero
+      }else{
 	apull(p->parent,p);
 	apull(root,p);
       }
