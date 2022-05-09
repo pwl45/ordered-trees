@@ -1,10 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <inttypes.h>
+
+
+
+uint64_t sumshifts,nshifts;
 
 //linked list node struct
 typedef struct ll_node {
-    int data;
+    char data;
     struct ll_node* prev;
     struct ll_node* next;
 } ll_node;
@@ -24,6 +30,9 @@ ll_node* new_node(int data, ll_node* prev, ll_node* next){
     return node;
 }
 
+void write_ms(int *ms, int n){
+
+}
 void print_ms(int* ms, int n){
     /* printf("n=%d\n",n); */
 
@@ -37,7 +46,23 @@ void print_ms(int* ms, int n){
     printf("]");
     printf("\n");
 }
-void print_ll(ll_node* hd){
+
+void write_ll(ll_node* hd, int n){
+    char delm = -1;
+    char buf[n+1];
+
+    int i=0;
+    while(hd){
+	buf[i] = hd->data;
+	hd=hd->next;
+	i++;
+    }
+    buf[n]=delm;
+    write(1,buf,n+1);
+    /* write(1,&delm,1); */
+}
+
+void print_ll(ll_node* hd, int n){
     printf("[");
     if(hd){
 	printf("%d",hd->data);
@@ -140,6 +165,14 @@ int* initialize_ms(char* frequencies, int* nptr, int* maxptr){
 }
 
 void lshift(int* ms, int i, int j){
+    /* nshifts++; */
+    /* sumshifts+=(j-i); */
+    /* printf("wah\n"); */
+    /* if(!(nshifts & ((1<<20)-1) )){ */
+	/* /1* printf("%lf\t%ld %ld\n",((double) sumshifts)/nshifts,sumshifts,nshifts/1000000); *1/ */
+	/* /1* printf("rat: %lf\n",((double) sumshifts)/nshifts); *1/ */
+    /* } */
+    /* printf("%d\n",j-i); */
     int curr = ms[j];
     for(int k = i; k <= j; k++){
 	swap(&curr,ms+ k);
@@ -260,43 +293,44 @@ void lshift_ll(ll_node* insert_node, ll_node* shift_node){
     insert_node->prev=shift_node;
 }
 
+ll_node* kthnode(ll_node* hd, int k){
+    ll_node* curr=hd;
+    while(k){
+	curr=curr->next;
+	k--;
+    }
+    return curr;
+}
+
 //TODO: we probably don't need tl, n, or a prev pointer.
-void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd)){
+void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd, int n)){
     inc* incs = (inc*) calloc(n, sizeof(inc)); //stack of (node, index) pairs
     int nincs=1; //number of increases
-    incs[0] = (inc) {.node=tl,.index=n-1}; //cool struct initializer syntax
 
-    //these don't need to be initialized
-    ll_node *shift_node, *insert_node;
-    int prefix_sum,prefix_len,insert_index;
+    ll_node *shift_node, *insert_node, *x, *xn;
+    incs[0] = (inc) {.node=tl,.index=n-1}; //cool struct initializer syntax
+    int prefix_sum,m,insert_index;
 
     while(nincs){
-	ll_node* m=incs[nincs-1].node;
-	prefix_len = incs[nincs-1].index;
-	if(prefix_len >= n-1){ // increase removed
-	    nincs--;
-	    shift_node=m;
-	}
-	else if(m->next->data > m->prev->data){
-	    if(m->next->data > m->data){ //increase removed
+	m = incs[nincs-1].index;
+	x=incs[nincs-1].node; //node at index m+1
+	xn=x->next; //node at index m+2
+
+	if(m >= n-1 || xn->data > x->prev->data || (prefix_sum == m && xn->data == 0)){
+	    if(m >= n-1 || xn->data > x->data || xn->data == 0){ //increase removed
 		nincs--;
 	    }else{ //increase kept
-		incs[nincs-1].node=m->next;
+		incs[nincs-1].node=x->next;
 		incs[nincs-1].index++;
 	    }
-	    shift_node=m;
+	    shift_node=x;
 	}
-	else{
-	    if(prefix_sum > prefix_len || m->next->data > 0){ //not tight
-		shift_node=m->next; //shift m+2...
-		incs[nincs-1].index++; //same increase, different location (shifted down by one)
-		if(prefix_len < n-2 && m->next->next->data > m->next->data && m->next->next->data <= m->data){ //hideous
-		    incs[nincs-2] = incs[nincs-1];
-		    nincs--;
-		}
-	    }else{ //tight; increase removed
-		nincs--;	
-		shift_node=m;
+	else{ 
+	    shift_node=xn; //shift x+1...
+	    incs[nincs-1].index++;
+	    if(xn->next && xn->next->data > xn->data && xn->next->data <= x->data){
+		incs[nincs-2] = incs[nincs-1];
+		nincs--;
 	    }
 	}
 
@@ -307,17 +341,17 @@ void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd)){
 	    insert_node=hd;
 	    hd=shift_node;
 	}
+
 	lshift_ll(insert_node,shift_node);
-	if(insert_index != prefix_len && (shift_node->data < insert_node->data)){
+	if(insert_index != m && (shift_node->data < insert_node->data)){
 	    prefix_sum=hd->data;
 	    incs[nincs++]= (inc) {.node = insert_node, .index=insert_index+1};
 	}else{
 	    prefix_sum+=shift_node->data;
 	}
 
-	visit(hd);
+	visit(hd,n);
     }
-
 }
 
 void luka(int* ms, int n, void (*visit)(int* ms, int n)){
@@ -376,6 +410,7 @@ ll_node* append_ll(ll_node* tl, int val,int freq){
     /* printf("append %d %d times\n",val,freq); */
     for(int i = 0; i < freq; i++){
 	newtl = new_node(val, tl,NULL);
+	newtl->prev=tl;
 	tl->next=newtl;
 	tl=newtl;
     }
@@ -435,6 +470,10 @@ ll_node* initialize_ll(char* frequencies, int* nptr){
     return hd;
 }
 
+void donothing(){
+
+}
+
 int main(int argc, char *argv[])
 {
     if(argc < 2){
@@ -450,15 +489,21 @@ int main(int argc, char *argv[])
 	int *ms = initialize_ms(argv[1],&n, &max);
 	rev(ms,n);
 	/* printf("%d %d\n",sum(ms,n),n); */
+	/* exit(0); */
 	ms[n]=666; //if we see 666 anywhere in the multiset, we've shifted from out of bounds.
 	luka(ms,n,print_ms);
+	/* printf("sum: %lu n: %lu\navg: %lf\n",sumshifts,nshifts,((double) sumshifts)/nshifts); */
     }else{
 	//relevant section
 	ll_node* hd = initialize_ll(argv[1], &n);
 	ll_node* tl = hd->prev;
 	hd->prev=NULL;
 
-	luka_ll(hd,tl,n,print_ll);
+	if(argc >= 3 && !strcmp(argv[2],"-b")){
+	    luka_ll(hd,tl,n,write_ll);
+	}else{
+	    luka_ll(hd,tl,n,print_ll);
+	}
     }
 
     return 0;
