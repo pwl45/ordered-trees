@@ -1,11 +1,11 @@
 In this chapter, we give a Gray code for generating Łukasiewicz words with fixed content using left-shifts. Section \ref{sec:lukasuc} will give the successor rule for the Gray code; Section \ref{sec:lukaproof} will prove its correctness.
 \section{Successor Rule}\label{sec:lukasuc}
 
-In this section, we provide a successor rule that applies a left-shift to a Łukasiewicz word.  The rule is given below in \ref{eq:luka} 
+In this section, we provide a successor rule that applies a left-shift to a Łukasiewicz word.  The rule is given below in \eqref{eq:luka} 
 Let $S$ be a multiset whose sum is equal to its length.  Let $\mathcal{L}(S)$ denote the set of valid Łukasiewicz words with content equal to S. Let $\alpha \in \mathcal{L}(S)$.  
 
 
-Recall the definition of a left-shift from equation \ref{eq:leftdef}: $\lshiftindex[\alpha]{i}{j}$ shifts the $j\thh$ symbol in $\alpha$ into the $i\thh$ position. 
+Recall the definition of a left-shift from equation \eqref{eq:leftdef}: $\lshiftindex[\alpha]{i}{j}$ shifts the $j\thh$ symbol in $\alpha$ into the $i\thh$ position. 
 % As in the cool-lex successor rule for multiset permutations in \ref{sec:coolPerms}, we let $x$ be the smallest value for which $\alpha_x<\alpha_{x-1}$.  
 We also define $\rho=\alpha_1,\alpha_2,\cdots\alpha_{m}$ to be the non-increasing prefix of $\alpha$, i.e. the longest prefix of $\alpha$ such that $\alpha_{i}\ge\alpha_{i-1}$ for all $i \le m$.  
 %In addition to the left-shift function, we define the length of the \emph{non-increasing prefix} of a string $\alpha$ to be 
@@ -96,19 +96,20 @@ In fact, the order turns out to be a cool-lex order, as discussed in Section~\re
 \section{Proof of Correctness}\label{sec:lukaproof}
 
 
-Now we prove that the successor rule is correct. %from Section \ref{sec:prefix} is correct.
+This section proves that the successor rule in \eqref{eq:luka} generates all Lukasiewicz words with a given set of content.
+% Now we prove that the successor rule is correct. %from Section \ref{sec:prefix} is correct.
 %Given a Łukasiewicz word $\alpha \in \Lukas{S}$, the rule creates the next string a shift Gray code for the fixed-content set $\Lukas{S}$.
 Our strategy is to define a recursive order of $\Lukas{S}$, and show that \eqref{eq:luka} creates the next string in this order.
 %By doing so, we'll also see that our Gray code is a generalization of a previously published Gray code for Dyck words by Ruskey and Williams \cite{ruskey2008generating}.
 
-\subsection{Cool-lex Order}
+\subsection{Terminology and Remarks}
 \label{sec:proof_cool}
 
-\emph{Cool-lex order} is a variation of co-lexicographic order.
-The order was first given for \emph{$(s,t)$-combinations}, which are binary strings with $s$ copies of $0$ and $t$ copies of $1$, by Ruskey and Williams \cite{ruskey2005generating,ruskey2009coolest}.
-In this context, the order gives a \emph{prefix-shift Gray code}, meaning that a single symbol is left-shifted into the first position.
-The prefix-shift Gray code was then generalized to Dyck words \cite{ruskey2008generating} and multiset permutations \cite{CoolSODA}.
-The latter result provides the recursive structure of our left-shift Gray code of fixed-content Łukasiewicz words.
+% \emph{Cool-lex order} is a variation of co-lexicographic order.
+% The order was first given for \emph{$(s,t)$-combinations}, which are binary strings with $s$ copies of $0$ and $t$ copies of $1$, by Ruskey and Williams \cite{ruskey2005generating,ruskey2009coolest}.
+% In this context, the order gives a \emph{prefix-shift Gray code}, meaning that a single symbol is left-shifted into the first position.
+% The prefix-shift Gray code was then generalized to Dyck words \cite{ruskey2008generating} and multiset permutations \cite{CoolSODA}.
+The cool-lex order for multiset permutations \cite{CoolSODA}, discussed in Section \ref{sec:coolPerms}, provides the recursive structure of our left-shift Gray code of fixed-content Łukasiewicz words. This section discusses the terminology used in describing the cool-lex order for multiset permutations.
 
 \subsubsection{Tails and Scuts}
 \label{sec:proof_scuts}
@@ -169,7 +170,7 @@ To illustrate this, consider the list in Figure \ref{fig:LukaTable}, and let $\a
     \item The first string with a $2$-scut is $\lshiftindex[\alpha]{3}{1} = 132000$.
     \item The first string with a $3$-scut is $\lshiftindex[\alpha]{2}{1} = 231000$.
 \end{itemize}
-In other words, the first string with a $1$-scut is obtained by shifting a $0$ into the second position, with the first strings with $2$-scuts and $3$-scuts are obtained by shifting $1$ and $2$ into the first position, respectively.
+In other words, the first string with a $1$-scut is obtained by shifting a $0$ into the second position, while the first strings with $2$-scuts and $3$-scuts are obtained by shifting $1$ and $2$ into the first position, respectively.
 This point is stated more generally in the following remark.
 
 \begin{remark}
