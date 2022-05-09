@@ -63,7 +63,7 @@ node* kthchild(node* parent, int k){
 	\end{center}
 \end{figure}
 
-    The algorithm in Figure \ref{fig:otreeCode} uses a while loop with two if statements per successor to evaulate the cases in \eqref{eq:otreeRule}.  The while loop evaluates if there is a first branching: if \verb+NULL+ is assigned to $O$, then there is no first branching, and the order is complete.  The first if statement evaluates 
+    The algorithm in Figure \ref{fig:otreeCode} uses a while loop with two if statements per successor to evaulate the cases in \eqref{eq:otreeRule}.  The while loop evaluates if there is a first branching: if \verb+NULL+ is assigned to $O$, then there is no first branching, and the order is complete.  The first if statement evaluates whether $O$ has at least 1 child: $O$'s first child is not \verb+NULL+ if and only if O has at least 1 child. The second if statement evaluates whether $P$ is the root of the tree.  The algorithm executes $\pull{O}{P}$ if $O$ has at least child or $P$ is the root of the tree.  Otherwise, it executes $\pull{G}{P}$ and $\pull{root}{P}$ 
 
 
 \begin{figure}[H]

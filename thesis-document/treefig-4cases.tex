@@ -1,7 +1,6 @@
 % included from otree-graycode.tex
 \begin{figure}
     % Triangles and dashed sections are a work in progress
-
     \begin{subfigure}[]{.5 \textwidth}
 	\begin{center}
 	    $11110001100100 \implies 11111000100100$
@@ -18,7 +17,7 @@ $\implies$
 
 	\end{center}
 	\caption{$O$ has at least 1 child: Case \eqref{eq:otree_oneshift}\\
-	$\poppush{P}{O}$ \\
+	$\poppush{O}{P}$ \\
 	$L$ becomes $O$'s first child.  The new first branching is between $O$ and $O$'s second child.
 	}
 	\label{fig:}
@@ -39,7 +38,7 @@ $\implies$
 
 	\end{center}
 	\caption{ $P \ne root$, $O$ has no children: Case \eqref{eq:otree_zeroshift}\\
-	$\poppush{P}{G};\poppush{P}{root}$ \\
+	$\poppush{G}{P};\poppush{root}{P}$ \\
 	$L$ becomes $G$'s first child; $O$ becomes the first child of $root$.  The new first branching is between the root and the root's second child.\\
 	% test
 	}
@@ -66,7 +65,7 @@ $\implies$
 
 	\end{center}
 	\caption{$O$ has no children, $P = root$: Case \eqref{eq:otree_oneshift}\\
-	$\poppush{P}{O}$ \\
+	$\poppush{O}{P}$ \\
 	    $L$ becomes $O$'s first child. The new first branching is between $P$ and $P$'s second child.
 	}
 	\label{fig:}
@@ -87,7 +86,7 @@ $\implies$
 
 	\end{center}
 	\caption{$\tree{T}$ has no first branching: Case \eqref{eq:otree_noo_cyclic} \\
-	$\poppush{P}{root}$ \\
+	$\poppush{root}{P}$ \\
 	O becomes the first child of the root \\
 	The new first branching is between the root and the root's second child.
 	}
