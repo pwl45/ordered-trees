@@ -1,14 +1,14 @@
-In this chapter, we give a Gray code for generating Lukasiewicz words with fixed content using left shifts. Section \ref{sec:lukasuc} will give the successor rule for the Gray code; Section \ref{sec:lukaproof} will prove its correctness.
+In this chapter, we give a Gray code for generating Łukasiewicz words with fixed content using left-shifts. Section \ref{sec:lukasuc} will give the successor rule for the Gray code; Section \ref{sec:lukaproof} will prove its correctness.
 \section{Successor Rule}\label{sec:lukasuc}
 
-In this section, we provide a successor rule that applies a left-shift to a Lukasiewicz word.  The rule is given below in \ref{eq:luka} 
-Let $S$ be a multiset whose sum is equal to its length.  Let $\mathcal{L}(S)$ denote the set of valid Lukasiewicz words with content equal to S. Let $\alpha \in \mathcal{L}(S)$.  
+In this section, we provide a successor rule that applies a left-shift to a Łukasiewicz word.  The rule is given below in \ref{eq:luka} 
+Let $S$ be a multiset whose sum is equal to its length.  Let $\mathcal{L}(S)$ denote the set of valid Łukasiewicz words with content equal to S. Let $\alpha \in \mathcal{L}(S)$.  
 
 
-Recall the definition of a left shift from equation \ref{eq:leftdef}: $\lshiftindex[\alpha]{i}{j}$ shifts the $j\thh$ symbol in $\alpha$ into the $i\thh$ position. 
+Recall the definition of a left-shift from equation \ref{eq:leftdef}: $\lshiftindex[\alpha]{i}{j}$ shifts the $j\thh$ symbol in $\alpha$ into the $i\thh$ position. 
 % As in the cool-lex successor rule for multiset permutations in \ref{sec:coolPerms}, we let $x$ be the smallest value for which $\alpha_x<\alpha_{x-1}$.  
 We also define $\rho=\alpha_1,\alpha_2,\cdots\alpha_{m}$ to be the non-increasing prefix of $\alpha$, i.e. the longest prefix of $\alpha$ such that $\alpha_{i}\ge\alpha_{i-1}$ for all $i \le m$.  
-%In addition to the left shift function, we define the length of the \emph{non-increasing prefix} of a string $\alpha$ to be 
+%In addition to the left-shift function, we define the length of the \emph{non-increasing prefix} of a string $\alpha$ to be 
 %the maximum value $m$ such that $\alpha_{i-1} \ge \alpha_{i}$ for all $2 \le i \le m$. We will let $\rho$ $\rho = a_1 \cdot a_2 \cdots a_m$.  The sum of the symbols in $\rho$ is $\sum \rho = a_1 + a_2 + \cdots + a_m$
 
 

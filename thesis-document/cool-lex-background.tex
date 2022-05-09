@@ -43,7 +43,7 @@ Binary strings with $s$ zeroes and $t$ ones are often referred to as $(s,t)$-com
  Let $\alpha$ be a binary string of length $n$.
  Let $y$ be the position of the leftmost zero in $\alpha$ and $x$ be the position of the leftmost 1 in $\alpha$ such that $x > y$. Note that $x$ is the first 1 that follows a 0; the analogue of marble $x$ in section \ref{sec:coolIntro}.  Moreover, $\alpha_1...\alpha_{x-1}$ is the non-increasing prefix of $\alpha$.
 
- % Let $\leftshift[\alpha]{i}$ be a simplified version of the left shift function defined in equation \ref{eq:leftdef}:  $\leftshift[\alpha]{i}$ shifts the $i\thh$ symbol of $\alpha$ into the first position.  Thus, $\leftshift[\alpha]{i}=\lshiftindex[\alpha]{1}{i}$.
+ % Let $\leftshift[\alpha]{i}$ be a simplified version of the left-shift function defined in equation \ref{eq:leftdef}:  $\leftshift[\alpha]{i}$ shifts the $i\thh$ symbol of $\alpha$ into the first position.  Thus, $\leftshift[\alpha]{i}=\lshiftindex[\alpha]{1}{i}$.
 
  \begin{equation} \label{eq:coolCombo}
      \overleftarrow{\text{cool}}(\alpha) = \leftshift[\alpha]{x+1}
@@ -63,8 +63,8 @@ Binary strings with $s$ zeroes and $t$ ones are often referred to as $(s,t)$-com
 
 \subsection{Efficient Implementation}
 
-At first glance, $\leftshift[\alpha]{x+1}$ seems like an $O(n)$ opeartion, as $x$ can be up to the length of $\alpha$ and the left shift operation requires shifting each symbol from $\alpha_1$ to $\alpha_{x}$ down.  However, 
-the property that the first $x$ symbols of the string are non-increasing allows for simplification of the left shift operation. Note that since $\alpha$ is a binary string, the non-increasing prefix of $\alpha$ must be $1^a0^b$ for some $0 \le a,b$, as previously mentioned in \ref{sec:shiftsandprefixes}. Since $y$ is the index of the first $0$ in $\alpha$ and $x$ is the index of the first $1$ following a $0$ in $\alpha$, we can conclude that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$. This allows each left-shift operation can be replaced with with either one or two symbol transpositions 
+At first glance, $\leftshift[\alpha]{x+1}$ seems like an $O(n)$ opeartion, as $x$ can be up to the length of $\alpha$ and the left-shift operation requires shifting each symbol from $\alpha_1$ to $\alpha_{x}$ down.  However, 
+the property that the first $x$ symbols of the string are non-increasing allows for simplification of the left-shift operation. Note that since $\alpha$ is a binary string, the non-increasing prefix of $\alpha$ must be $1^a0^b$ for some $0 \le a,b$, as previously mentioned in \ref{sec:shiftsandprefixes}. Since $y$ is the index of the first $0$ in $\alpha$ and $x$ is the index of the first $1$ following a $0$ in $\alpha$, we can conclude that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$. This allows each left-shift operation can be replaced with with either one or two symbol transpositions 
 
  Let $\transpose{\alpha}{i}{j}$ with $1 \le i \le j \le n$ be a function that swaps $\alpha_i$ an $\alpha_j$.  More formally, $\transpose{\alpha}{i}{j}=\alpha_1,\alpha_2,\dots,\alpha_{i-1},\alpha_{j}\alpha_{i+1}\dots \alpha_{j-1}\alpha_i \alpha_{j+1}\dots \alpha_n$.  Equation \ref{eq:coolComboTranspose} re-states the successor rule for combinations using transposes, with separte cases for whether a 1 or a 0 is left-shifted.
 % The left-shift rule can be re-stated as follows, with separate cases for shifting a 1 and shifting a 0.
@@ -347,7 +347,7 @@ Due to its simplicity and efficiency, Don Knuth included the cool-lex algorithm 
 
 \section{Multiset Permutations} \label{sec:coolPerms}
 
-Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams can be described via a simple algorithm that uses one left shift per generated string  \cite{williams2009loopless}.
+Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams can be described via a simple algorithm that uses one left-shift per generated string  \cite{williams2009loopless}.
 
 First, recall equation \ref{eq:coolComboCyclic} for $(s,t)$-combinations.  Equation \ref{eq:coolComboExpanded} gives an expanded version of the successor rule for $(s,t)$-combinations that differentiates between whether a $0$ or a $1$ is being shifted. Note that left-shifting position $x$ and position $x+1$ are equivalent when $\alpha_{x+1}=1$, since $\alpha_{x}$ is the first one that follows a zero and therefore $\alpha_{x+1}=\alpha_{x}=1$.
 
@@ -389,7 +389,7 @@ This successor rule has the convenient property of ensuring that length of the s
 In particular, if $\alpha_{i+2}$ is shifted, then the length of the non-increasing prefix is either 1 if $\alpha_{i+2}\le \alpha_1$ or $i+1$ otherwise. 
 Similarly, if $\alpha_{i+1}$ is shifted, then the length of the non-increasing prefix is either 1 if $\alpha_{i+1}\le \alpha_1$ or $i+1$ otherwise. 
 This property makes a loopless implementation of the sucessor rule possible, as scanning the string to find the length of the non-increasing prefix is not required.  
-A similar property regarding the length of successive non-increasing prefixes will allow for a loopless implementation of the shift Gray code for Lukasiewicz words in chapter \ref{chap:luka-implementation}.
+A similar property regarding the length of successive non-increasing prefixes will allow for a loopless implementation of the shift Gray code for Łukasiewicz words in chapter \ref{chap:luka-implementation}.
 
 However, unlike the binary cool-lex rules, multiset permutations can have any number of distinct symbols in a non-increasing prefix.  Therefore, implementing a left-shift via transpositions would be more complicated and  not a constant time operation.  Therefore, \cite{williams2009loopless} used a linked-list representation of a multiset to implement the successor rule in \ref{eq:coolPerms} looplessly.
 
