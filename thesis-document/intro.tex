@@ -132,7 +132,7 @@ Frank Gray's binary reflected code was influential enough that the term \emph{Gr
 % \subsubsection{Sublists: Reflecting and Filtering}
 % Inspired similar minimal change orders in two distinct ways: taking sublists, and generalizin reversing approach.
 
-\subsection{Gray Code Sublists}
+\subsection{Gray Code Sublists} \label{sec:GraySublists}
 In particular, Gray codes for many binary languages can be obtained by listing all binary strings in Gray code order, filtering the list to contain only strings in the language, and seeing if the resulting ordering is a Gray code.  Sawada, Williams, and Wong demonstrated this process in practice for a broad set of binary ``flip-swap languages" including necklaces, Lyndon words, and feasible 0-1 knapsack problem solutions, among others \cite{sawada2021inside}.  They found that orderings obtained for binary ``flip-swap'' languages by filtering the binary reflected Gray code all have the property that successive strings differ from each other by at most 2 bits, allowing for simple and efficient implementations of these orderings.
 
 

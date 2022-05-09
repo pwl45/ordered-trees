@@ -1,4 +1,4 @@
-This chapter gives a loopless implementation of the successor rule in \ref{eq:luka} as well as a simplified implementation of the algorithm for the special case of Motzkin words. Section \ref{sec:luka_ll} gives a loopless implementation of \eqref{eq:luka} using an integer linked list representation of a Lukasiewicz word. Section \ref{sec:coolMotz} gives a loopless implemmentation of \eqref{eq:luka} for the special case of Motzkin words.  The algorithm for Motzkin words uses an integer array represeentation of Motzkin words and evaluates at most 3 conditionals per generated string. 
+This chapter gives a loopless implementation of the successor rule in \ref{eq:luka} as well as a simplified implementation of the algorithm for the special case of Motzkin words. Section \ref{sec:luka_ll} gives a loopless implementation of \eqref{eq:luka} using an integer linked list representation of a Łukasiewicz word. Section \ref{sec:coolMotz} gives a loopless implemmentation of \eqref{eq:luka} for the special case of Motzkin words.  The algorithm for Motzkin words uses an integer array represeentation of Motzkin words and evaluates at most 3 conditionals per generated string. 
 
 
 \section{Generating Łukasiewicz Words in Linked Lists}\label{sec:luka_ll}
@@ -38,6 +38,14 @@ The observation in \ref{reasonforstack} necessitates keeping track of all increa
     \begin{subfigure}[]{.5\textwidth}
     \begin{center}
         \begin{Verbatim}
+
+
+
+
+
+
+
+
 typedef struct ll_node {
     int data;
     struct ll_node* prev;
@@ -58,46 +66,46 @@ typedef struct inc {
     \begin{subfigure}[]{.5\textwidth}
     \begin{center}
         \begin{Verbatim}
-void lshift_ll(ll_node* insert_node, ll_node* shift_node){
-    //remove shift_node
-    ll_node* sprev=shift_node->prev;
-    ll_node* snext=shift_node->next;
-    if(sprev){
-	sprev->next=snext;
-    }
-    if(snext){
+void lshift(ll_node* insert, ll_node* shift){
+    //remove shift
+    ll_node* sprev=shift->prev;
+    ll_node* snext=shift->next;
+    sprev->next=snext;
+    if(snext)
 	snext->prev=sprev;
-    }
 
-    //insert shift_node before insert_node
-    ll_node* iprev=insert_node->prev;
-    shift_node->prev=iprev;
-    if(iprev){
-	iprev->next=shift_node;
-    }
+    //insert shift before insert
+    ll_node* iprev=insert->prev;
+    shift->prev=iprev;
+    if(iprev)
+	iprev->next=shift;
 
-    shift_node->next=insert_node;
-    insert_node->prev=shift_node;
+    shift->next=insert;
+    insert->prev=shift;
 }
         \end{Verbatim}
     \end{center}
 
-\caption{helper function for left-shifting a linked list node}
+\cprotect\caption{Function for left-shifting a linked list node \verb$shift$ to before \verb$insert$}
     \label{fig:lukaHelpers}
     \end{subfigure}
 
+    \caption{Functions and structs used for the algorithm in \ref{fig:lukaCode}}
+
 \end{figure}
 
-Figure \ref{fig:lukaCode} gives a loopless C implementation of the successor rule in \eqref{eq:luka}.  The while loop iterates until the Lukasiewicz word contains no increases and therefore is in descending order, which occurs at the end of a non-cyclic ordering.  The \verb$inc* incs$ is used as a stack which stores pairs of linked list nodes and indices.  The \verb$ll_node* $ is the linked list node corresponding to the first increase in $\alpha$.  
+Figure \ref{fig:lukaCode} gives a loopless C implementation of the successor rule in \eqref{eq:luka}.  The while loop iterates until the Łukasiewicz word contains no increases and therefore is in descending order, which occurs at the end of a non-cyclic ordering.  The \verb$inc* incs$ is used as a stack which stores pairs of linked list nodes and indices.  The \verb$ll_node* $ is the linked list node corresponding to the first increase in $\alpha$.  
 
 \begin{figure}
 \begin{Verbatim}
 void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd, int n)){
     inc* incs = (inc*) calloc(n, sizeof(inc)); //stack of (node, index) pairs
     int nincs=1; //number of increases
+
     ll_node *shift_node, *insert_node, *x, *xn;
-    incs[0] = (inc) {.node=tl,.index=n-1}; //cool struct initializer syntax
     int prefix_sum,m,insert_index;
+
+    incs[0] = (inc) {.node=tl,.index=n-1}; //cool struct initializer syntax
 
     while(nincs){
 	m = incs[nincs-1].index;
@@ -130,25 +138,26 @@ void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd, int n))
 	    hd=shift_node;
 	}
 
-	lshift_ll(insert_node,shift_node);
+	lshift(insert_node,shift_node);
 	if(insert_index != m && (shift_node->data < insert_node->data)){
 	    prefix_sum=hd->data;
 	    incs[nincs++]= (inc) {.node = insert_node, .index=insert_index+1};
 	}else{
 	    prefix_sum+=shift_node->data;
 	}
+
 	visit(hd,n);
     }
 }
 \end{Verbatim}
 
-\caption{Function for looplessly generating all Lukasiewicz words with a fixed set of content.}
+\caption{Function for looplessly generating all Łukasiewicz words with a fixed set of content.}
 \label{fig:lukaCode}
 \end{figure}
 
 First, the algorithm pops an increase off of the \verb$incs$ stack, storing the increase's index in \verb$m$ and the increase's node in \verb$x$.  Next, the algorithm determines which node is to be shifted, denoted via \verb$shift_node$.  This is accomplished in the main if-else block.  The first if statement evaluates the condition in \eqref{eq:prefix_m1_1} and if it is true sets \verb$shift_node$ to \verb$x$,the node at index $m+1$. Otherwise, it sets \verb$shift_node$ to \verb$xn$, the node at index $m+2$.  In both cases, the algorithm checks the values of the nodes adjacent to the \verb$shift_node$ to determine if an increase has been modified or removed by shifting \verb$shift_node$.
 
-The next block of code uses the fact that the index to shift to is $1$ if a $1$ is being shifted and $0$ otherwise.  The head of the list, \verb$hd$, is updated if a node is shifted to index 0.  Finally, the algorithm executes the left-shift with \verb$insert_node$ and \verb$shift_node$, checks if an increase was created at the front of the list, and updates the \verb$prefix_sum$.  This algorithm is clearly loopless, as \verb$lshift_ll$ is a constant time operation and the function \verb$luka_ll$ has no inner loops.
+The next block of code uses the fact that the index to shift to is $1$ if a $1$ is being shifted and $0$ otherwise.  The head of the list, \verb$hd$, is updated if a node is shifted to index 0.  Finally, the algorithm executes the left-shift with \verb$insert_node$ and \verb$shift_node$, checks if an increase was created at the front of the list, and updates the \verb$prefix_sum$.  This algorithm is clearly loopless, as \verb$lshift$ is a constant time operation and the function \verb$luka_ll$ has no inner loops.
 
 \section{Generating Motzkin Words in Arrays}\label{sec:coolMotz}
 Since Łukasiewicz words are a generalization of Motzkin words, the same algorithm can be used to generate Motzkin words by restricting the content set S to be strictly zeroes, ones, and twos.  However, the additional restrictions on Motzkin words allow for a simpler implementation of the rule.  In particular, the content restriction obviates the need for an increase stack.   Pseudocode for loopless generation of Motzkin words is given below in Fig. \ref{fig:motzkinAlg}. 
