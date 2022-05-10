@@ -5,7 +5,7 @@ This chapter will give background information on cool-lex order and the sets it 
 Two common threads in the cool-lex algorithms for combinatorial generation is their focus on the \emph{non-increasing prefix} of string and their use of \emph{left-shifts} for minimal changes.  This section will define these terms and discuss their relevance to cool-lex order.
 
 \subsection{Left-Shifts}
-  Mentioned previously in section \ref{sec:coolIntro}, a left-shift shifts a single symbol somewhere earlier (left) in a string.  Given a string $\alpha = a_1 a_2 \ldots a_n$, we define $\lshiftindex[\alpha]{i}{j}$ with $i < j$ as removing the symbol $\alpha_j$ and inserting it at position $i$, shifting symbols $\alpha_i$ through $\alpha_{j-1}$ one position to the right.  A formal definition of $\lshiftindex[\alpha]{i}{j}$ is given below in equation \ref{eq:leftdef}.
+  Mentioned previously in section \ref{sec:coolIntro}, a left-shift shifts a single symbol somewhere earlier (left) in a string.  Given a string $\alpha = a_1 a_2 \ldots a_n$, we define $\lshiftindex[\alpha]{i}{j}$ with $i < j$ as removing the symbol $\alpha_j$ and inserting it at position $i$, shifting symbols $\alpha_i$ through $\alpha_{j-1}$ one position to the right.  A formal definition of $\lshiftindex[\alpha]{i}{j}$ is given below in equation \eqref{eq:leftdef}.
 
 \begin{equation} \label{eq:leftdef}
     \lshiftindex[\alpha]{i}{j} = a_1 a_2 \ldots a_{i-1} a_j a_{i} a_{i+1} \ldots a_{j-1} a_{j+1} a_{j+2} \ldots a_n.
@@ -43,7 +43,7 @@ Binary strings with $s$ zeroes and $t$ ones are often referred to as $(s,t)$-com
  Let $\alpha$ be a binary string of length $n$.
  Let $y$ be the position of the leftmost zero in $\alpha$ and $x$ be the position of the leftmost 1 in $\alpha$ such that $x > y$. Note that $x$ is the first 1 that follows a 0; the analogue of marble $x$ in section \ref{sec:coolIntro}.  Moreover, $\alpha_1...\alpha_{x-1}$ is the non-increasing prefix of $\alpha$.
 
- % Let $\leftshift[\alpha]{i}$ be a simplified version of the left-shift function defined in equation \ref{eq:leftdef}:  $\leftshift[\alpha]{i}$ shifts the $i\thh$ symbol of $\alpha$ into the first position.  Thus, $\leftshift[\alpha]{i}=\lshiftindex[\alpha]{1}{i}$.
+ % Let $\leftshift[\alpha]{i}$ be a simplified version of the left-shift function defined in equation \eqref{eq:leftdef}:  $\leftshift[\alpha]{i}$ shifts the $i\thh$ symbol of $\alpha$ into the first position.  Thus, $\leftshift[\alpha]{i}=\lshiftindex[\alpha]{1}{i}$.
 
  \begin{equation} \label{eq:coolCombo}
      \overleftarrow{\text{cool}}(\alpha) = \leftshift[\alpha]{x+1}
@@ -66,7 +66,7 @@ Binary strings with $s$ zeroes and $t$ ones are often referred to as $(s,t)$-com
 At first glance, $\leftshift[\alpha]{x+1}$ seems like an $O(n)$ opeartion, as $x$ can be up to the length of $\alpha$ and the left-shift operation requires shifting each symbol from $\alpha_1$ to $\alpha_{x}$ down.  However, 
 the property that the first $x$ symbols of the string are non-increasing allows for simplification of the left-shift operation. Note that since $\alpha$ is a binary string, the non-increasing prefix of $\alpha$ must be $1^a0^b$ for some $0 \le a,b$, as previously mentioned in \ref{sec:shiftsandprefixes}. Since $y$ is the index of the first $0$ in $\alpha$ and $x$ is the index of the first $1$ following a $0$ in $\alpha$, we can conclude that $\alpha_1...\alpha_{x-1}$ must be exactly $1^{y-1}0^{x-y}$. This allows each left-shift operation can be replaced with with either one or two symbol transpositions 
 
- Let $\transpose{\alpha}{i}{j}$ with $1 \le i \le j \le n$ be a function that swaps $\alpha_i$ an $\alpha_j$.  More formally, $\transpose{\alpha}{i}{j}=\alpha_1,\alpha_2,\dots,\alpha_{i-1},\alpha_{j}\alpha_{i+1}\dots \alpha_{j-1}\alpha_i \alpha_{j+1}\dots \alpha_n$.  Equation \ref{eq:coolComboTranspose} re-states the successor rule for combinations using transposes, with separte cases for whether a 1 or a 0 is left-shifted.
+ Let $\transpose{\alpha}{i}{j}$ with $1 \le i \le j \le n$ be a function that swaps $\alpha_i$ an $\alpha_j$.  More formally, $\transpose{\alpha}{i}{j}=\alpha_1,\alpha_2,\dots,\alpha_{i-1},\alpha_{j}\alpha_{i+1}\dots \alpha_{j-1}\alpha_i \alpha_{j+1}\dots \alpha_n$.  Equation \eqref{eq:coolComboTranspose} re-states the successor rule for combinations using transposes, with separte cases for whether a 1 or a 0 is left-shifted.
 % The left-shift rule can be re-stated as follows, with separate cases for shifting a 1 and shifting a 0.
 
 \begin{equation}\label{eq:coolComboTranspose}
@@ -235,9 +235,9 @@ Figure \ref{fig:coolComboCode} gives psuedocode for implementing this successor 
 
 Ruskey and Williams found the following algorithm for generating binary Dyck words, dubbed ``CoolCat" due to its use of a cool-lex order to generate (cat)alan objects \cite{ruskey2008generating}.  As in chapter \ref{chap:catalan}, we will use $\mathbf{D}_n$ to denote binary Dyck words with $n$ ones and $n$ zeroes.  Note that the length of any string in $\mathbf{D}_n$ is therefore $2n$.
  Let $D \in \mathbf{D}_n$.
- Recall that definition of the prefix shift operation from equation \ref{eq:preshiftdef}: $\preshift{D}{j}=\lshiftindex[D]{2}{j}$.
+ Recall that definition of the prefix shift operation from equation \eqref{eq:preshiftdef}: $\preshift{D}{j}=\lshiftindex[D]{2}{j}$.
  Let $y$ be the index of the first $0$ in D and $x$ be the index of the first $1$ following a $0$ in D as in section \ref{sec:coolCombo}.
- Equation \ref{eq:prefixDyck_simple} gives the successor rule for Dyck words.
+ Equation \eqref{eq:prefixDyck_simple} gives the successor rule for Dyck words.
 
 \begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck_simple}}
 	\preshift{D}{x+1} & if $\preshift{D}{x+1} \in \mathbf{D}_n$\\
@@ -252,7 +252,7 @@ We will focus on $\mathbf{D}_n$  languages due to their correspondce with Dyck w
 \subsection{Efficient Implementation}
 Evaluating whether $\preshift{D}{x+1} \in \mathbf{D}_n$ can be determined by looking at $D_{x+1}$ and the the first $x-1$ symbols of D: 
 
-If $D_{x+1}=1$, then shifting it into the second position is valid.  If $D_{x+1}=0$ and $D$ starts with at least $\frac{x-1}{2}$ ones, then shifting a 0 into the second position will not invalidate the condition that all prefixes of $D$ have at least as many ones as zeroes.   Therefore, the successor rule in \ref{eq:prefixDyck_simple} can be simplified to the following: 
+If $D_{x+1}=1$, then shifting it into the second position is valid.  If $D_{x+1}=0$ and $D$ starts with at least $\frac{x-1}{2}$ ones, then shifting a 0 into the second position will not invalidate the condition that all prefixes of $D$ have at least as many ones as zeroes.   Therefore, the successor rule in \eqref{eq:prefixDyck_simple} can be simplified to the following: 
 
 \begin{subnumcases}{\coolCat{D} = \label{eq:prefixDyck}}
     % \preshift{D}{2n} & \text{if $D$ has no $01$ substring} \label{eq:prefixDyck_n}\\
@@ -276,7 +276,7 @@ With $D$ redefined as above and $x$ defined as before with respect to the update
 	\leftshift[D]{x} & otherwise \label{eq:lshiftdyck_k}
 \end{subnumcases}
 
-Similarly to the rule for combinations in \ref{eq:coolComboTranspose}, the left-shifts in $\overleftarrow{\mathsf{coolCat}}$ can be implemented looplessly using transposes. Moreover, values for $x$ and $y$ can be kept track of based on which values are shfited, like in the $(s,t)$ combinations algorithm. Since $y-1$ is the number of consecutive ones to start $D$, keeping track of $y$ and $x$ is sufficient to evaluate the condition in \ref{eq:lshiftdyck_k1}.  Pseudocode for implementing $\overleftarrow{\mathsf{coolCat}}$ looplessly is given in figure \ref{fig:coolDyckCode}.
+Similarly to the rule for combinations in \eqref{eq:coolComboTranspose}, the left-shifts in $\overleftarrow{\mathsf{coolCat}}$ can be implemented looplessly using transposes. Moreover, values for $x$ and $y$ can be kept track of based on which values are shfited, like in the $(s,t)$ combinations algorithm. Since $y-1$ is the number of consecutive ones to start $D$, keeping track of $y$ and $x$ is sufficient to evaluate the condition in \eqref{eq:lshiftdyck_k1}.  Pseudocode for implementing $\overleftarrow{\mathsf{coolCat}}$ looplessly is given in figure \ref{fig:coolDyckCode}.
 
 \begin{figure}[H]
     \centering
@@ -349,7 +349,7 @@ Due to its simplicity and efficiency, Don Knuth included the cool-lex algorithm 
 
 Cool-lex order has also been shown to enumerate multiset permutations via prefix shifts.  The rule given by Williams can be described via a simple algorithm that uses one left-shift per generated string  \cite{williams2009loopless}.
 
-First, recall equation \ref{eq:coolComboCyclic} for $(s,t)$-combinations.  Equation \ref{eq:coolComboExpanded} gives an expanded version of the successor rule for $(s,t)$-combinations that differentiates between whether a $0$ or a $1$ is being shifted. Note that left-shifting position $x$ and position $x+1$ are equivalent when $\alpha_{x+1}=1$, since $\alpha_{x}$ is the first one that follows a zero and therefore $\alpha_{x+1}=\alpha_{x}=1$.
+First, recall equation \eqref{eq:coolComboCyclic} for $(s,t)$-combinations.  Equation \eqref{eq:coolComboExpanded} gives an expanded version of the successor rule for $(s,t)$-combinations that differentiates between whether a $0$ or a $1$ is being shifted. Note that left-shifting position $x$ and position $x+1$ are equivalent when $\alpha_{x+1}=1$, since $\alpha_{x}$ is the first one that follows a zero and therefore $\alpha_{x+1}=\alpha_{x}=1$.
 
 \begin{equation} \label{eq:coolComboExpanded}
     \overleftarrow{\text{cool}}(\alpha) = \begin{cases}
@@ -361,7 +361,7 @@ First, recall equation \ref{eq:coolComboCyclic} for $(s,t)$-combinations.  Equat
 
 
  Let $\alpha$ be a multiset of length $n$.
- Let $x$ be the smallest value for which $\alpha_{x} > \alpha_{x-1}$.  Note that this makes $\alpha_{1}\cdots\alpha_{x-1}$ the non-increasing prefix of $\alpha$.  The following successor rule generalizes \ref{eq:coolComboExpanded} to generate all permutations of the content of the multiset $\alpha$.  See Figure \ref{subfig:coolPerms} for an illustration of the shifts excuted by this successor rule and Figure \ref{fig:permutations} for a comparison of cool-lex order to lexicographic order for two multisets.
+ Let $x$ be the smallest value for which $\alpha_{x} > \alpha_{x-1}$.  Note that this makes $\alpha_{1}\cdots\alpha_{x-1}$ the non-increasing prefix of $\alpha$.  The following successor rule generalizes \eqref{eq:coolComboExpanded} to generate all permutations of the content of the multiset $\alpha$.  See Figure \ref{subfig:coolPerms} for an illustration of the shifts excuted by this successor rule and Figure \ref{fig:permutations} for a comparison of cool-lex order to lexicographic order for two multisets.
  % Let $i$ be the maximum value such that $\alpha_{j-1} \ge s_j$ for all $2 \le j \le i$.  In other words, $i$ is the length of the non-increasing prefix of $\alpha$.  
 
 \begin{equation}\label{eq:coolPerms}
@@ -391,7 +391,7 @@ Similarly, if $\alpha_{i+1}$ is shifted, then the length of the non-increasing p
 This property makes a loopless implementation of the sucessor rule possible, as scanning the string to find the length of the non-increasing prefix is not required.  
 A similar property regarding the length of successive non-increasing prefixes will allow for a loopless implementation of the shift Gray code for Łukasiewicz words in chapter \ref{chap:luka-implementation}.
 
-However, unlike the binary cool-lex rules, multiset permutations can have any number of distinct symbols in a non-increasing prefix.  Therefore, implementing a left-shift via transpositions would be more complicated and  not a constant time operation.  Therefore, \cite{williams2009loopless} used a linked-list representation of a multiset to implement the successor rule in \ref{eq:coolPerms} looplessly.
+However, unlike the binary cool-lex rules, multiset permutations can have any number of distinct symbols in a non-increasing prefix.  Therefore, implementing a left-shift via transpositions would be more complicated and  not a constant time operation.  Therefore, \cite{williams2009loopless} used a linked-list representation of a multiset to implement the successor rule in \eqref{eq:coolPerms} looplessly.
 
 
 
