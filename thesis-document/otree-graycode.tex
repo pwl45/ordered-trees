@@ -1,5 +1,5 @@
-This chapter presents a loopless Gray code for generating all ordered trees with $n$ nodes. 
-Sections \ref{sec:otree-otherresults} and \ref{sec:termsandcons} give context on this Gray code's relationship to related results and discuss terminology for this chapter's results. Section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm; Section \ref{sec:otree-proof} gives a proof of our algorithm's correctness.
+This chapter presents a Gray code for generating all ordered trees with $n$ nodes. 
+Sections \ref{sec:otree-otherresults} and \ref{sec:termsandcons} give context on this Gray code's relationship to related results and discuss terminology for this chapter's results. Section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm; Section \ref{sec:otree-proof} gives a proof of our successor rule's correctness.
 
 % Section \ref{sec:otree-otherresults} gives context on this Gray code's relationship to related results, section \ref{sec:termsandcons} discuss terminology for this chapter's results, section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm, and section \ref{sec:otree-proof} gives a proof of our algorithm's correctness.
 % Cooldyck was first loopless for Dyck and Binary; we now show also ordered
@@ -38,7 +38,7 @@ Fig. \ref{fig:exampleotree} gives an example illustrating an ordered tree's firs
 
 
 
-% Let $F$ be the leftmost leaf of T, or equivalently the leftmost descendant of the root. Consider the unique path between the root of T and $F$, denoted $\path{T}{root}{F}$. We will refer to this path as the left-down path of T, or $\leftdown{\tree{T}}$
+% Let $F$ be the leftmost leaf of T, or equivalently the leftmost descendant of the root. Consider the unique path between the root of T and $F$, denoted $\pathto{T}{root}{F}$. We will refer to this path as the left-down path of T, or $\leftdown{\tree{T}}$
 
 % path to leftmost descendent
 % Define the left-down path of an ordered tree T, denoted $\leftdown{\tree{T}}$ to be the first $s+1$ nodes in a preorder traversal of T such that, for each $t_i$ with $0 \le i \le s$, $i=0$ or $t_i$ is the leftmost child of $t_{i-1}$.
@@ -48,10 +48,10 @@ Fig. \ref{fig:exampleotree} gives an example illustrating an ordered tree's firs
     \centering
     $\tree{T}=$
 
-    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=10pt, level distance=40pt]
+    \begin{tikzpicture}[every tree node/.style={draw,circle},sibling distance=14pt, level distance=40pt]
 	\tikzset{edge from parent/.style={draw, edge from parent path=
 	{(\tikzparentnode) -- (\tikzchildnode)}}}
-	\Tree [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightblue}]{P};[.\node[style={fill=lightpurple}]{L}; [.{} [.{} [.{} ] ] ] ] [.\node[style={fill=pink}]{O}; [.\node{}; ] ] [.\node{}; ] ] [.\node{}; [.\node{}; ] ] ] ]
+	\Tree [.{} [.\node[style={fill=lightyellow}]{G}; [.\node[style={fill=lightblue}]{P};[.\node[style={fill=lightpurple}]{L}; [.{} [.{} ] ] ] [.\node[style={fill=pink}]{O}; [.\node{}; ] ] [.\node{}; ] [.\node{}; ] ] [.\node{}; [.\node{}; ] ] ] ]
     \end{tikzpicture}
 
     $D=[1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0]$
@@ -59,12 +59,12 @@ Fig. \ref{fig:exampleotree} gives an example illustrating an ordered tree's firs
     \label{fig:exampleotree}
 \end{figure}
 
-% Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the $\path{T}{root}{F}$. If $\path{T}{root}{F}=\tree{T}$, i.e. the entire tree is a single path, let O be the leaf of the tree. Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
+% Given an ordered tree T, let O be the first node in a preorder traversal of T that is not in the $\pathto{T}{root}{F}$. If $\pathto{T}{root}{F}=\tree{T}$, i.e. the entire tree is a single path, let O be the leaf of the tree. Let P be O's parent.  Let G be P's parent, and let L be P's leftmost child (or, equivalently, O's left sibling).  The labels P, G, and L are mnemonics for O's (p)arent, (g)randparent, and (l)eft sibling. 
 % Given an ordered tree T, let $\treeshift{T}{A}{B}$ be a function that shifts A to be the first child of B, with the restriction that A is a \emph{first-born}s, or the first child of its parents.
 
 \section{Successor Rule} \label{sec:otree-successor}
 
-Given an ordered tree $\tree{T}$ and an ordered tree node A in $\tree{T},$ let $\popchild{A}$ be a function that removes and returns $A$'s first child.  In other words, it pops A's first child.  Additionally, let $\pushchild{A}{B}$ be a function that makes B A's first child.  In other words, it pushes B onto A's list of children. 
+Given an ordered tree $\tree{T}$ and an ordered tree node A in $\tree{T},$ let $\popchild{A}$ be a function that removes and returns $A$'s first child.  In other words, it pops A's first child.  Additionally, let $\pushchild{A}{B}$ be a function that makes B to be A's first child.  In other words, it pushes B onto A's list of children. 
 For convenience, we will also define $\poppush{B}{A}=\pushchild{A}{\popchild{B}}$, which removes the first child of A and makes it the new first child of B.
 
 The successor rule for enumerating ordered trees with $n$ nodes can be stated as follows:
@@ -75,7 +75,7 @@ The successor rule for enumerating ordered trees with $n$ nodes can be stated as
 \end{subnumcases}
 
 
-To make the order cyclic generated by \eqref{eq:otreeRule} cyclic, an additional rule can be added for the case where $\tree{T}$ has no first branching, modifying the successor rule to be:
+To make the order generated by \eqref{eq:otreeRule} cyclic, an additional rule can be added for the case where $\tree{T}$ has no first branching, modifying the successor rule to be:
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:otreeRule_cyclic}}
     % \poppush{root}{P} &  $\leftdown{\tree{T}}=\tree{T}$ \label{eq:otree_noo_cyclic}\\
@@ -84,14 +84,15 @@ To make the order cyclic generated by \eqref{eq:otreeRule} cyclic, an additional
     \poppush{G}{P};\poppush{root}{P}  &  otherwise \label{eq:otree_zeroshift_cyclic}
 \end{subnumcases}
 
-Figure \ref{fig:next} demonstrates of how $\eqref{eq:otree_oneshift}$ and $\eqref{eq:otree_zeroshift}$ operate on trees in general.  Figure \ref{fig:otreeruledemo} demonstrates the pull shifts from equations \eqref{eq:otreeRule} and \eqref{eq:otreeRule_cyclic} as executed on four specific trees and their corresponding Dyck words.
+Figure \ref{fig:next} demonstrates how $\eqref{eq:otree_oneshift}$ and $\eqref{eq:otree_zeroshift}$ operate on trees in general.  Figure \ref{fig:otreeruledemo} demonstrates the pull shifts from equations \eqref{eq:otreeRule} and \eqref{eq:otreeRule_cyclic} as executed on four specific trees and their corresponding Dyck words.
 
 \input{esa-treefig.tex}
 \input{treefig-4cases.tex}
 
 \section{Proof of Correctness} \label{sec:otree-proof}
 
-This section will prove that the successsor rule does in fact in \eqref{eq:otreeRule} generates all ordered trees with $n$ nodes. See \cite{lapeypush}, section 5 for an alternate proof of this result, available \href{https://github.com/pwl45/ordered-trees/blob/main/papers/Cool_Ordered_Trees_by_Pop_Push.pdf}{here}.  
+This section will prove that the successsor rule does in fact in \eqref{eq:otreeRule} generates all ordered trees with $n$ nodes. See \cite{lapeypush}, section 5 for an alternate proof of this result, available here: \cite{lapeythesisrepo}.
+%\href{https://github.com/pwl45/ordered-trees/blob/main/papers/Cool_Ordered_Trees_by_Pop_Push.pdf}{here}.  
 \subsection{Definitions and Remarks}
 
 Let $\tree{T}$ be an ordered tree with $n+1$ nodes listed in preorder as $t_0,t_1,...,t_n$.  Note that $t_0$ is the root of $\tree{T}$. We define the \emph{left-down path} of $\tree{T}$, $\leftdown{\tree{T}},$ to be the unique path between $\tree{T}$'s root and $\tree{T}$'s leftost leaf.
@@ -99,7 +100,7 @@ Let $D=\dyck{T}$.  Let $x$ be the index of the first $1$ following a $0$ in $D$,
 The following remarks can be derived from from the above definitions and the bijection between Dyck words and ordered trees given in given in \ref{subsec:otree-dyck-bij}.
 
 
-\begin{remark} $\depth{O}=s-z+1$ \label{re:o_depth_formula}
+\begin{remark} $\depth{O}=s-z+1$. \label{re:o_depth_formula}
     % \bigskip
 \end{remark} 
 \begin{proof}
@@ -108,12 +109,12 @@ The following remarks can be derived from from the above definitions and the bij
     $t_s$ is the last node in the $\leftdown{\tree{T}}$, as the left-down path has $s+1$ nodes starting at $t_0$. $t_s$ has depth s, as it is exactly s steps from the root.  Note that $O=t_{s+1}$.  The number of zeroes between $t_s$ and $t_{s+1}$ is the number of zeroes between the $s\thh$ and $(s+1)^{\underline{st}}$ ones in $D_i$.  
 
 \end{proof} 
-\begin{remark}O corresponds to $D_x$%, i.e. $\oneindex{D}{s+1}=x$
+\begin{remark}O corresponds to $D_x$.
 \end{remark}
 \begin{proof}
     Recall that $O$ is the first branching of $\tree{T}$ and the first second child visited in a preorder traversal of $\tree{T}$.
 
-    Recall that in the bijection between ordered trees and Dyck words given in \ref{subsec:otree-dyck-bij} that each 1 in D corresponds to a step down and each 0 corresponds to a step up.  A second child in a preorder traversal of an ordered tree must be equal to the 
+    Recall that in the bijection between ordered trees and Dyck words given in \ref{subsec:otree-dyck-bij}, each 1 in D corresponds to a step down and each 0 corresponds to a step up.  A second child in a preorder traversal of an ordered tree must correspond to a step down immediately following a step up.  Therefore, the first second child visited in a preorder traversal of $\tree{T}$ corresponds to the first $1$ following a zero in $D$, which is $D_x$.
     %Consequently, $\leftdown{\tree{T}}$ corresponds to the ``all-one" prefix of D.  In other words, $\leftdown{\tree{T}}=t_0,t_1,...t_{s}$ such that $i=0$ or $D_i=1$. Note that $t_{s+1}$ is therefore the first node in a preorder traversal of T such that $D_{\oneindex{D}{s+1}}=1$ and $D_{\oneindex{D}{s+1}-1}=0$.  O is therefore also the first node in a preorder traversal of T such that $t_{s+1} \notin \leftdown{\tree{T}}$.  Therfore, $\oneindex{D}{s+1}=x$, i.e., $t_{s+1}=O$ corresponds to the 1 in the leftmost 01 substring of D.
 
 \end{proof}
@@ -126,7 +127,7 @@ The following remarks can be derived from from the above definitions and the bij
 \end{proof}
 
 \begin{remark} \label{re:L_sz1}
-    $L$ corresponds to $D_{s-z+1}$ %, i.e. $\oneindex{D}{s-z+1}=s-z+1$
+    $L$ corresponds to $D_{s-z+1}$.
 \end{remark}
 \begin{proof}
 
@@ -164,7 +165,7 @@ The following remarks can be derived from from the above definitions and the bij
     Recall the method of constructing an ordered tree from a Dyck word.  Each one in D creates a new node; zeroes in D do not create nodes.  Generating an ordered tree from a Dyck word generates the nodes of the tree in preorder.  Thus, $t_i$ corresponds to the $i$th one in D for $1 \le i \le n$.
 \end{proof}
 
-\begin{remark} The difference in depths between nodes $t_i$ and $t_{i-1}$ is equal to one minus the number of zeroes between the $(i-1)^{\underline{st}}$ and $i\thh$ and  ones in $D$
+\begin{remark} The difference in depths between nodes $t_i$ and $t_{i-1}$ is equal to one minus the number of zeroes between the $(i-1)^{\underline{st}}$ and $i\thh$ and  ones in $D$.
 
 
 \end{remark}
@@ -192,7 +193,7 @@ The following remarks can be derived from from the above definitions and the bij
 
     This follows naturally from the bijection between Dyck words and ordered trees.  Each zero corresponds to a step up in the tree before adding the next child.  
 
-    If there are zero zeroes between the $i\thh$  and $(i-1)^{\underline{st}}$ ones in D, $t_i$ is a child of $t_{i-1}$; $\depth{t_i}=\depth{t_{i-1}}+1$
+    If there are zero zeroes between the $i\thh$  and $(i-1)^{\underline{st}}$ ones in D, $t_i$ is a child of $t_{i-1}$; $\depth{t_i}=\depth{t_{i-1}}+1$.
 
     If there is one zero between the $i\thh$  and $(i-1)^{\underline{st}}$ ones in D, $t_i$ is a child of $t_{i-1}$'s parent; $\depth{t_i}=\depth{t_{i-1}}+1$.  
 
@@ -207,14 +208,14 @@ The following remarks can be derived from from the above definitions and the bij
 \begin{proof}
     % This follows from Remark \ref{re:depthformula}, as it implies that for any $i,i+1 \le n$, $\oneindex{D}-\oneindex{$ 
 
-    Let $\tree{T}=t_0,t_1,...t_n$ be a preorder traversal of T.  Note that $t_0$ is the root of $\tree{T}$
+    Let $\tree{T}=t_0,t_1,...t_n$ be a preorder traversal of T.  Note that $t_0$ is the root of $\tree{T}$.
 
     Construct D as follows: 
 
     \begin{itemize}
 	% \item skip $t_0$
-	\item Let $D=\epsilon$ % clear that this is empty string?
-	\item For each $t_i$, $1\le i \le n$
+	\item Let $D=\epsilon$. % clear that this is empty string?
+	\item For each $t_i$, $1\le i \le n$,
 	    \begin{itemize}
 		\item Append a 1 to $D$
 		\item Append $1-\depth{t_{i}}+\depth{t_{i-1}}$ zeroes to D.
@@ -230,7 +231,7 @@ Recall that the successor rule $\coolCat{D}$ generates all Dyck words.  Therefor
 
 
 \begin{theorem}
-    Given an ordered tree T, $\nextTree{T}=\otree{\coolCat{\dyck{T}}}$
+    Given an ordered tree T, $\nextTree{T}=\otree{\coolCat{\dyck{T}}}$.
 \end{theorem}
 
 \begin{proof}
@@ -276,11 +277,11 @@ We will show the following equivalences:
 
 To accomplish this, we will first prove a few auxillary lemmas to be used to show equivalency between cases. 
 
-Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(x-s-1)$; $d_{x}=1$
+Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(x-s-1)$; $d_{x}=1$.
 % \begin{itemize}
 \begin{lemma} \label{le:final_case_equivalence}
 
-    $D$ has no 01 substring $\iff$ $\leftdown{\tree{T}}=\tree{T}$
+    $D$ has no 01 substring $\iff$ $\leftdown{\tree{T}}=\tree{T}$.
 \end{lemma}
 \begin{proof}
 
@@ -288,7 +289,7 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
     If $D$ has no $01$ substring, $D=1^n0^n$, and T is $n+1$ nodes where $t_0$ is the root and each $t_i$ for $1\le i \le n$ is a child of $t_{i-1}$  In this case, $\tree{T}$ is a single path of $n+1$ nodes, and the left-down path of T is the entire tree.
 \end{proof}
 \begin{lemma} \label{le:no_children_equivalence}
-    $D_{x+1} = 0 \iff O$ has no children
+    $D_{x+1} = 0 \iff O$ has no children.
 \end{lemma}
 \begin{proof}
 
@@ -301,9 +302,9 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
 \end{lemma}
 \begin{proof}
 
-    First, note that $P=root$ simply means that O is a child of the root.  O is a child of the root $\iff \depth{O}=1$.  Additionally, note that $s+z=x-1$
+    First, note that $P=root$ simply means that O is a child of the root.  O is a child of the root $\iff \depth{O}=1$.  Additionally, note that $s+z=x-1$.
 
-    As shown in remark \ref{re:o_depth_formula}, $\depth{O}=s-z+1$. Therefore, $P=root \iff s=z=\frac{x-1}{2}$
+    As shown in remark \ref{re:o_depth_formula}, $\depth{O}=s-z+1$. Therefore, $P=root \iff s=z=\frac{x-1}{2}$.
     i.e. the first $x-1$ symbols of D are $\frac{x-1}{2}$ ones followed by $\frac{x-1}{2}$ zeroes. 
 
     % This equivalence can can be rewriten as follows: 
@@ -319,15 +320,15 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
 \end{proof}
 % \begin{enumerate}
 \begin{lemma}
-    \eqref{eq:ex_otree_n} corresponds to \eqref{eq:expandedDyck_n}
+    \eqref{eq:ex_otree_n} corresponds to \eqref{eq:expandedDyck_n}.
 \end{lemma}
 \begin{proof}
 
-    Let $D=\dyck{T}$
+    Let $D=\dyck{T}$.
 
     Per lemma \ref{le:final_case_equivalence} $D$ has no 01 substring $\iff$ $\leftdown{\tree{T}}=\tree{T}$.  
 
-    Thus, $\nextTree{T}$ executes case \eqref{eq:ex_otree_n} if and only if $\coolCat{D}$ executes case  \eqref{eq:expandedDyck_n}
+    Thus, $\nextTree{T}$ executes case \eqref{eq:ex_otree_n} if and only if $\coolCat{D}$ executes case  \eqref{eq:expandedDyck_n}.
 
     Note that since $D$ has no $01$ substring, $D=1^n0^n$. 
 
@@ -376,31 +377,30 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
 
 \end{proof}
 \begin{lemma}
-    \eqref{eq:ex_otree_k1_0} corresponds to \eqref{eq:expandedDyck_k1_0}
+    \eqref{eq:ex_otree_k1_0} corresponds to \eqref{eq:expandedDyck_k1_0}.
 \end{lemma}
 \begin{proof}
-    Let $D=\dyck{T}$
+    Let $D=\dyck{T}$.
 
     % \begin{itemize}
     Per lemma \ref{le:tight_case_equivalence} $P=root \iff D$ starts with exactly $\frac{x-1}{2}$ ones.  
 
     It was also previously shown that $D_{x+1}=0 \iff O$ has no children.  
-    Thus, $\nextTree{T}$ executes case \eqref{eq:otree_zeroshift} 
-    if and only if $\coolCat{D}$ executes case   \eqref{eq:expandedDyck_k1_0}
+    Thus, $\nextTree{T}$ executes case \eqref{eq:otree_zeroshift} if and only if $\coolCat{D}$ executes case   \eqref{eq:expandedDyck_k1_0}.
 
     \bigskip
 
     We now show that the execution of \eqref{eq:otree_zeroshift} is equivalent to the execution of \eqref{eq:expandedDyck_k1_0} given case a.
     Given $\dyck{T}=D=1^s0^{z}10d_{x+2}d_{x+3}...d_{2n}$, we aim to show that 
 
-    $\dyck{\nextTree{T}}=\coolCat{\dyck{T}}$
+    $\dyck{\nextTree{T}}=\coolCat{\dyck{T}}$.
     \bigskip
 
     Note that in this case $\nextTree{T}$ can be obtained by performing $\poppush{G}{P};\poppush{root}{P}$. 
 
-	    Let $\tree{T}'=\poppush[T]{P}{G}$; $\tree{T}''=\poppush[T']{P}{root}$
+	    Let $\tree{T}'=\poppush[T]{P}{G}$; $\tree{T}''=\poppush[T']{P}{root}$.
 
-	    Note that $\nextTree{T}=\tree{T}''$
+	    Note that $\nextTree{T}=\tree{T}''$.
 
     Since $P \ne root$, we know that G, the parent of P, exists. 
     Thus, we can assume that $G,P,L \in \leftdown{\tree{T}}$.  T can therefore be specified as follows: 
@@ -454,11 +454,11 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
 
     Recovering a Dyck word from $\tree{T}'$, we obtain 
 
-    D'=$1^{s-1}0^z110d_{x+2}d_{x+3},\dots,d_{2n}$
+    D'=$1^{s-1}0^z110d_{x+2}d_{x+3},\dots,d_{2n}$.
 
 
     Next, we use $\poppush[T']{P}{root}$
- to obtain $\tree{T}'' = \nextTree{T}$
+ to obtain $\tree{T}'' = \nextTree{T}$.
 
     $\poppush[T']{P}{root}$
  shifts O to become the first child of the root. Note that we know that O has no children. Consequently, no nodes other than O have their depth affected by this shift. Thus, 
@@ -503,7 +503,7 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
 
 \end{proof}
 \begin{lemma}
-    \eqref{eq:ex_otree_k1_1} corresponds to \eqref{eq:expandedDyck_k1_1}
+    \eqref{eq:ex_otree_k1_1} corresponds to \eqref{eq:expandedDyck_k1_1}.
 \end{lemma}
 \begin{proof}
 
@@ -537,7 +537,7 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
     $\poppush[T]{P}{O}$
     shifts L to be O's first child:
 
-    Nodes $L=t_{s-z+1}$ through $F=t_s$ will now come after O in preorder traversal.  Additionally, $\leftdown{\tree{T}}$ will now go through O; every node in $\path{T}{L}{F}$ will have its depth increased by one.  
+    Nodes $L=t_{s-z+1}$ through $F=t_s$ will now come after O in preorder traversal.  Additionally, $\leftdown{\tree{T}}$ will now go through O; every node in $\pathto{T}{L}{F}$ will have its depth increased by one.  
 
     Therefore, $\tree{T}'=\nextTree{T}$ can be specified as follows: 
 
@@ -564,7 +564,7 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
 
 \end{proof}
 \begin{lemma}
-    \eqref{eq:ex_otree_k} corresponds to \eqref{eq:expandedDyck_k}
+    \eqref{eq:ex_otree_k} corresponds to \eqref{eq:expandedDyck_k}.
 \end{lemma}
 \begin{proof}
 
@@ -599,7 +599,7 @@ Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be t
     $\poppush[T]{P}{O}$
     shifts L to be O's first child:
 
-    Therefore, nodes $L=t_{1}$ through $F=t_s$ will now come after O in preorder traversal.  Additionally, $\leftdown{\tree{T}}$ will now go through O; every node in $\path{T}{L}{F}$ will have its depth increased by one.  
+    Therefore, nodes $L=t_{1}$ through $F=t_s$ will now come after O in preorder traversal.  Additionally, $\leftdown{\tree{T}}$ will now go through O; every node in $\pathto{T}{L}{F}$ will have its depth increased by one.  
 
     Therefore, $\tree{T}'=\nextTree{T}$ can be specified as follows: 
 

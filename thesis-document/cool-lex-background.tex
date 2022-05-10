@@ -115,7 +115,7 @@ Figure \ref{fig:coolComboCode} gives psuedocode for implementing this successor 
         \end{algorithm}
 
     \end{subfigure}
-    \caption{Pseudocode for generating $(s,t)$-combinations in cool-lex order.}
+    \caption{Pseudocode for generating $(s,t)$-combinations in cool-lex order. $y$ tracks the location of the first $0$ in $b$, $x$ tracks the location of the first $1$ following a $0$. }
     \label{fig:coolComboCode}
 \end{figure}
 
@@ -315,7 +315,7 @@ Similarly to the rule for combinations in \ref{eq:coolComboTranspose}, the left-
         \end{algorithmic}
         \end{algorithm}
     \end{subfigure}
-    \caption{Pseudocode for generating Dyck words in cool-lex order.}
+    \cprotect\caption{Pseudocode for generating Dyck words with $t$ ones and $t$ zeroes in cool-lex order. Like the coolCombo algorithm in Figure \ref{fig:coolComboCode}, $y$ tracks the location of the first $0$ in $b$, $x$ tracks the location of the first $1$ following a $0$.}
      \label{fig:coolDyckCode}
 \end{figure}
 

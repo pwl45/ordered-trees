@@ -9,7 +9,7 @@ However, using a linked-list of integers to represent Łukasiewicz words, the le
 The algorithm in \ref{fig:lukaCode} takes advantage of the following observations about equation \ref{eq:luka}:
 
 \begin{enumerate}
-    \item In all cases, $\luka{\alpha}$ shifts a single symbol at most 2 symbols past the first increase in $\alpha$ to either the first or second position in $\alpha$.  
+    \item In all cases, $\luka{\alpha}$ left-shifts a single symbol located at most 2 symbols past the first increase in $\alpha$ to either the first or second position in $\alpha$.  
     \item Given $m$, a pointer to $\alpha_m$ and a pre-calculated value of $\sum{\rho}$, the correct shift to perform can be determined and executed looplessly.
     \item Case \ref{eq:prefix_n_2} occurs only when $\alpha$ is in descending order and is guaranteed to create an increase at position 2.
 
@@ -17,20 +17,20 @@ The algorithm in \ref{fig:lukaCode} takes advantage of the following observation
 
     \item Shifting a symbol from position $m+1$ creates an increase at position $m+2$ if $\alpha_m < \alpha_{m+2}$.  This becomes the new first increase in the string unless the shift creates an increase at the front of the string.
 
-    \item In the case where a symbol is shifted from position $m+1$, $\alpha_m >= \alpha_{m+2}$, and the shift does not create an increase at the front of the string, the new first increase is whatever the previous second increase in the string was previously. \
+    \item In the case where a symbol is shifted from position $m+1$, $\alpha_m \ge \alpha_{m+2}$, and the shift does not create an increase at the front of the string, the new first increase is whatever the previous second increase in the string was previously. \
 
 Shifts from position $m+1$ occurr either when 
         \begin{enumerate}
             \item $\alpha_m < \alpha_{m+2}$: the new first increase is at position $m+2$.
-            \item $m=n-1$: the new first increase is either at the front of the string or does not exist
-	    \item $\alpha_m >= \alpha_{m+2}$ and $\alpha_{m+2} = 0$: the new first increase is either at the front of the string or at the previous second increase.  Since $\alpha_{m+2}=0$, if no increase is created at the front of the string, all symbols between $\alpha_{m+2}$ and the new first increase must be zero \label{reasonforstack}
+            \item $m=n-1$: the new first increase is either at the front of the string or does not exist.
+	    \item $\alpha_m >= \alpha_{m+2}$ and $\alpha_{m+2} = 0$: the new first increase is either at the front of the string or at the previous second increase.  Since $\alpha_{m+2}=0$, if no increase is created at the front of the string, all symbols between $\alpha_{m+2}$ and the new first increase must be zero \label{reasonforstack}.
         \end{enumerate}
-    \item If shifting creates an increase at the front of the string, the new $\sum{\rho}$ is equal to $\alpha_1$
+    \item If shifting creates an increase at the front of the string, the new $\sum{\rho}$ is equal to $\alpha_1$.
     \item If shifting does not create an increase at the front of the string, the new $\sum{\rho}$ is equal to its prior value plus the value of the symbol that was shifted.
          
 \end{enumerate}
 
-The observation in \ref{reasonforstack} necessitates keeping track of all increases in $\alpha$ in order to guarantee the ability to determine the new first increase in constant time (i.e., without scanning the string).  This is possible in constant time since left-shifting a symbol from position $m,m+1,$ or $m+2$ will never affect any increases past index $m+3$.  Thus, a stack-like data structure containing pointers to ``increase'' nodes and the indices at which they occur is maintained throughout the algorithm's execution.  This requires order n additional space.
+The observation in \ref{reasonforstack} necessitates keeping track of all increases in $\alpha$ in order to guarantee the ability to determine the new first increase in constant time (i.e., without scanning the string).  This is possible in constant time since left-shifting a symbol from position $m,m+1,$ or $m+2$ will never affect any increases past index $m+3$.  Thus, a stack-like data structure containing pointers to ``increase'' nodes and the indices at which they occur is maintained throughout the algorithm's execution.  This requires $O(n)$ additional space.
 
 % -----------------------------work in progress---------------------------------
     
@@ -160,7 +160,10 @@ First, the algorithm pops an increase off of the \verb$incs$ stack, storing the 
 The next block of code uses the fact that the index to shift to is $1$ if a $1$ is being shifted and $0$ otherwise.  The head of the list, \verb$hd$, is updated if a node is shifted to index 0.  Finally, the algorithm executes the left-shift with \verb$insert_node$ and \verb$shift_node$, checks if an increase was created at the front of the list, and updates the \verb$prefix_sum$.  This algorithm is clearly loopless, as \verb$lshift$ is a constant time operation and the function \verb$luka_ll$ has no inner loops.
 
 \section{Generating Motzkin Words in Arrays}\label{sec:coolMotz}
-Since Łukasiewicz words are a generalization of Motzkin words, the same algorithm can be used to generate Motzkin words by restricting the content set S to be strictly zeroes, ones, and twos.  However, the additional restrictions on Motzkin words allow for a simpler implementation of the rule.  In particular, the content restriction obviates the need for an increase stack.   Pseudocode for loopless generation of Motzkin words is given below in Fig. \ref{fig:motzkinAlg}. 
+Since Łukasiewicz words are a generalization of Motzkin words, the same algorithm can be used to generate Motzkin words by restricting the set of allowable symbols in $S$ to be zeroes, ones, and twos. Maintining the requirement for Lukasiewicz words that each multiset has a sum equal to its length implies that $S$ has the same number of ones and twos.  This restriction allows for a simpler implementation of the rule in \eqref{eq:luka}.  In particular, the content restriction obviates the need for an increase stack and reduces the number of cases.   Pseudocode for loopless generation of Motzkin words is given below in Fig. \ref{fig:motzkinAlg}.
+The algorithm takes parameters $s$ and $t$, where $s$ is the number of zeroes and twos and $t$ is the number of ones.  Therefore, the length of a string generate by coolMotzkin $(s,t)$ is $2\cdot s + t$.
+The algorithm for Motzkin words is an extension of the cool-lex algorithm for generating Dyck words in \ref{fig:coolDyck} and uses a similar approach to generating strings.
+Where the $coolDyck$ uses $y$ to track the first $0$ in the string and $x$ to track the first $1$ following a $0$, $coolMotzkin$ uses $z$ to track the index of the first $1$ in the non-increasing prefix, $y$ to track the index of the first $0$ in the non-increasing prefix, and $x$ to track the index of the first increase.  This takes advantage of the fact that the non-increasing prefix of a Motzkin word must be $2^a1^b0^c$ for some $a,b,c \ge 0$.
 
 
 % \iffalse
@@ -171,7 +174,7 @@ Since Łukasiewicz words are a generalization of Motzkin words, the same algorit
         \Function{coolMotzkin}{$s,t$}
         \EndFunction{}
          
-        \State $n \gets 2*s+t$
+        \State $n \gets 2 \cdot s+t$
         \State $b \gets 2^1 0^1 2^{s-1} 1^t 0^{s-1}$
         \State $x \gets 3$
         \State $y \gets 2$
@@ -194,15 +197,15 @@ Since Łukasiewicz words are a generalization of Motzkin words, the same algorit
             
             \vspace{.4em} 
             \If{$b_x = 0$}
-                \If{$z-2 > x-y$}
+                \If{$z-2 <= x-y$}
+                    \State $x \gets x+1$
+                \Else 
                     \State $b_1=2$
                     \State $b_2=0$
                     \State $b_x=r$
                     \State $x \gets 3$
                     \State $y \gets 2$
                     \State $z \gets 2$
-                \Else 
-                    \State $x \gets x+1$
                 
                 \EndIf
                 \ElsIf{$q \ge b[x]$}
@@ -210,15 +213,20 @@ Since Łukasiewicz words are a generalization of Motzkin words, the same algorit
                     \State $b_{x-1} \gets 1$     
                     \State $b_1 \gets 1$     
                     \State $z \gets 1$     
+
                 
+            \EndIf
+            \If{$b_2 > b_1$}
+                \State $z \gets 1$
+                \State $y \gets 2$
+                \State $x \gets 2$
             \EndIf
             \visit{$b$}
         \EndWhile
         \end{algorithmic}
-        % I don't know how to get rid of this "a" here
         \caption{Motzkin}
         \end{algorithm}
-    \caption{Pseudocode algorithm for loopless enumeration of Motzkin words}
+    \caption{Pseudocode algorithm for loopless enumeration of Motzkin words. $z$ tracks the index of the first $1$ in the non-increasing prefix, $y$ tracks the index of the first $0$ in the non-increasing prefix, and $x$ tracks the index of the first increase.}
     \label{fig:motzkinAlg}
 \end{figure}
 % \fi
