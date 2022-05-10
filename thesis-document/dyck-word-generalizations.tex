@@ -5,13 +5,13 @@ All three languages retain the requirement that the path start at the origin, en
 
 \section{Motzkin Paths}\label{sec:motzkin}
 Recall the interpretation of Dyck words as paths in the Cartesian plane from Section \ref{sec:Dycks}.
-Motzkin paths use (1,0) horizontal steps in addition to (1,1) and (1,-1) steps. 
+Motzkin paths use (1,0) horizontal steps in addition to $(1,1)$ and $(1,-1)$ steps. 
 % The number of Motzkin and Schröder paths termminating at $(n,0)$ are counted by the $n\thh$ Motzkin and Schröder numbers respectively.  These sequences are illustrated below for $n \ge 0$ along with their respective entries in the Online Encyclopedia of Integer Sequences (OEIS) \cite{oeis}.
 The number of Motzkin paths termminating at $(n,0)$ is counted by the $n\thh$ Motzkin number.  This sequence is illustrated below for $n \ge 0$ along with its corresponding OEIS entry.
 
 
 \begin{align}
-\mathcal{M}_n &= 1, 1, 2, 4, 9, 21, 51, \ldots  & \text{OEIS} \text{A}001006 \\
+\mathcal{M}_n &= 1, 1, 2, 4, 9, 21, 51, \ldots  & \text{OEIS} \text{A}001006
 \end{align}
 
 The Motzkin numbers are named for $20\thh$ century Israeli-American mathematician Theodore Motzkin and are closely related to the Catalan numbers.  In particular, the Motzkin numbers can be expressed in terms of binomial coefficients and Catalan numbers via the following equation:
@@ -26,7 +26,7 @@ And inversely,
 	\C_{n+1} = \sum_{k=0}^{n} {n \choose k}\M_k
 \end{equation}
 
-The Motzkin numbers have many additional combinatorial interpretations, which are often similar to combinatorial interpretations of the Catalan numbers.  For example, where $\C_n$ counts the number of ordered trees with $n+1$ nodes, $\M_n$ counts the number of ordered trees with $n+2$ nodes with the restriction that no node except for the root has exactly one child (although the root need not have exactly one child). Donaghey and Shapiro's \emph{Motzkin Numbers} demonstrates this as well as many other interesting bijections \cite{donaghey1977motzkin}.
+The Motzkin numbers have many additional combinatorial interpretations, which are often similar to combinatorial interpretations of the Catalan numbers.  For example, $\C_n$ counts the number of ordered trees with $n+1$ nodes, while $\M_n$ counts the number of ordered trees with $n+2$ nodes with the restriction that no node except for the root has exactly one child (although the root need not have exactly one child). Donaghey and Shapiro's \emph{Motzkin Numbers} demonstrates this as well as many other interesting bijections \cite{donaghey1977motzkin}.
 
 \section{Schröder Paths}\label{sec:schroder}
 
@@ -59,7 +59,7 @@ Our algorithm in Chapter $\ref{chap:luka-graycode}$ will generate Łukasiewicz w
 \begin{figure}[]
 	\centering
 	\includegraphics[width = .95 \textwidth]{paths.png}
-	\caption{Łukasiewicz, Motzkin, and Schröder words.}
+	\caption{Łukasiewicz, Motzkin, and Schröder words and paths termminating at $(4,0)$.}
 	\label{fig:paths}
 \end{figure}
 
