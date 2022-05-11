@@ -217,7 +217,7 @@ For any $e \in \mathbf{E}_n$, traverse e in preorder.  Record a $1$ for each int
          level distance=1.5cm}
     \Tree [.{} [.{} [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] ] [.{} [.{} \edge[draw=none]; \node[blank]{};\edge[draw=none]; \node[blank]{};] \edge[draw=none]; \node[blank]{};] ] 
 \end{tikzpicture}
-    \caption{The extended binary tree (left) and binary tree (right) corresponding to the Dyck word 111001001100 \\
+    \caption[The extended binary tree (left) and binary tree (right) corresponding to the Dyck word 111001001100.]{The extended binary tree (left) and binary tree (right) corresponding to the Dyck word 111001001100. \\
     Note that a preorder traversal of the extended binary tree excluding its final leaf yields 111001001100.
     }
 \label{fig:binarytreesbijection}
@@ -282,7 +282,7 @@ We refer to orderings that are Gray codes for multiple combinatorial objects as 
     [.\node[style={fill=midishgreen}]{}; ] [.\node[style={fill=midishgreen}]{}; ] [.\node[style={fill=midishgreen}]{}; ] ] ] 
 \end{tikzpicture}
 
-        \caption{A single bit transposition in a Dyck word resulting in an ordered tree change that would require updating several pointers in a link-based representation.
+        \caption[A single bit transposition in a Dyck word resulting in an ordered tree change that would require updating several pointers in a link-based representation.]{A single bit transposition in a Dyck word resulting in an ordered tree change that would require updating several pointers in a link-based representation.
         In particular, if this example were generalized to the case where the initial Dyck word is 
         $1(10)^n0$, the corresponding ordered tree's first non-root node will have $n$ children.  In that case, transposing bits $n+1$ and $n+2$ in the Dyck word would require updating at least $n/2$ pointers in a link-based tree representation.
         }
@@ -324,7 +324,7 @@ $\C_{n+1}$ is the number of ways of triangulating a convex polygon with $n+3$ si
 
 $C_6=\sum_{k=0}^5\C_k \cdot \C_{n-k}=42 + 14 + 10 + 10 + 14 + 42 = 132$
 \end{center}
-    \caption{Constructing $\C_6$ recursively using polygons and Dyck words.
+    \caption[Constructing $\C_6$ recursively using polygons and Dyck words.]{Constructing $\C_6$ recursively using polygons and Dyck words.
     In the case of triangulated polygons, the blue region is a polygon with $k+2$ sides, the black region is a triangle, and the red region is a polygon with $n-k+2$ sides.  The blue region can be triangulated $\C_k$ ways, the black region is already a triangle and therefore can be triangulated 1 way, and the red region can be triangulated $C_{n-k}$ ways. Note again the special case of $k=0$ or $n-k=0$, where we define a 2-gon as having one triangulation, so $C_{0}=0$
     In the case of Dyck words, each $\{\D_i\}$ can expand to any of the $\C_i$ Dyck words of order $i$.  Thus, the expression $(\{\D_k\})\{\D_{n-k}\}$ has $\C_{k}\cdot\C_{n-k}$ possible expansions.  Note that we define $\D_0$ as having only one possible expansion, the empty string.
 }
