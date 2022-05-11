@@ -2,7 +2,7 @@ This chapter gives a loopless implementation of the successor rule in \eqref{eq:
 
 
 \section{Generating Łukasiewicz Words in Linked Lists}\label{sec:luka_ll}
-Implementing left-shifts in an array-based representation of Łukasiewicz words with unrestricted content would require some form of loop to implement left-shifts.  In particular, consider the case of $\lshiftindex[\alpha]{1}{k}$ where $\alpha=1\cdot2\cdot3\cdot4\cdot5\cdots k$.  This would require shifting each of the first $k$ symbols down one index and therefore require $O(k)$ time.  This is not a constant time operation if $k$ is not a constant.  In particular, a case like this would necessitate worst-case linear time to perform a single iteration of \eqref{eq:luka}.
+Implementing left-shifts in an array-based representation of Łukasiewicz words with unrestricted content would require some form of non-constant time operation.  In particular, consider the case of $\lshiftindex[\alpha]{1}{k}$ where $\alpha=1\cdot2\cdot3\cdot4\cdot5\cdots k$.  This would require shifting each of the first $k$ symbols down one index and therefore require $O(k)$ time.  This is not a constant time operation if $k$ is not a constant.  In particular, a case like this would necessitate worst-case linear time to perform a single iteration of \eqref{eq:luka}.
 However, using a linked list of integers to represent Łukasiewicz words, the left-shifts in \eqref{eq:luka} can be implemented looplessly.  If pointers to the nodes at positions $i$ and $j$ are present, then $\lshiftindex{i}{j}$ simply removes the node at position $i$ and re-inserts it before the node at position $j$.  Thus, a linked list representation of Łukasiewicz words may allow for a loopless implementation of the successor rule in $\eqref{eq:luka}$.  We use a doubly linked list in our implementation to facilitate the linking and unlinking of nodes.
 
 \subsection{Implementation Observations}
@@ -11,7 +11,7 @@ The algorithm in \ref{fig:lukaCode} takes advantage of the following observation
 \begin{enumerate}
     \item In all cases, $\luka{\alpha}$ left-shifts a single symbol located at most 2 symbols past the first increase in $\alpha$ to either the first or second position in $\alpha$.  
     \item Given $m$, a pointer to $\alpha_m$ and a pre-calculated value of $\sum{\rho}$, the correct shift to perform can be determined and executed looplessly.
-    \item Case \eqref{eq:prefix_n_2} occurs only when $\alpha$ is in descending order and is guaranteed to create an increase at position 2.
+    \item Case \eqref{eq:prefix_n_2} occurs only when $\alpha$ is $\tail(n)$, i.e. $\alpha$ is in non-increasing order. This is guaranteed to create an increase at position 2.
 
     \item Shifting a symbol from position $m+2$ preserves the increase at position $m+1$.  The increase at position $m+1$ remains the first increase in $\alpha$ unless the shift creates an increase at the front of the string.
 
@@ -23,7 +23,7 @@ Shifts from position $m+1$ occurr either when
         \begin{enumerate}
             \item $\alpha_m < \alpha_{m+2}$: the new first increase is at position $m+2$.
             \item $m=n-1$: the new first increase is either at the front of the string or does not exist.
-	    \item $\alpha_m >= \alpha_{m+2}$ and $\alpha_{m+2} = 0$: the new first increase is either at the front of the string or at the previous second increase.  Since $\alpha_{m+2}=0$, if no increase is created at the front of the string, all symbols between $\alpha_{m+2}$ and the new first increase must be zero \label{reasonforstack}.
+	    \item $\alpha_m \ge \alpha_{m+2}$ and $\alpha_{m+2} = 0$: the new first increase is either at the front of the string or at the previous second increase.  Since $\alpha_{m+2}=0$, if no increase is created at the front of the string, all symbols between $\alpha_{m+2}$ and the new first increase must be zero. \label{reasonforstack}
         \end{enumerate}
     \item If shifting creates an increase at the front of the string, the new $\sum{\rho}$ is equal to $\alpha_1$.
     \item If shifting does not create an increase at the front of the string, the new $\sum{\rho}$ is equal to its prior value plus the value of the symbol that was shifted.

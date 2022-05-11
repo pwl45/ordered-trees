@@ -1,4 +1,5 @@
 
+
 % figure balanced parentheses binary trees
 % add figures/exhaustive lists
 \section{Combinatorial Generation: Looking at All the Possibilities}
@@ -170,7 +171,7 @@ Amazingly, repeatedly performing this operation will eventually generate all pos
 
 This rule for marbles on a ramp can be translated to binary strings to create a successor rule that generates all binary strings with fixed content.  We refer to this operation of moving a single marble to the top of the ramp as a \emph{left-shift}.
 The order described by this rule is 
-cool-lex order, a variation of co-lexicographic order that was first introduced for $(s,t)$-combinations by Ruskey and Williams \cite{ruskey2005generating} \cite{ruskey2008generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \eqref{eq:BRGC-rule}. To generate all binary strings of a given length instead of all binary strings with a fixed set of content, one only needs to change the rule slightly.  In the case where there is no black marble following a white marble, move the last marble to the top of the ramp and change its color.  In binary strings, this rule corresponds to left-shifting the last bit to the front of the string and complementing it.
+cool-lex order, a variation of co-lexicographic order that was first introduced for $(s,t)$-combinations by Ruskey and Williams \cite{ruskey2005generating,ruskey2009generating}.  It was initially discovered by thinking about simple iterative successor rules like the successor rule for the binary reflected Gray code in equation \eqref{eq:BRGC-rule}. To generate all binary strings of a given length instead of all binary strings with a fixed set of content, one only needs to change the rule slightly.  In the case where there is no black marble following a white marble, move the last marble to the top of the ramp and change its color.  In binary strings, this rule corresponds to left-shifting the last bit to the front of the string and complementing it.
 
 Cool-lex order has some advantages of both lexicographic orderings and Gray codes.  Like lexicographic orders, cool-lex order has a simple recursive structure that is easy to understand at  high level.  
 Like the binary reflected Gray code, cool-lex orders often lead to generation algorithms that are simpler and more efficient than lexicographic orders.  Accordingly, cool-lex objects for exhaustively generating different sets are not just of theoretical interest.
@@ -201,7 +202,81 @@ Frank Gray's reflected binary code used complementing a single bit as the minima
 
 Defining minimal changes for trees is more complicated, as what changes are \emph{minimal} within a tree is often representation dependent.  Our Gray code for ordered trees aims to use simple operations that are minimal for most reasonable tree representations.  These minimal changes use ``pops", which remove a node's first child, and ``pushes,'' which push one node to be the first child of another.  More specifically, the algorithm will generate trees using a pop-push operation that pops one node's first child and pushes it to become the first child of another node.  We will refer to this pop-push operation as a ``pull.''
 
-% TODO: picture
+\begin{figure}[ht]
+\centering
+\begin{minipage}[t]{0.31\linewidth}
+\vspace{0pt}
+\centering
+%\begin{tabular}{|@{\;\,}c@{\;\,}c@{\;\,}c@{\;\,}|} \hline
+\begin{tabular}{| m{1.9em} m{5em} m{2,2em} |} \hline
+Tree & Dyck word & Case \\ \hline
+\includegraphics[scale=0.25]{tree1011110000.pdf} & $1011110000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101110000.pdf} & $1101110000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110110000.pdf} & $1110110000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1111010000.pdf} & $1111010000$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1011101000.pdf} & $1011101000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101101000.pdf} & $1101101000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110101000.pdf} & $1110101000$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1011011000.pdf} & $1011011000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101011000.pdf} & $1101011000$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1010111000.pdf} & $1010111000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1100111000.pdf} & $1100111000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110011000.pdf} & $1110011000$ & \eqref{eq:otree_oneshift}  \\ \hline
+\end{tabular}
+\end{minipage}
+\begin{minipage}[t]{0.325\linewidth}
+\vspace{0pt}
+\centering
+%\begin{tabular}{|@{\;\,}c@{\;\,}c@{\;\,}c@{\;\,}|} \hline
+\begin{tabular}{| m{2,2em} m{5em} m{2,2em} |} \hline
+Tree & Dyck word & Case \\ \hline
+\includegraphics[scale=0.25]{tree1111001000.pdf} & $1111001000$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1011100100.pdf} & $1011100100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101100100.pdf} & $1101100100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110100100.pdf} & $1110100100$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1011010100.pdf} & $1011010100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101010100.pdf} & $1101010100$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1010110100.pdf} & $1010110100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1100110100.pdf} & $1100110100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110010100.pdf} & $1110010100$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1011001100.pdf} & $1011001100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101001100.pdf} & $1101001100$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1010101100.pdf} & $1010101100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1100101100.pdf} & $1100101100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110001100.pdf} & $1110010100$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1111000100.pdf} & $1111000100$ & \eqref{eq:otree_zeroshift} \\ \hline
+\end{tabular}
+\end{minipage}
+\begin{minipage}[t]{0.335\linewidth}
+\vspace{0pt}
+\centering
+%\begin{tabular}{|@{\;\,}c@{\;\,}c@{\;\,}c@{\;\,}|} \hline
+\begin{tabular}{| m{2.3em} m{5em} m{2,2em} |} \hline
+Tree & Dyck word & Case \\ \hline
+\includegraphics[scale=0.25]{tree1011100010.pdf} & $1011100010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101100010.pdf} & $1101100010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110100010.pdf} & $1110100010$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1011010010.pdf} & $1011010010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101010010.pdf} & $1101010010$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1010110010.pdf} & $1010110010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1100110010.pdf} & $1100110010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110010010.pdf} & $1110010010$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1011001010.pdf} & $1011001010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1101001010.pdf} & $1101001010$ & \eqref{eq:otree_zeroshift} \\ \hline
+\includegraphics[scale=0.25]{tree1010101010.pdf} & $1010101010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1100101010.pdf} & $1100101010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1110001010.pdf} & $1110001010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1111000010.pdf} & $1111000010$ & \eqref{eq:otree_oneshift}  \\ \hline
+\includegraphics[scale=0.25]{tree1111100000.pdf} & $1111100000$ &                            \\ \hline
+\end{tabular}
+\end{minipage}
+\caption{The ordered trees with $n = 6$ nodes as generated by our algorithm.
+    The next tree is obtained by $\pull{{O}}{{P}}$ when \eqref{eq:otree_oneshift} is specified, or by $\pull{G}{P};\pull{{root}}{{P}}$ when \eqref{eq:otree_zeroshift} is specified.
+These nodes are situated around the first branching that is traversed during a preorder traversal, which is highlighted in turquoise.
+More specifically, ${O}$ is the second-child of this branching, ${P}$ is its parent, and ${G}$ is its grandparent.
+The last tree is the unique tree which has no such branching.}
+\label{fig:trees6}
+\end{figure}
 
 
 
