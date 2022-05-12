@@ -29,7 +29,8 @@ ll_node* get_initial_luka(int t){
     return hd;
 }
 
-void print_ll(ll_node* hd){
+void print_ll(ll_node* hd,int n){
+    /* return; */
     if(hd){
         printf("%d",hd->data);
     }
@@ -40,6 +41,11 @@ void print_ll(ll_node* hd){
 }
 
 
+//hd is first symbol, the root of the ordered tree
+//lf is the first 0; leftmost leaf of ordered tree
+//lo is the first non-zero number following a 0; first branchiing in an ordered tree
+//lp is p in an ordered tree (parent of first branching)
+//lg is g in an ordered tree (parent of p)
 void coolLuka(int t) {
     ll_node *lf, *lo, *lp, *lg;
     ll_node *hd = get_initial_luka(t);
@@ -48,10 +54,11 @@ void coolLuka(int t) {
     lp=hd;
     lg=NULL;
 
-    print_ll(hd);
+    print_ll(hd,t);
     while (lo) {
 	if (lo->data) { // if o has a child, shift 1
 
+	    //pull(O,P)
 	    lf->next = lo->next;
 	    lo->next = lp->next;
 	    lp->next = lo;
@@ -60,40 +67,43 @@ void coolLuka(int t) {
 
 	    lg = lp;
 	    lp = lo;
-	    lo = lf->next;
 	} else {
 	    if (lp == hd) { // if the string is tight, shift a 1
 
+		//pull(O,P)
 		lf->next = lo->next;
 		lo->next = lp->next;
 		lp->next = lo;
 		lp->data--;
 		lo->data++;
 
-		lg = NULL;
-		lp = lp;
-		lo = lf->next;
+		//don't even need to update anything here, nice
+		/* lg = NULL; */ 
+		/* lp = lp; */
+		/* lf = lf */
 	    } else { // if the string isn't tight, shift a zero
 
+		//pull(G,P)
 		lg->data++;
 		lp->data--;
-		lf->next = lp; // lf->next=o;
+		lf->next = lp; // lf->next=lo;
 		lg->next = lp->next;
-		lp->next = lo;
+		/* lp->next = lo; // this will be overwritten by the next block anyway*/
 		hd->data++;
 
+		//pull(root,P)
 		lp->data--;
 		lp->next = lo->next; // works because o has no children
 		lo->next = hd->next;
 		hd->next = lo;
 
-		lg = NULL;
+		/* lg = NULL; //there is no lg, but it won't be accessed so don't need to NULL it */
 		lp = hd;
 		lf = hd->next;
-		lo = lf->next;
 	    }
 	}
-	print_ll(hd);
+	print_ll(hd,t);
+	lo = lf->next; //this is always what happens
 
     }
 }
