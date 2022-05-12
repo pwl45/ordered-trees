@@ -31,4 +31,6 @@ lukan: lukan.c
 
 .PHONY: clean
 clean:
-	rm -f otree otree-old otree-functions.o coolDyck aotree aotree-functions.o oluka.o lukan 
+	rm -f otree-functions.o otree otree-standalone aotree-functions.o oluka.o aotree coolDyck lukan
+
+
