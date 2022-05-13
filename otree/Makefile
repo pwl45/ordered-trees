@@ -2,7 +2,7 @@
 
 CFLAGS=-O3
 
-all: otree coolDyck aotree otree-standalone lukan
+all: otree coolDyck aotree otree-standalone lukan lukapull
 
 otree-functions.o: otree-functions.c
 	gcc -c otree-functions.c $(CFLAGS)
@@ -28,6 +28,8 @@ coolDyck: coolDyck.c
 lukan: lukan.c
 	gcc -o lukan lukan.c $(CFLAGS)
 
+lukapull: lukapull.c
+	gcc -o lukapull lukapull.c $(CFLAGS)
 
 .PHONY: clean
 clean:
