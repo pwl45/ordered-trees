@@ -6,31 +6,21 @@ Let $S$ be a multiset whose sum is equal to its length.  Let $\mathcal{L}(S)$ de
 
 
 Recall the definition of a left-shift from equation \eqref{eq:leftdef}: $\lshiftindex[\alpha]{i}{j}$ shifts the $j\thh$ symbol in $\alpha$ into the $i\thh$ position. 
-% As in the cool-lex successor rule for multiset permutations in \ref{sec:coolPerms}, we let $x$ be the smallest value for which $\alpha_x<\alpha_{x-1}$.  
 We also let $\rho=\alpha_1\cdot\alpha_2\cdots\alpha_{m}$ be the non-increasing prefix of $\alpha$, i.e. the longest prefix of $\alpha$ such that $\alpha_{i}\ge\alpha_{i-1}$ for all $i \le m$.  
-%In addition to the left-shift function, we define the length of the \emph{non-increasing prefix} of a string $\alpha$ to be 
-%the maximum value $m$ such that $\alpha_{i-1} \ge \alpha_{i}$ for all $2 \le i \le m$. We will let $\rho$ $\rho = a_1 \cdot a_2 \cdots a_m$.  The sum of the symbols in $\rho$ is $\sum \rho = a_1 + a_2 + \cdots + a_m$
 
 
 \begin{subnumcases}{\luka{\alpha} = \label{eq:luka}} 
     \lshiftindex{n}{2} & if  $m=n$ \label{eq:prefix_n_2}\\
-	\lshiftindex{m+1}{1} & if  $m=n-1$  or  $\alpha_{m} < \alpha_{m+2}$   or $(\alpha_{m+2} = 0 $ and $ \sum \rho = m) $ \label{eq:prefix_m1_1}\\
+	\lshiftindex{m+1}{1} & if  $m=n-1$  or  $\alpha_{m} < \alpha_{m+2}$ or $(\alpha_{m+2} = 0 $ and $ \sum \rho = m) $ \label{eq:prefix_m1_1}\\
 	\lshiftindex{m+2}{1} &  if $ \alpha_{m+2} \neq 0 $\label{eq:prefix_m2_1}\\
 	\lshiftindex{m+2}{2} & otherwise  \label{eq:prefix_m2_2}
 \end{subnumcases}
 
-% \begin{subnumcases}{\luka{\alpha} = \label{eq:luka}} 
-%     \lshiftindex{n}{2} & if  $\alpha$ is in descending order \label{eq:prefix_n_2}\\
-% 	\lshiftindex{x}{1} & if  $x=n$  or  $\alpha_{x-1} < \alpha_{x+w}$   or \label{eq:prefix_m1_1}\\
-% 	    & $(\alpha_{x+1} = 0 $ and $ \sum \rho = x-1) $\nonumber\\
-% 	\lshiftindex{m+2}{1} &  if $ \alpha_{m+2} \neq 0 $\label{eq:prefix_m2_1}\\
-% 	\lshiftindex{m+2}{2} & otherwise  \label{eq:prefix_m2_2}
-% \end{subnumcases}
 
 Figure \ref{fig:LukaTable} illustrates the successor rule on every string in $\Lukas{S}$ for $S = \{0,0,0,1,2,3\}$.
 For example, consider the top row with $\alpha = a_1 \cdot a_2 \cdot a_3 \cdot a_4 \cdot a_5 \cdot a_6 = 302100$.
-Here the non-increasing prefix is $a_1 \cdot a_2 = 30$, so $x = 1$, and the length of the string is $n = 6$.
-Thus, $x \neq n$, so \eqref{eq:prefix_n_2} is not applied.
+Here the non-increasing prefix is $a_1 \cdot a_2 = 30$, so $m = 2$, and the length of the string is $n = 6$.
+Thus, $m \neq n$, so \eqref{eq:prefix_n_2} is not applied.
 Now consider the conditions in \eqref{eq:prefix_m1_1}.
 The second condition is $a_{m} < a_{m+2}$, which is $a_2 = 0 < 1 = a_4$ for $\alpha$.  
 Since this is true, $\luka{\alpha} = \lshiftindex{m+1}{1}$ by \eqref{eq:prefix_m1_1}, which is $\lshiftindex{3}{1}$ for $\alpha$.
