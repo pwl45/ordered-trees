@@ -456,7 +456,8 @@
 % \newtheorem{theorem}{Theorem}[section]
 \newtheorem{remark}{Remark}[chapter]
 % \newtheorem{lemma}[theorem]{Lemma}
-
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 % polygon stuff: thank you to https://texample.net/tikz/examples/polygon-division/
 % Macro for drawing a heptagon   
 \def\hepta{\draw(A) -- (B) -- (C) -- (D) -- (E) -- (F) -- (G) -- cycle;}
@@ -522,7 +523,8 @@
 
 }
 \newcommand{\cool}[1]{\operatorname{cool}(#1)}
-\newcommand{\complementbit}[1]{\operatorname{complement}(#1)}
+% \newcommand{\complementbit}[2][]{\operatorname{complement}_{#1}(#2)}
+\newcommand{\complementbit}[2][]{\operatorname{complement}_{#1}(#2)}
 \newcommand{\lshiftindex}[3][]{\operatorname{left}_{#1}(#2,#3)}
 \newcommand{\leftshift}[2][]{\operatorname{left}_{#1}(#2)}
 \newcommand{\rrot}[2][]{\operatorname{rrot}_{#1}(#2)}

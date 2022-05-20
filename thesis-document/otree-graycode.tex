@@ -1,7 +1,7 @@
 This chapter presents a Gray code for generating all ordered trees with $n$ nodes. 
 Sections \ref{sec:otree-otherresults} and \ref{sec:termsandcons} give context on this Gray code's relationship to related results and discuss terminology for this chapter's results. Section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm; Section \ref{sec:otree-proof} gives a proof of our successor rule's correctness.
 
-% Section \ref{sec:otree-otherresults} gives context on this Gray code's relationship to related results, section \ref{sec:termsandcons} discuss terminology for this chapter's results, section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm, and section \ref{sec:otree-proof} gives a proof of our algorithm's correctness.
+% Section \ref{sec:otree-otherresults} gives context on this Gray code's relationship to related results, Section \ref{sec:termsandcons} discuss terminology for this chapter's results, Section \ref{sec:otree-successor} provides a 2-case successor rule for the algorithm, and Section \ref{sec:otree-proof} gives a proof of our algorithm's correctness.
 % Cooldyck was first loopless for Dyck and Binary; we now show also ordered
 % Give exampl  of bit change that messup tree (show for bin and o). 
 % \chapter{Test}
@@ -10,7 +10,7 @@ Sections \ref{sec:otree-otherresults} and \ref{sec:termsandcons} give context on
 Ruskey and Williams previously gave a Gray code for generating all Dyck words of a given length in cool-lex order via prefix shifts \cite{ruskey2008generating}.  In the same paper, Ruskey and Williams also gave a Gray code for generating all binary trees with a fixed number in the same order, making the cool-lex order of Dyck words a simultaneous Gray code for Dyck words of order $n$ and binary trees with $n$ nodes.
 
 % TODO: adaptation of order, new successor rule
-This thesis provides a new Gray code that generates another Catalan object, ordered trees, with a fixed number of nodes in a cool-lex order using \emph{pops} and \emph{pushes}.  These pop and push operations remove a node's first child (pop) and push a node to be another node's new first child (push).  Our Gray code generates all ordered trees using at most 2 pushes and 2 pops per generated tree. This constitutes the first pop-push Gray code for ordered trees.  Additionally, the algorithm generates a minimal change ordering of ordered trees in the same order as their corresponding Dyck words in Ruskey and Williams's algorithm for Dyck words and binary trees. Therefore, in conjunction with the result from \cite{ruskey2008generating}, the cool-lex order for Dyck words now creates a simultaneous Gray code for Dyck words, binary trees, and ordered trees.  As we will see in chapter \ref{chap:otree-implementation}, this Gray code can be implemented via a looples algorithm like the the cool-lex algorithms for Dyck words and binary trees. 
+This thesis provides a new Gray code that generates another Catalan object, ordered trees, with a fixed number of nodes in a cool-lex order using \emph{pops} and \emph{pushes}.  These pop and push operations remove a node's first child (pop) and push a node to be another node's new first child (push).  Our Gray code generates all ordered trees using at most 2 pushes and 2 pops per generated tree. This constitutes the first pop-push Gray code for ordered trees.  Additionally, the algorithm generates a minimal change ordering of ordered trees in the same order as their corresponding Dyck words in Ruskey and Williams's algorithm for Dyck words and binary trees. Therefore, in conjunction with the result from \cite{ruskey2008generating}, the cool-lex order for Dyck words now creates a simultaneous Gray code for Dyck words, binary trees, and ordered trees.  As we will see in Chapter \ref{chap:otree-implementation}, this Gray code can be implemented via a loopless algorithm like the cool-lex algorithms for Dyck words and binary trees. 
 
 
 \section{Terminology and Conventions} \label{sec:termsandcons}
@@ -21,10 +21,11 @@ Code is written with a \texttt{monospaced} font.
 
 When discussing an ordered tree $\tree{T}$, we use the term \emph{first branching}, which could be misinterpreted. 
 We use the term to mean the following: 
-The first branching occurs when the preorder traversal goes up an edge, and then down an edge, for the first time.
+\begin{definition}[First branching]
+    Given an ordered tree $\tree{T}$, the first branching occurs at the first time a preorder traversal of $\tree{T}$ goes up an edge and then down an edge.
 The node that is incident to both of these edges is the parent of the first branching.
-% For example, these first branches are highlighted in turquoise in Figure \ref{fig:trees6}.
-In particular, note that the subtree to the left of the first branch must be a path (see Remark \ref{rem:left-is-path}). Moreover, note that the first branching is also the first time a second child is visited in a preorder traversal of $\tree{T}$.  All previously visited nodes in a preorder traversal are either the root or the first child of their parent.
+\end{definition}
+Note that the subtree to the left of the first branch must be a path (see Remark \ref{rem:left-is-path}). Moreover, note that the first branching is also the first time a second child is visited in a preorder traversal of $\tree{T}$.  All previously visited nodes in a preorder traversal are either the root or the first child of their parent.
 
 % Another way of describing the first branching is as follows.  Let $\leftpath{T}$ be the unique path between 
 
@@ -65,7 +66,7 @@ Fig. \ref{fig:exampleotree} gives an example illustrating an ordered tree's firs
 \section{Successor Rule} \label{sec:otree-successor}
 
 Given an ordered tree $\tree{T}$ and an ordered tree node A in $\tree{T},$ let $\popchild{A}$ be a function that removes and returns $A$'s first child.  In other words, it pops A's first child.  Additionally, let $\pushchild{A}{B}$ be a function that makes B to be A's first child.  In other words, it pushes B onto A's list of children. 
-For convenience, we will also define $\poppush{B}{A}=\pushchild{A}{\popchild{B}}$, which removes the first child of A and makes it the new first child of B.
+For convenience, we will also define $\poppush{A}{B}=\pushchild{A}{\popchild{B}}$, which removes the first child of B and makes it the new first child of A.
 
 The successor rule for enumerating ordered trees with $n$ nodes can be stated as follows:
 
@@ -91,13 +92,16 @@ Figure \ref{fig:next} demonstrates how $\eqref{eq:otree_oneshift}$ and $\eqref{e
 
 \section{Proof of Correctness} \label{sec:otree-proof}
 
-This section will prove that the successsor rule does in fact in \eqref{eq:otreeRule} generates all ordered trees with $n$ nodes. See \cite{lapeypush}, section 5 for an alternate proof of this result, available here: \cite{lapeythesisrepo}.
+This section will prove that the successsor rule in equation \eqref{eq:otreeRule} does in fact generate all ordered trees with $n$ nodes. See \cite{lapeypush}, section 5 for an alternate proof of this result, available here: \cite{lapeythesisrepo}.
 %\href{https://github.com/pwl45/ordered-trees/blob/main/papers/Cool_Ordered_Trees_by_Pop_Push.pdf}{here}.  
 \subsection{Definitions and Remarks}
 
-Let $\tree{T}$ be an ordered tree with $n+1$ nodes listed in preorder as $t_0,t_1,...,t_n$.  Note that $t_0$ is the root of $\tree{T}$. We define the \emph{left-down path} of $\tree{T}$, $\leftdown{\tree{T}},$ to be the unique path between $\tree{T}$'s root and $\tree{T}$'s leftost leaf.
-Let $D=\dyck{T}$.  Let $x$ be the index of the first $1$ following a $0$ in $D$, mirroring section \ref{sec:coolDyck}.  Let $s$ be the number of consecutive ones to start D and let $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(x-s-1)$; $d_{x}=1$.  Let $\oneindex{D}{i}=$ be the index of the $i\thh{}$ one in $D$.
-The following remarks can be derived from from the above definitions and the bijection between Dyck words and ordered trees given in given in \ref{subsec:otree-dyck-bij}.
+Let $\tree{T}$ be an ordered tree with $n+1$ nodes listed in preorder as $t_0,t_1,...,t_n$.  Note that $t_0$ is the root of $\tree{T}$. We define the \emph{left-down path} of $\tree{T}$, $\leftdown{\tree{T}},$ to be the unique path between $\tree{T}$'s root and $\tree{T}$'s leftmost leaf.
+
+Next, we define $\dyck{T}$ to be a function that converts an ordered tree to a Dyck word using the bijection given in section \ref{subsec:otree-dyck-bij}.  Similarly, we define $\otree{D}$ to be a function that converts a Dyck word to an ordered tree using the same bijection.  
+
+Throughout the proof, we will let $D=\dyck{T}$.  Let $x$ be the index of the first $1$ following a $0$ in $D$, mirroring Section \ref{sec:coolDyck}.  Let $s$ be the number of consecutive ones to start D and let $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(x-s-1)$; $d_{x}=1$.  Let $\oneindex{D}{i}=$ be the index of the $i\thh{}$ one in $D$.
+The following remarks can be derived from from the above definitions and the bijection between Dyck words and ordered trees given in \ref{subsec:otree-dyck-bij}.
 
 
 \begin{remark} $\depth{O}=s-z+1$. \label{re:o_depth_formula}
