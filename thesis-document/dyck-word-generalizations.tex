@@ -26,7 +26,7 @@ And inversely,
 	\C_{n+1} = \sum_{k=0}^{n} {n \choose k}\M_k
 \end{equation}
 
-The Motzkin numbers have many additional combinatorial interpretations, which are often similar to combinatorial interpretations of the Catalan numbers.  For example, $\C_n$ counts the number of ordered trees with $n+1$ nodes, while $\M_n$ counts the number of ordered trees with $n+2$ nodes with the restriction that no node except for the root has exactly one child (although the root need not have exactly one child). Donaghey and Shapiro's \emph{Motzkin Numbers} demonstrates this as well as many other interesting bijections \cite{donaghey1977motzkin}.
+The Motzkin numbers have many additional combinatorial interpretations, which are often similar to combinatorial interpretations of the Catalan numbers.  For example, $\C_n$ counts the number of ordered trees with $n+1$ nodes, while $\M_n$ counts the number of ordered trees with $n+2$ nodes with the restriction that no node except for the root has exactly one child (although the root need not have exactly one child). Donaghey and Shapiro's \emph{Motzkin Numbers} demonstrates this as well as many other natural mappings \cite{donaghey1977motzkin}.
 
 \section{Schröder Paths}\label{sec:schroder}
 
@@ -49,7 +49,7 @@ Consequently, in the context of fixed-content generation, Motzkin and Schröder 
 
 \section{Łukasiewicz Paths}\label{sec:lukasiewicz}
 
-Łukasiewicz paths allow $(1,-1)$ steps, $(1,0)$ steps and any $(1,k)$ step where $k$ is a positive integer. We encode each $(1,k)$ step in a Łukasiewicz path as $k+1$ and therefore encode an Łukasiewicz path of length $n$ as a sequence of integers.  We call the resulting string of integers a \emph{Łukasiewicz word}.  Like Motzkin and Schröder words, Łukasiewicz words have the property that the sum of each prefix of a Łukasiewicz word is at least as great as the prefix's length and the sum of an entire Łukasiewicz word is equal to its length.. 
+Łukasiewicz paths allow $(1,-1)$ steps, $(1,0)$ steps and any $(1,k)$ step where $k$ is a positive integer. We encode each $(1,k)$ step in a Łukasiewicz path as $k+1$ and therefore encode an Łukasiewicz path of length $n$ as a sequence of integers.  We call the resulting string of integers a \emph{Łukasiewicz word}.  Like Motzkin and Schröder words, Łukasiewicz words have the property that the sum of each prefix of a Łukasiewicz word is at least as great as the prefix's length and the sum of an entire Łukasiewicz word is equal to its length. 
 
 The number of Łukasiewicz paths terminating at $(n,0)$ is counted by the $n\thh$ Catalan number, $\C_n$. Łukasiewicz paths are therefore in bijective correspondence with the Catalan objects discussed in in Chapter \ref{chap:catalan}, sharing a particularly nice correspondence with ordered trees. In particular, a Łukasiewicz word of length $n$ can be constructed from an ordered tree with $n+1$ nodes via a preorder listing each ordered tree node's number of children, excluding the final leaf.  See Figure \ref{fig:lukatrees} for an illustration of this bijection.
 Our algorithm in Chapter $\ref{chap:luka-graycode}$ will generate Łukasiewicz words with \emph{fixed content}.

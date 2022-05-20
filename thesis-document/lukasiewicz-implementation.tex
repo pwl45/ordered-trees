@@ -105,7 +105,7 @@ void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd, int n))
     ll_node *shift_node, *insert_node, *x, *xn;
     int prefix_sum,m,insert_index;
 
-    incs[0] = (inc) {.node=tl,.index=n-1}; //cool struct initializer syntax
+    incs[0] = (inc) {.node=tl,.index=n-1};
 
     while(nincs){
 	m = incs[nincs-1].index;
