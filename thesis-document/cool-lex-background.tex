@@ -44,15 +44,22 @@ Binary strings with $s$ zeroes and $t$ ones are often referred to as $(s,t)$-com
  Let $y$ be the position of the leftmost zero in $\alpha$ and $x$ be the position of the leftmost 1 in $\alpha$ such that $x > y$. Note that $x$ is the first 1 that follows a 0; the analogue of marble $x$ in Section \ref{sec:coolIntro}.  Moreover, $\alpha_1...\alpha_{x-1}$ is the non-increasing prefix of $\alpha$.
 
 
- \begin{equation} \label{eq:coolCombo}
-     \overleftarrow{\text{cool}}(\alpha) = \leftshift[\alpha]{x+1}
- \end{equation}
+ % \begin{equation} \label{eq:coolCombo}
+ %     \overleftarrow{\text{cool}}(\alpha) = \leftshift[\alpha]{x+1}
+ % \end{equation}
+
+\begin{equation}\label{eq:coolComboCyclic}
+    \overleftarrow{\text{cool}}(\alpha) = \begin{cases}
+        \leftshift[\alpha]{n} & \text{if } x=n \\
+	\leftshift[\alpha]{x+1} & otherwise
+\end{cases}
+\end{equation}
 
  To make this order cyclic, an additional case can be added for when there is no 1 following a zero. In this case, shift the last marble to the front of the list. Note that in this case all ones must follow all zeroes, and therefore $\alpha=1^t0^s$.  Figure \ref{subfig:coolcombo} demonstrates this rule being used to enumerate $(4,2)$ combinations.
 
 \begin{equation}\label{eq:coolComboCyclic}
     \overleftarrow{\text{cool}}(\alpha) = \begin{cases}
-	\leftshift[\alpha]{n} & \text{if } \alpha=1^t0^s \\
+        \leftshift[\alpha]{n} & \text{if } \alpha=1^t0^s \text{ or } x=n\\
 	\leftshift[\alpha]{x+1} & otherwise
 \end{cases}
 \end{equation}

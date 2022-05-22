@@ -28,47 +28,6 @@ In other words, the rule left-shifts $a_3$ into position $1$.
 Thus, the next string in the list is $a_3 \cdot a_1 \cdot a_2 \cdot a_4 \cdot a_5 \cdot a_6 = 230100$, as seen in the second row of Figure~\ref{fig:LukaTable}.
 
 
-\begin{figure}
-    \centering
-    % This figure is temporarily omitted because it is slow
-    \begin{tabularx}{0.9\textwidth}{>{\hsize=0.275\hsize}C >{\hsize=0.225\hsize}C >{\hsize=0.05\hsize}C >{\hsize=0.1\hsize}C >{\hsize=0.2\hsize}C  >{\hsize=0.2\hsize}r }
-\thead{Łukasiewicz path} & \thead{Łukasiewicz word} & \thead{$m$} & \thead{\eqref{eq:luka}} & \thead{shift} & \thead{scut} \\ \hline 
-\LukaTable[2]{3,0,2,1,0,0} & 302100 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $100$ \\
-\LukaTable[3]{2,3,0,1,0,0} & 230100 & 1 & \eqref{eq:prefix_m2_2} & $\lshiftindex{3}{2}$ & $100$ \\
-\LukaTable[2]{2,0,3,1,0,0} & 203100 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $100$ \\
-\LukaTable[3]{3,2,0,1,0,0} & 320100 & 3 & \eqref{eq:prefix_m2_2} & $\lshiftindex{5}{2}$ & $100$ \\
-\LukaTable[2]{3,0,2,0,1,0} & 302010 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $10$ \\
-\LukaTable[2]{3,0,0,2,1,0} & 300210 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $10$ \\
-\LukaTable[3]{2,3,0,0,1,0} & 230010 & 1 & \eqref{eq:prefix_m2_2} & $\lshiftindex{3}{2}$ & $10$ \\
-\LukaTable[2]{2,0,3,0,1,0} & 203010 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $10$ \\
-\LukaTable[3]{3,2,0,0,1,0} & 320010 & 4 & \eqref{eq:prefix_m2_2} & $\lshiftindex{6}{2}$ & $10$ \\
-\LukaTable[2]{3,0,2,0,0,1} & 302001 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $1$ \\
-\LukaTable[2]{3,0,0,2,0,1} & 300201 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $1$ \\
-\LukaTable[3]{2,3,0,0,0,1} & 230001 & 1 & \eqref{eq:prefix_m2_2} & $\lshiftindex{3}{2}$ & $1$ \\
-\LukaTable[2]{2,0,3,0,0,1} & 203001 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $1$ \\
-\LukaTable[3]{3,2,0,0,0,1} & 320001 & 5 & \eqref{eq:prefix_m1_1} & $\lshiftindex{6}{1}$ & $1$ \\
-\LukaTable[3]{1,3,2,0,0,0} & 132000 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $2000$ \\
-\LukaTable[3]{3,1,2,0,0,0} & 312000 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $2000$ \\
-\LukaTable[2]{3,0,1,2,0,0} & 301200 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $200$ \\
-\LukaTable[2]{1,3,0,2,0,0} & 130200 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $200$ \\
-\LukaTable[2]{3,1,0,2,0,0} & 310200 & 3 & \eqref{eq:prefix_m2_2} & $\lshiftindex{5}{2}$ & $200$ \\
-\LukaTable[2]{3,0,1,0,2,0} & 301020 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $20$ \\
-\LukaTable[2]{3,0,0,1,2,0} & 300120 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $20$ \\
-\LukaTable[2]{1,3,0,0,2,0} & 130020 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $20$ \\
-\LukaTable[2]{3,1,0,0,2,0} & 310020 & 4 & \eqref{eq:prefix_m1_1} & $\lshiftindex{5}{1}$ & $20$ \\
-\LukaTable[3]{2,3,1,0,0,0} & 231000 & 1 & \eqref{eq:prefix_m2_1} & $\lshiftindex{3}{1}$ & $31000$ \\
-\LukaTable[3]{1,2,3,0,0,0} & 123000 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $3000$ \\
-\LukaTable[3]{2,1,3,0,0,0} & 213000 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $3000$ \\
-\LukaTable[2]{2,0,1,3,0,0} & 201300 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $300$ \\
-\LukaTable[2]{1,2,0,3,0,0} & 120300 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $300$ \\
-\LukaTable[2]{2,1,0,3,0,0} & 210300 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $300$ \\
-\LukaTable[3]{3,2,1,0,0,0} & 321000 & 6 & \eqref{eq:prefix_n_2} & $\lshiftindex{6}{2}$ & $\epsilon$ 
-    \end{tabularx}
-    \caption[The left-shift Gray code $\cool{S}$ for Łukasiewicz words with content $S = \{0,0,0,1,2,3\}$.]{The left-shift Gray code $\cool{S}$ for Łukasiewicz words with content $S = \{0,0,0,1,2,3\}$.
-    Each row gives the non-increasing prefix length $m$, the rule \eqref{eq:luka}, and the shift that creates the next word.
-    The right column gives the scut of each string, which illustrates the suffix-based recursive definition of cool-lex order.}
-    \label{fig:LukaTable}
-\end{figure}
 
 \subsection{Observations}
 \label{sec:prefix_observations}
@@ -122,6 +81,48 @@ We refer to a scut of the form $\scut(s, \ell)$ as an \emph{$s$-scut}.
 
 As an example, the tail with content $S$ = {0,0,1,1,2,2,3,3} is 33221100, which is the content of $S$ arranged in non-increasing order..  The scut of 12323100 is 3100, since it is the shortest suffix that is not also a suffix of the tail, and it is a 3-scut since it begins with 3.
 
+\begin{figure}
+    \centering
+    % This figure is temporarily omitted because it is slow
+    \begin{tabularx}{0.9\textwidth}{>{\hsize=0.275\hsize}C >{\hsize=0.225\hsize}C >{\hsize=0.05\hsize}C >{\hsize=0.1\hsize}C >{\hsize=0.2\hsize}C  >{\hsize=0.2\hsize}r }
+\thead{Łukasiewicz path} & \thead{Łukasiewicz word} & \thead{$m$} & \thead{\eqref{eq:luka}} & \thead{shift} & \thead{scut} \\ \hline 
+\LukaTable[2]{3,0,2,1,0,0} & 302100 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $100$ \\
+\LukaTable[3]{2,3,0,1,0,0} & 230100 & 1 & \eqref{eq:prefix_m2_2} & $\lshiftindex{3}{2}$ & $100$ \\
+\LukaTable[2]{2,0,3,1,0,0} & 203100 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $100$ \\
+\LukaTable[3]{3,2,0,1,0,0} & 320100 & 3 & \eqref{eq:prefix_m2_2} & $\lshiftindex{5}{2}$ & $100$ \\
+\LukaTable[2]{3,0,2,0,1,0} & 302010 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $10$ \\
+\LukaTable[2]{3,0,0,2,1,0} & 300210 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $10$ \\
+\LukaTable[3]{2,3,0,0,1,0} & 230010 & 1 & \eqref{eq:prefix_m2_2} & $\lshiftindex{3}{2}$ & $10$ \\
+\LukaTable[2]{2,0,3,0,1,0} & 203010 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $10$ \\
+\LukaTable[3]{3,2,0,0,1,0} & 320010 & 4 & \eqref{eq:prefix_m2_2} & $\lshiftindex{6}{2}$ & $10$ \\
+\LukaTable[2]{3,0,2,0,0,1} & 302001 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $1$ \\
+\LukaTable[2]{3,0,0,2,0,1} & 300201 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $1$ \\
+\LukaTable[3]{2,3,0,0,0,1} & 230001 & 1 & \eqref{eq:prefix_m2_2} & $\lshiftindex{3}{2}$ & $1$ \\
+\LukaTable[2]{2,0,3,0,0,1} & 203001 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $1$ \\
+\LukaTable[3]{3,2,0,0,0,1} & 320001 & 5 & \eqref{eq:prefix_m1_1} & $\lshiftindex{6}{1}$ & $1$ \\
+\LukaTable[3]{1,3,2,0,0,0} & 132000 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $2000$ \\
+\LukaTable[3]{3,1,2,0,0,0} & 312000 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $2000$ \\
+\LukaTable[2]{3,0,1,2,0,0} & 301200 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $200$ \\
+\LukaTable[2]{1,3,0,2,0,0} & 130200 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $200$ \\
+\LukaTable[2]{3,1,0,2,0,0} & 310200 & 3 & \eqref{eq:prefix_m2_2} & $\lshiftindex{5}{2}$ & $200$ \\
+\LukaTable[2]{3,0,1,0,2,0} & 301020 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $20$ \\
+\LukaTable[2]{3,0,0,1,2,0} & 300120 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $20$ \\
+\LukaTable[2]{1,3,0,0,2,0} & 130020 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $20$ \\
+\LukaTable[2]{3,1,0,0,2,0} & 310020 & 4 & \eqref{eq:prefix_m1_1} & $\lshiftindex{5}{1}$ & $20$ \\
+\LukaTable[3]{2,3,1,0,0,0} & 231000 & 1 & \eqref{eq:prefix_m2_1} & $\lshiftindex{3}{1}$ & $31000$ \\
+\LukaTable[3]{1,2,3,0,0,0} & 123000 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $3000$ \\
+\LukaTable[3]{2,1,3,0,0,0} & 213000 & 2 & \eqref{eq:prefix_m2_2} & $\lshiftindex{4}{2}$ & $3000$ \\
+\LukaTable[2]{2,0,1,3,0,0} & 201300 & 2 & \eqref{eq:prefix_m1_1} & $\lshiftindex{3}{1}$ & $300$ \\
+\LukaTable[2]{1,2,0,3,0,0} & 120300 & 1 & \eqref{eq:prefix_m1_1} & $\lshiftindex{2}{1}$ & $300$ \\
+\LukaTable[2]{2,1,0,3,0,0} & 210300 & 3 & \eqref{eq:prefix_m1_1} & $\lshiftindex{4}{1}$ & $300$ \\
+\LukaTable[3]{3,2,1,0,0,0} & 321000 & 6 & \eqref{eq:prefix_n_2} & $\lshiftindex{6}{2}$ & $\epsilon$ 
+    \end{tabularx}
+    \caption[The left-shift Gray code $\cool{S}$ for Łukasiewicz words with content $S = \{0,0,0,1,2,3\}$.]{The left-shift Gray code $\cool{S}$ for Łukasiewicz words with content $S = \{0,0,0,1,2,3\}$.
+    Each row gives the non-increasing prefix length $m$, the rule \eqref{eq:luka}, and the shift that creates the next word.
+    The right column gives the scut of each string, which illustrates the suffix-based recursive definition of cool-lex order.}
+    \label{fig:LukaTable}
+\end{figure}
+
 \subsubsection{Recursive Order}
 \label{sec:proof_recursive}
 
@@ -154,7 +155,7 @@ The the scuts appear in the same order as \eqref{eq:egscuts} after excluding the
 100, 10, 1, 2000, 200, 20, 31000, 3000, 300,    
 \end{equation}
 % TODO: should these be parens instead of curly braces for tail{n} 
-Finally the single string without a scut $\tail(n) = 321000$ appears last.
+Finally, the single string without a scut $\tail(n) = 321000$ appears last.
 
 In each scut group the strings are ordered recursively.
 In other words, the common scut is removed from the strings in a particular group, and then they are ordered according to $\cool{S'}$, where $S'$ is the valid multiset obtained by removing the symbols of the common scut from $S$.
@@ -181,38 +182,7 @@ The first string in $\cool{S}$ with a $t_i$-scut is $\lshiftindex[\tail(n)]{n-i+
 
 Less technically, Remark \ref{rem:first} says that the first string with a $t_i$-scut is obtained by shifting the next smallest symbol from its position in $\tail(n)$ into the first position, or second position if it is $0$.
 
-% Now we formally define the order recursively. 
-% In the definition, we use 
-% \begin{subnumcases}{cool(S) =}
-%     \phantom{LaTeX Sucks Center this Crap} \emptystring & if $S = \emptyset$ \\
-%     \begin{array}{rcl}
-%         cool(S - \scut(d_2,F_1-1)) & \cdot & \scut(d_2,F_1-1), \\
-%         cool(S - \scut(d_2,F_1-2)) & \cdot & \scut(d_2,F_1-2), \\
-%         & \vdots & \\
-%         cool(S - \scut(d_2,0)) & \cdot & \scut(d_2,0), \\[0.5em]
-%         cool(S - \scut(d_3,F_2-1)) & \cdot & \scut(d_3,F_2-1), \\
-%         cool(S - \scut(d_3,F_2-2)) & \cdot & \scut(d_3,F_2-2), \\
-%         & \vdots & \\
-%         cool(S - \scut(d_3,0)) & \cdot & \scut(d_3,0), \\
-%         & {\Large \vdots} & \\
-%         cool(S - \scut(d_k,F_{k-1}-1)) & \cdot & \scut(d_k,F_{k-1}-1), \\
-%         cool(S - \scut(d_k,F_{k-1}-2)) & \cdot & \scut(d_k,F_{k-1}-2), \\
-%         & \vdots & \\
-%         cool(S - \scut(d_k,0)) & \cdot & \scut(d_k,0), \\
-%         & & \tail(n) \\
-%     \end{array} & 
-%     \begin{tabular}{c}
-%         otherwise, 
-%     \end{tabular}
-% \end{subnumcases}
-% where $sort(S) = d_1, d_2, \ldots, d_k$ and $f_i$ for frequencies and $F_i$ for cumulative frequencies
 
-% The following remark is due to the fact that the above ordering of the scuts (and $tail{n}$) include every possible suffix of a string in $\Lukas{S}$
-
-% \begin{remark}
-% \label{rem:ordering}
-% $\cool{S}$ is an ordering of $\Lukas{S}$.
-% \end{remark}
 
 \subsection{Equivalence}
 \label{sec:proof_equal}
