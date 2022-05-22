@@ -7,7 +7,7 @@ All three languages retain the requirement that the path start at the origin, en
 Recall the interpretation of Dyck words as paths in the Cartesian plane from Section \ref{sec:Dycks}.
 Motzkin paths use (1,0) horizontal steps in addition to $(1,1)$ and $(1,-1)$ steps. 
 % The number of Motzkin and Schröder paths termminating at $(n,0)$ are counted by the $n\thh$ Motzkin and Schröder numbers respectively.  These sequences are illustrated below for $n \ge 0$ along with their respective entries in the Online Encyclopedia of Integer Sequences (OEIS) \cite{oeis}.
-The number of Motzkin paths termminating at $(n,0)$ is counted by the $n\thh$ Motzkin number.  This sequence is illustrated below for $n \ge 0$ along with its corresponding OEIS entry.
+The number of Motzkin paths terminating at $(n,0)$ is counted by the $n\thh$ Motzkin number.  This sequence is illustrated below for $n \ge 0$ along with its corresponding OEIS entry.
 
 
 \begin{align}
@@ -36,7 +36,7 @@ Schröder paths are identical to Motzkin paths except they allow for $(2,0)$ hor
 \mathcal{S}_n &= 1, 2, 6, 22, 90, 394, 1806, \ldots & \text{OEIS} \text{A}006318
 \end{align}
 
-The use of $(2,0)$ horizontal steps seems arbitrary at first but has a number of useful properties.  For example, unlike Motzkin paths, Schröder paths retain the property of Dyck paths that each path must terminate at $(2n,0)$ for some integer $n$.  Conversely, one-length horizontal step in Motzkin words allows Motzkin paths to termminate at odd positions on the $x$ axis.  
+The use of $(2,0)$ horizontal steps seems arbitrary at first but has a number of useful properties.  For example, unlike Motzkin paths, Schröder paths retain the property of Dyck paths that each path must terminate at $(2n,0)$ for some integer $n$.  Conversely, one-length horizontal step in Motzkin words allows Motzkin paths to terminate at odd positions on the $x$ axis.  
 
 The big Schröder numbers are named for $19\thh$ century German mathematician Ernst Schröder.  They are related to but distinct from the little Schröder numbers, which have the fascinating history of potentially being discovered thousands of years before the Catalan, Motzkin, and big Schröder numbers by the Greek astronomer Hipparchus.  See \cite{stanley1997hipparchus} for a brief history of this discovery and \cite{bobzien2011combinatorics} for an in-depth reconstruction of Hipparchus's logic. 
 
@@ -59,7 +59,7 @@ Our algorithm in Chapter $\ref{chap:luka-graycode}$ will generate Łukasiewicz w
 \begin{figure}[]
 	\centering
 	\includegraphics[width = .95 \textwidth]{paths.png}
-	\caption{Łukasiewicz, Motzkin, and Schröder words and paths termminating at $(4,0)$.}
+	\caption{Łukasiewicz, Motzkin, and Schröder words and paths terminating at $(4,0)$.}
 	\label{fig:paths}
 \end{figure}
 
@@ -72,7 +72,7 @@ Our algorithm in Chapter $\ref{chap:luka-graycode}$ will generate Łukasiewicz w
 \begin{figure}[]
 	\centering
 	\includegraphics[width = .95 \textwidth]{trees.png}
-	\caption[The $\mathcal{C}_4$=14 Łukasiewicz paths of order $n=4$ are in bijective correspondence with the 14 rooted ordered trees with $n+1=5$ nodes.]{The $\mathcal{C}_4$=14 Łukasiewicz paths of order $n=4$ are in bijective correspondence with the 14 rooted ordered trees with $n+1=5$ nodes.  Ordered tree nodes are labelled by their number of children.  Given a tree, a Łukasiewicz word is obtained by recording the number of children of each node in preorder traversal; the zero from the rightmost leaf is omitted.  For example, the two trees in the middle section correspond to 2200 (top) and 2020 (bottom) respectively.}
+	\caption[The $\mathcal{C}_4$=14 Łukasiewicz paths of order $n=4$ are in bijective correspondence with the 14 rooted ordered trees with $n+1=5$ nodes.]{The $\mathcal{C}_4$=14 Łukasiewicz paths of order $n=4$ are in bijective correspondence with the 14 rooted ordered trees with $n+1=5$ nodes.  Ordered tree nodes are labeled by their number of children.  Given a tree, a Łukasiewicz word is obtained by recording the number of children of each node in preorder traversal; the zero from the rightmost leaf is omitted.  For example, the two trees in the middle section correspond to 2200 (top) and 2020 (bottom) respectively.}
 	\label{fig:lukatrees}
 \end{figure}
 

@@ -92,7 +92,7 @@ Figure \ref{fig:next} demonstrates how $\eqref{eq:otree_oneshift}$ and $\eqref{e
 
 \section{Proof of Correctness} \label{sec:otree-proof}
 
-This section will prove that the successsor rule in equation \eqref{eq:otreeRule} does in fact generate all ordered trees with $n$ nodes. See \cite{lapeypush}, section 5 for an alternate proof of this result, available here: \cite{lapeythesisrepo}.
+This section will prove that the successor rule in equation \eqref{eq:otreeRule} does in fact generate all ordered trees with $n$ nodes. See \cite{lapeypush}, section 5 for an alternate proof of this result, available here: \cite{lapeythesisrepo}.
 %\href{https://github.com/pwl45/ordered-trees/blob/main/papers/Cool_Ordered_Trees_by_Pop_Push.pdf}{here}.  
 \subsection{Definitions and Remarks}
 
@@ -250,7 +250,7 @@ Recall that the successor rule $\coolCat{D}$ generates all Dyck words.  Therefor
 
 $\coolCat{D}$ and $\nextTree{T}$ are each broken down into 3 cases in equations \eqref{eq:prefixDyck} and \eqref{eq:otreeRule} respectively. 
 
-For convenience, equations \eqref{eq:expandedOtree} and \eqref{eq:expandedDyck}  give the expanded restatemtents of the successor rules for $\nextTree{T}$ and $\coolCat{D}$ to facilitate comparisons between the two.  %Recall that $s$ is the number of consecutive ones at the start of $D$.
+For convenience, equations \eqref{eq:expandedOtree} and \eqref{eq:expandedDyck}  give the expanded restatements of the successor rules for $\nextTree{T}$ and $\coolCat{D}$ to facilitate comparisons between the two.  %Recall that $s$ is the number of consecutive ones at the start of $D$.
 
 \begin{subnumcases}{\nextTree{T} = \label{eq:expandedOtree}}
     \poppush{root}{P}  & $\leftdown{\tree{T}}=\tree{T}$ \label{eq:ex_otree_n}\\
@@ -279,7 +279,7 @@ We will show the following equivalences:
     \item \eqref{eq:ex_otree_k} corresponds to \eqref{eq:expandedDyck_k}
 \end{itemize}
 
-To accomplish this, we will first prove a few auxillary lemmas to be used to show equivalency between cases. 
+To accomplish this, we will first prove a few auxiliary lemmas to be used to show equivalency between cases. 
 
 Let $D=\dyck{T}$, $s$ be the number of consecutive ones to start D, and $z$ be the number of consecutive zeroes starting at $d_{s+1}$.  Note that $z=(x-s-1)$; $d_{x}=1$.
 % \begin{itemize}
