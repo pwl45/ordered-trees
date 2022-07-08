@@ -14,6 +14,8 @@ Alternatively, a wrapper script `./optikz.sh` is provided that adds the necessar
 
 As an example, the output of `./optikz 5 -o` is stored in `sampletrees.pdf`.
 
+Additionally, the `-l` flag (`./otree n -l`) outputs each ordered tree's corresponding Lukasiewicz word. 
+
 ### Other Files
 
 There are many other, less relevant files in here. 
