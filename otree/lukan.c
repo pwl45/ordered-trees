@@ -30,7 +30,7 @@ ll_node* get_initial_luka(int t){
 }
 
 void print_ll(ll_node* hd,int n){
-    /* return; */
+    return;
     if(hd){
         printf("%d",hd->data);
     }

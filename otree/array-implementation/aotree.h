@@ -1,5 +1,3 @@
-#include "otree.h"
-
 struct arraynode {
     int nch; //not  strictly necessary
     int maxch;

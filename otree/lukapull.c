@@ -1,49 +1,68 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 
-typedef struct ll_node {
-    int data;
-    struct ll_node* next;
-} ll_node;
+typedef struct lukanode {
+    int value;
+    struct lukanode* next;
+} lukanode;
 
-//make ll_node
-ll_node* new_llnode(int data,ll_node* next){
-    ll_node* node = (ll_node*) malloc(sizeof(ll_node));
-    node->data=data;
+//make lukanode
+lukanode* new_llnode(int value,lukanode* next){
+    lukanode* node = (lukanode*) malloc(sizeof(lukanode));
+    node->value=value;
     node->next=next;
     return node;
 }
 //get first lukasiewicz word
-ll_node* get_initial_luka(int t){
-    ll_node* tl = new_llnode(0,NULL);
-    ll_node* curr = tl;
+lukanode* get_initial_luka(int t){
+    /* printf("initluka\n"); */
+    lukanode* tl = new_llnode(0,NULL);
+    lukanode* curr = tl;
     for(int i = 0; i < t-2; i++)
 	curr=new_llnode(1,curr);	
     curr=new_llnode(0,curr);
     curr=new_llnode(2,curr);
+    /* printf("done initluika\n"); */
     return curr;
 }
 
-void print_ll(ll_node* hd,int n){
+void print_ll(lukanode* hd,int n){
     while(hd){
-        printf("%d",hd->data);
+        printf("%d",hd->value);
 	hd=hd->next;
     }
     putchar('\n');
 }
 
-//equivalent to pull(A,B) where B is a path beginning at p and ending at pathtl.
-void pathpull(ll_node* dest, ll_node* p, ll_node* pathtl){
-    ll_node* tmp = dest->next;
+//bad
+void swap3(uintptr_t* A, uintptr_t* B, uintptr_t* C){
+    *A = (*A) ^ (*B) ^ (*C);
+    *B = (*A) ^ (*B) ^ (*C);
+    *C = (*A) ^ (*B) ^ (*C);
+    *A = (*A) ^ (*B) ^ (*C);
+}
 
+//equivalent to pull(A,B) where B is a path beginning at p and ending at pathtl.
+void pathpull(lukanode* dest, lukanode* p, lukanode* pathtl){
+
+    lukanode* tmp = dest->next;
     dest->next=p->next;
     p->next=pathtl->next;
     pathtl->next=tmp;
 
-    p->data--;
-    dest->data++;
+    p->value--;
+    dest->value++;
 }
+
+void lshift(lukanode* src, lukanode* dest){
+    lukanode* shifted = src->next;
+    src->next=shifted->next;
+    shifted->next=dest->next;
+    dest->next=shifted;
+}
+
 
 //hd is first symbol, the root of the ordered tree
 //lf is the first 0; leftmost leaf of ordered tree
@@ -51,32 +70,45 @@ void pathpull(ll_node* dest, ll_node* p, ll_node* pathtl){
 //lp is p in an ordered tree (parent of first branching)
 //lg is g in an ordered tree (parent of p)
 void coolLuka(int t) {
-    ll_node *lf, *lo, *lp, *lg;
-    ll_node *hd = lp = get_initial_luka(t);
+    lukanode *lf, *lo, *lp, *lg;
+    lukanode *hd = lp = get_initial_luka(t);
     lf=hd->next;
     lo=lf->next;
 
+    /* int i=0; */
     print_ll(hd,t);
     while (lo) {
-	if (lo->data) { // if o has a child, shift 1
-	    pathpull(lo,lp,lf); //pull(O,P)
+	if (lo->value) { // if o has a child, shift 1
+	    /* pathpull(lo,lp,lf); //pull(O,P) */
+	    lshift(lf,lp);
+	    lp->value--;
+	    lo->value++;
 	    lg = lp;
 	    lp = lo;
 	} else {
 	    if (lp == hd) { //p==root
-		pathpull(lo,lp,lf); //pull(O,P)
+		lshift(lf,lp);
+		lp->value--;
+		lo->value++;
 	    } else {
-		pathpull(lg,lp,lf); //pull(G,P)
-		pathpull(hd,lp,lo); //pull(root,P)
+		lshift(lg,lf);
+		lp->value--;
+		lg->value++;
+		lshift(lp,hd);
+		lp->value--;
+		hd->value++;
+
 		lp = hd;
 		lf = hd->next;
 	    }
 	}
 	print_ll(hd,t);
 	lo = lf->next; //this is always what happens
+	/* i++; */
     }
 }
 
 int main(int argc, char **argv) {
+  /* coolLuka(atoi(argv[1])); */
   coolLuka(atoi(argv[1]));
 }

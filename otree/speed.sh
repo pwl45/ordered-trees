@@ -1,10 +1,15 @@
 #!/bin/bash
-make all
-TIMEFORMAT="%Rs"
-for i in {1..15}
+TIMEFORMAT="%R"
+for i in {1..22}
 do
-    echo -n "testing n=$i..."
+    echo "testing n=$i..."
     # n-1 generates trees with n nodes
-    time ./otree $(( $i - 1 )) > /dev/null 
+    echo -n "noparent: "
+    time ./otree-noparent $(( $i - 1 )) > /dev/null
+
+    echo -n "parent: "
+    time ./otree-standalone $(( $i - 1 )) > /dev/null 
+    
+    echo
     
 done

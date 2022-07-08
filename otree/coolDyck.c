@@ -5,8 +5,6 @@
 
 void printdyck(uint8_t* b, int n){
 
-    /* return; */
-
     for(int i = 0; i < n-1; i++){
 	putchar(b[i+1]+48);
 	/* putchar(','); */
@@ -18,7 +16,7 @@ void printdyck(uint8_t* b, int n){
 }
 
 //s zeroes, t ones
-int rankDyck(uint8_t* b, int s, int t){
+int rankDyck_st(uint8_t* b, int s, int t){
     int n = s+t;
     printdyck(b,n);
     printf("%d %d\n",s,t);
@@ -27,7 +25,7 @@ int rankDyck(uint8_t* b, int s, int t){
     if(b[n]==0){
 	printf("Trailing zero\n");
 	printf("\n");
-	return rankDyck(b,s-1,t);
+	return rankDyck_st(b,s-1,t);
     }else{
 	//we know b[n] == 1
 	int currInd = n-1;
@@ -47,11 +45,15 @@ int rankDyck(uint8_t* b, int s, int t){
 	    printf("\n");
 
 	    //leftover is t-1 ones and s-((n-1)-(currInd)) zeroes
-	    return 0 + rankDyck(b,s-(n-1-currInd),t-1);
+	    return 0 + rankDyck_st(b,s-(n-1-currInd),t-1);
 	}
     }
     printf("Should never reach here\n");
     return 0;
+}
+
+void rankDyck(uint8_t* b, int n){
+    printf("%d\n",rankDyck_st(b,n/2,n/2));
 }
 
 //slightly modified version of coolDyck that starts with 10111...000... and ends with 1111...0000...
@@ -88,6 +90,40 @@ void coolDyck(int t){
 		y=2;
 	    }
 	}
+	printdyck(b,n);
+    }
+}
+//slightly modified version of coolDyck that starts with 10111...000... and ends with 1111...0000...
+void coolDyckBranchless(int t){
+    int n = 2*t;
+
+    // one based indexing; uses calloc so we only need to set the ones 
+    uint8_t* b = (uint8_t*) calloc(sizeof(uint8_t),(n+1));
+    b[0]=-1;
+
+    //INITIAL STRING: 101111...0000....
+    b[1]=1;
+    b[2]=0;
+    memset(b+3,1,t-1);
+    memset(b+3+t-1,0,t-1);
+
+    int x=3;
+    int y=2;
+
+    printdyck(b,n);
+    while (x <= n) {
+	b[x]=0;
+	b[y]=1;
+	x++;
+	y++;
+	int bx0 = !b[x];
+	int tight = x >= 2*y-2;
+	x += bx0&tight;
+	int bx0nottight=(bx0&(!tight));
+	b[x] |= bx0nottight;
+	b[2] &= !bx0nottight;
+	x = x*!bx0nottight + 3*bx0nottight;
+	y = y*!bx0nottight + 2*bx0nottight;
 	printdyck(b,n);
     }
 }

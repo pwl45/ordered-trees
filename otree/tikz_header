@@ -1,4 +1,8 @@
 \documentclass{article}
 \usepackage{tikz}
 \usepackage{tikz-qtree}
+\usepackage{amsmath}
 \begin{document}
+\definecolor{lightpurple}{RGB}{203, 195, 227}
+\definecolor{lightblue}{RGB}{173, 216, 230}
+\definecolor{lightyellow}{RGB}{255, 255, 158}
