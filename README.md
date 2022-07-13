@@ -11,6 +11,10 @@ Alternatively, you can compile my thesis from its LaTeX source code by using `ma
 
 Source code for algorithm in chapters 4 and 5 on generating ordered trees with a fixed number of nodes is located in the `otree` directory.  Everything there is compilable with `make`; see `otree/README.md` for more information.
 
+
+![ordered trees](./trees.png)
+
+
 ### Łukasiewicz Words
 
 Source code for algorithm in chapters 7 and 8 on generating Łukasiewicz words with a fixed set of content is located in the `luka` directory.  Everything there is compilable with `make`; see `luka/README.md` for more information.
