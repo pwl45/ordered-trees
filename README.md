@@ -12,7 +12,7 @@ Alternatively, you can compile my thesis from its LaTeX source code by using `ma
 Source code for algorithm in chapters 4 and 5 on generating ordered trees with a fixed number of nodes is located in the `otree` directory.  Everything there is compilable with `make`; see `otree/README.md` for more information.
 
 
-![ordered trees](./treepulldown.svg)
+<!-- ![ordered trees](./treepulldown.svg) -->
 
 
 ### Łukasiewicz Words
@@ -45,16 +45,3 @@ array based implementation for the special case of Motzkin words and a linked li
 for the general case of unrestricted Łukasiewicz words. These results have been accepted at the 33rd
 International Workshop on Combinatorial Algorithms and will be presented June 2022 4
 [14].
-
-<html>
-<head>
-<!-- <style> -->
-<!-- img { -->
-<!--   background-color: #FFFFFF; -->
-<!-- } -->
-<!-- </style> -->
-</head>
-<body>
-<p align="left" style="background-color: #FFFFFF"><img src="treepulldown.png" style="background-color: #F00FFF"/></p>
-</body>
-</html>
