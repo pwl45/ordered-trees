@@ -55,6 +55,6 @@ International Workshop on Combinatorial Algorithms and will be presented June 20
 <!-- </style> -->
 </head>
 <body>
-<p align="center"><img src="./trepulldown.svg" /></p>
+<p align="center"><img src="trepulldown.svg" /></p>
 </body>
 </html>
