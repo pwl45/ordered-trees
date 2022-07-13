@@ -45,3 +45,16 @@ array based implementation for the special case of Motzkin words and a linked li
 for the general case of unrestricted Łukasiewicz words. These results have been accepted at the 33rd
 International Workshop on Combinatorial Algorithms and will be presented June 2022 4
 [14].
+
+<html>
+<head>
+<style>
+img {
+  background-color: #FFFFFF;
+}
+</style>
+</head>
+<body>
+<p align="center"><img src="./trepulldown.svg" /></p>
+</body>
+</html>
