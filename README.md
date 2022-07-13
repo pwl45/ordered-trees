@@ -48,11 +48,11 @@ International Workshop on Combinatorial Algorithms and will be presented June 20
 
 <html>
 <head>
-<style>
-img {
-  background-color: #FFFFFF;
-}
-</style>
+<!-- <style> -->
+<!-- img { -->
+<!--   background-color: #FFFFFF; -->
+<!-- } -->
+<!-- </style> -->
 </head>
 <body>
 <p align="center"><img src="./trepulldown.svg" /></p>
