@@ -47,14 +47,14 @@ International Workshop on Combinatorial Algorithms and will be presented June 20
 [14].
 
 <html>
-<!-- <head> -->
-<!-- <!-1- <style> -1-> -->
-<!-- <!-1- img { -1-> -->
-<!-- <!-1-   background-color: #FFFFFF; -1-> -->
-<!-- <!-1- } -1-> -->
-<!-- <!-1- </style> -1-> -->
-<!-- </head> -->
+<head>
+<!-- <style> -->
+<!-- img { -->
+<!--   background-color: #FFFFFF; -->
+<!-- } -->
+<!-- </style> -->
+</head>
 <body>
-<p align="center" style="background-color: #FFFFFF"><img src="treepulldown.svg" style="background-color: #FFFFFF"/></p>
+<p align="left" style="background-color: #FFFFFF"><img src="treepulldown.svg" style="background-color: #F00FFF"/></p>
 </body>
 </html>
