@@ -50,7 +50,7 @@ void print_ll(ll_node* hd){
 }
 
 // Prints arrow to visualize a shift
-// note: double digit numbers will break this (arrows will be wrong length).
+// As far as this function is concerned, numbers with more than one digit do not exist.
 // Not especially robust, but nice for basic visualizations.
 void print_arrow(int to_index, int from_index){
   to_index = 1+3*(to_index);
@@ -144,7 +144,7 @@ void visit_ll_visual(ll_node* hd, int n, inc* incs, int nincs, int prefix_sum){
 /* ------------------------------------------------------------------------------------ */
 
 /* ------------------------------ Left-shifting Function ------------------------------ */
-//Implementation of the left-shfting operation in a linked list.
+//Vanilla implementation of the left-shfting operation in a linked list.
 // shift_node is shifted in front of insert_node
 void lshift(ll_node* insert_node, ll_node* shift_node){
   //remove shift_node
@@ -164,6 +164,31 @@ void lshift(ll_node* insert_node, ll_node* shift_node){
   insert_node->prev=shift_node;
 }
 
+//Slightly optimized left_shift
+//Shifts shift_node to index 0 if its value is nonzero, or index 1 if its value is zero
+//returns 1 if the shift created an increase, zero otherwise.
+//Also modifies the head of the list if it changes
+int lzshift(ll_node** hdptr, ll_node* shift_node){
+  ll_node* hd = *hdptr;
+  ll_node* insert_node = hd; //Assume shift_node->data > 0
+  *hdptr=shift_node;
+
+  //remove shift_node from its current location
+  ll_node* sprev=shift_node->prev; //shift_node->prev must exist
+  if( (sprev->next=shift_node->next) ) //if shift_node->next exists, update its prev pointer
+    shift_node->next->prev=sprev;
+
+  if(!shift_node->data){
+    insert_node=hd->next;
+    hd->next=shift_node;
+    *hdptr=hd; // if we're not shifting to the front of the list, put *hdptr back to its old value
+  }
+
+  shift_node->prev=insert_node->prev;
+  shift_node->next=insert_node;
+  insert_node->prev=shift_node;
+  return shift_node->data < insert_node->data;
+}
 
 /* ------------------------------Main Generating Function------------------------------ */
 //Generates all Lukasiewicz words with a given set of content
@@ -173,11 +198,11 @@ void lshift(ll_node* insert_node, ll_node* shift_node){
 //n: length of list; 
 //visit: function called on each generated Lukasiewicz word (used for outputting results).
 void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd, int n, inc* incs, int nincs, int prefix_sum)){
-  inc* incs = (inc*) calloc(n, sizeof(inc)); //stack of (node, index) pairs; tracks every increase in the string
+  inc* incs = (inc*) malloc(n*sizeof(inc)); //stack of (node, index) pairs; tracks every increase in the string
   int nincs=1; //number of increases
 
-  ll_node *shift_node, *insert_node, *x, *xn;
-  int prefix_sum,m,insert_index;
+  ll_node *shift_node, *x, *xn;
+  int prefix_sum,m, front_increase;
 
   incs[0] = (inc) {.node=tl,.index=n-1};
 
@@ -189,7 +214,7 @@ void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd, int n, 
     //Determine which index to shift from, and if that shift will add/remove an increase
     if(m >= n-1 || xn->data > x->prev->data || (prefix_sum == m && xn->data == 0)){ //shift from index m+1
       shift_node=x; //x is the node at index m+1
-      if(m >= n-1 || xn->data > x->data || xn->data == 0){ //increase removed by shifting 
+      if(m >= n-1 || xn->data > x->data || xn->data == 0){ //increase removed by shifting
         nincs--;
       }else{ //increase maintained, but is now one further down the string
         incs[nincs-1].node=x->next;
@@ -205,23 +230,14 @@ void luka_ll(ll_node* hd, ll_node* tl, int n, void (*visit)(ll_node* hd, int n, 
       }
     }
 
-    insert_node=hd->next;
-    
-    insert_index=!(shift_node->data); //if shifted value is 0, shift to index 1. otherwise, to index 0.
-    if(!insert_index){ //update head if shifting to position 0
-      insert_node=hd;
-      hd=shift_node;
-    }
-
-    lshift(insert_node,shift_node); //execute shift
-    if(insert_index != m && (shift_node->data < insert_node->data)){ 
+    front_increase = lzshift(&hd,shift_node); //could inline this into the if statement... but that seems excessive
+    prefix_sum+=shift_node->data; //this will be correct unless we create an increase at the front, in which case it's overwritten
+    if(front_increase && (m > !shift_node->data) ){ 
       //check if we created an increase at the front of the string
       prefix_sum=hd->data;
-      incs[nincs++]= (inc) {.node = insert_node, .index=insert_index+1};
-    }else{
-      //otherwise, increase prefix_sum by the value we shifted
-      prefix_sum+=shift_node->data;
+      incs[nincs++]= (inc) {.node = shift_node->next, .index=1+(!shift_node->data)};
     }
+
     visit(hd,n, incs, nincs,prefix_sum);
 
   }
@@ -255,7 +271,7 @@ ll_node* prepend_ll(ll_node* hd, int val,int freq){
 //reads comma separated frequency list, e.g. 2,3,0,1 means 2 zeroes, 3 ones, 0 twos, and 1 three.
 //will certainly seg fault if given invalid input
 int read_input_ll(char* frequencies, int* nptr, ll_node** hdptr, ll_node** tlptr){
-  const char delim[2] = ","; //[2] because of null
+  const char delim[2] = ","; //[2] because of nulO
   char* token = strtok(frequencies, delim);
 
   int i=0;
@@ -326,6 +342,10 @@ int main(int argc, char *argv[])
   }
 
   read_input_ll(argv[1], &n, &hd, &tl);
+  if(tl == hd->next && tl->data==0){ // you suck
+    print_ll(hd);
+    return 0;
+  }
 
   luka_ll(hd,tl,n,visit);
   //should theoretically free everything in the linked list...
