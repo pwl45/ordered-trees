@@ -24,4 +24,4 @@ mcer: mcer.c
 
 .PHONY: clean
 clean:
-	rm -f otree-functions.o otree otree-standalone coolDyck mcer
+	rm -f otree-functions.o otree otree-standalone coolDyck mcer otree-noparent
