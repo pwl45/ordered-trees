@@ -12,7 +12,7 @@ Alternatively, you can compile my thesis from its LaTeX source code by using `ma
 Source code for algorithm in chapters 4 and 5 on generating ordered trees with a fixed number of nodes is located in the `otree` directory.  Everything there is compilable with `make`; see `otree/README.md` for more information.
 
 
-![ordered trees](./trees.png)
+![ordered trees](./treepulldown.svg)
 
 
 ### Łukasiewicz Words
