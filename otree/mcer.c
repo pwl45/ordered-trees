@@ -24,7 +24,6 @@ void printdyck(uint8_t* b, int n){
 
 //This function basically just sets 
 //b=(10)^n
-//dumb way of doing this, M.C. Er
 void GenerateOrderedTrees(int x, int y){
   /* calls++; */
 
