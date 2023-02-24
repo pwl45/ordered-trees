@@ -25,7 +25,7 @@ void visit_bintree_rec(node* n){
 // otree root->left is start of binary tree
 void visit(node* root){ visit_bintree_rec(root->left); putchar('\n');}
 
-void coolOtree(int n) {
+void coolBintree(int n) {
   node *root = (node*)calloc(sizeof(node),1);
   node *prev, *curr = root;
   for(int i = 0; i < n; i++){
@@ -55,4 +55,4 @@ void coolOtree(int n) {
     visit(root);
   }
 }
-int main(int argc, char **argv) { coolOtree(atoi(argv[1])); }
+int main(int argc, char **argv) { coolBintree(atoi(argv[1])); }
