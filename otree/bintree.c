@@ -10,6 +10,22 @@ void pull(node *A, node *B){
   A->left = pulled;
 }
 
+void lrot(node* P){
+  node* W = P->left;
+  node* X = W->right;
+
+  //W->left remains same
+  //W->right becomes X
+  W->right = X->left;
+
+  //X->left becomes W
+  X->left=W;
+
+  //Parent node's new left child becomes X
+  P->left=X;
+  //X->right stays same same
+}
+
 // Has trailing zero for now
 void visit_bintree_rec(node* n){
   if (n == NULL){
@@ -38,13 +54,14 @@ void coolBintree(int n) {
   visit(root);
   while (o) {
     if (o->left) { // if o has a child, o pulls p
-      pull(o,p);
+      lrot(p); // pull(o,p);
       g=p;
       p=o;
       o = o->left->right;
     } else {
       if (p == root) { // if p is the root, o pulls p
-        pull(o,p);
+        /* pull(o,p); */
+        lrot(p); // pull(o,p);
       } else { // otherwise, g pulls p and root pulls p
         pull(g,p);
         pull(root,p);
