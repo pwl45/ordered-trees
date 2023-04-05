@@ -1,14 +1,20 @@
-.PHONY: all
+.PHONY: all clean
 
-CFLAGS=-O3
+CFLAGS=-O0
 
-all: otree coolDyck otree-standalone otree-noparent mcer 
+all: otree coolDyck otree-standalone otree-noparent mcer bintree bintree-rusk
 
 otree-functions.o: otree-functions.c
 	gcc -c otree-functions.c $(CFLAGS)
 
 otree: otree.c otree-functions.o 
 	gcc -o otree otree.c otree-functions.o $(CFLAGS)
+
+bintree: bintree.c
+	gcc -o bintree bintree.c $(CFLAGS)
+
+bintree-rusk: bintree-rusk.c
+	gcc -o bintree-rusk bintree-rusk.c $(CFLAGS)
 
 otree-standalone: otree-standalone.c
 	gcc -o otree-standalone otree-standalone.c $(CFLAGS)
@@ -22,6 +28,5 @@ coolDyck: coolDyck.c
 mcer: mcer.c
 	gcc -o mcer mcer.c $(CFLAGS)
 
-.PHONY: clean
 clean:
 	rm -f otree-functions.o otree otree-standalone coolDyck mcer otree-noparent
