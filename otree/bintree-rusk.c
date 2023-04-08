@@ -41,18 +41,19 @@ void coolBintree(int n) {
   visit(R);
   while (x) {
     if (x->left) { // Case (a) in Ruskey and Williams
-      y->right = x->right;
-      y->right && (y->right->parent=y);
+      if(y->right = x->right)
+        y->right->parent=y;
 
       x->right = x->left;
       //no parent change needed
 
-      x->left = y->left;
-      (x->left) && (x->left->parent = x);
+      if(x->left = y->left) //x->left was just reassigned, need to check it's nonnull
+        x->left->parent = x;
 
       y->left = x;
-      (y->left) && (y->left->parent = y);
+      // we know x isn't null, because of while loop condition, so don't need to check
 
+      x->parent = y;
       y=x;
       x=y->right;
     } else {
@@ -64,23 +65,22 @@ void coolBintree(int n) {
         // no parent change needed
 
         R=x;
-
         y=x;
         x=x->right;
         R->parent=NULL;
       } else { // Case (b) in Ruskey and Williams
         // l(p(y)) <- l(y)
-        y->parent->left = y->left; //1
-        y->parent->left && (y->parent->left->parent = y->parent); //2
-
+        if(y->parent->left = y->left) // 1
+          y->left->parent = y->parent; //2
+        
         // l(x) <- r(x)
         x->left=x->right; //3
         //no parent change needed x->right already has x as its parent
 
         // r(x) <- r(p(y))
-        x->right=y->parent->right; //4
-        y->parent->right && (y->parent->right->parent=x); //5
-
+        if(x->right=y->parent->right) //4
+         x->right->parent=x; //5
+        
         // r(p(y)) <- x
         y->parent->right = x; //6
         x->parent=y->parent; //7
