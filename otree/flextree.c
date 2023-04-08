@@ -4,9 +4,9 @@ typedef struct otreenode { struct otreenode *first; struct otreenode *right; } o
 
 typedef struct bintreenode { struct bintreenode* left; struct bintreenode* right;} bintreenode;
 
-#define OTREE_TO_BINTREE(n) ( (bintreenode*)((void*)n->first) )
+#define OTREE_TO_BINTREE(n) ( (struct bintreenode*)((void*)(n->first)) )
 
-void pull(otreenode *A, otreenode *B){ 
+inline void pull(otreenode *A, otreenode *B){ 
   otreenode *pulled = B->first;
   B->first = pulled->right;
   pulled->right = A->first;
@@ -38,7 +38,6 @@ void visit_bintree_rec(bintreenode* n){
 
 void visit_otree(otreenode* n){ visitrec(n); putchar('\n');}
 void visit_bintree(bintreenode* n){ visit_bintree_rec(n); putchar('\n'); }
-
 
 void coolOtree(int n) {
   otreenode *root = (otreenode*)calloc(sizeof(otreenode),1);
