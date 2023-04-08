@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 typedef struct node { struct node *left; struct node *right; } node;
 typedef struct bintreenode { struct bintreenode* left; struct bintreenode* right;} bintreenode;
 
@@ -10,12 +11,13 @@ void pull(node *A, node *B){
   A->left = pulled;
 }
 
+//P is the parent of the rotation point (we don't store parent pointer, so we need it)
 void lrot(node* P){
   node* W = P->left;
   node* X = W->right;
 
   //W->left remains same
-  //W->right becomes X
+  //W->right becomes X->left
   W->right = X->left;
 
   //X->left becomes W
@@ -23,6 +25,25 @@ void lrot(node* P){
 
   //Parent node's new left child becomes X
   P->left=X;
+  //X->right stays same same
+}
+
+//P is the parent of the rotation point (we don't store parent pointer, so we need it)
+void rrot(node* P){
+  node* X = P->left;
+  node* W = X->left;
+
+  //X->left becomes W->right
+  X->left=W->right;
+
+  //W->left remains same
+
+  //W->right becomes X
+  W->right = X;
+
+
+  //Parent node's new left child becomes W
+  P->left=W;
   //X->right stays same same
 }
 
@@ -63,8 +84,14 @@ void coolBintree(int n) {
         /* pull(o,p); */
         lrot(p); // pull(o,p);
       } else { // otherwise, g pulls p and root pulls p
-        pull(g,p);
-        pull(root,p);
+        rrot(g);
+        assert(p->left && (p->left->left == NULL));
+        node* tmp=root->left;
+
+        root->left = p->left;
+        p->left=p->left->right;
+        root->left->right=tmp;
+        /* pull(root,p); */
         p=root; //g could be set to null
       }
       o = o->right;

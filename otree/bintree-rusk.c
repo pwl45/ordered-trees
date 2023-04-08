@@ -37,10 +37,10 @@ void coolBintree(int n) {
     }
   }
   node *x = R->right, *y=R;
+
   visit(R);
-  int i=0;
   while (x) {
-    if (x->left) {
+    if (x->left) { // Case (a) in Ruskey and Williams
       y->right = x->right;
       y->right && (y->right->parent=y);
 
@@ -56,7 +56,7 @@ void coolBintree(int n) {
       y=x;
       x=y->right;
     } else {
-      if(R==y){
+      if(R==y){ // Case (c) in Ruskey and Williams
         x->left=y;
         x->left->parent=x;
 
@@ -68,7 +68,7 @@ void coolBintree(int n) {
         y=x;
         x=x->right;
         R->parent=NULL;
-      } else {
+      } else { // Case (b) in Ruskey and Williams
         // l(p(y)) <- l(y)
         y->parent->left = y->left; //1
         y->parent->left && (y->parent->left->parent = y->parent); //2
@@ -100,7 +100,6 @@ void coolBintree(int n) {
 
         // x <- r(y)
         x=y->right; //13
-        // no parent change needed
       }
 
     }
