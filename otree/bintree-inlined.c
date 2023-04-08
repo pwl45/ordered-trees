@@ -4,49 +4,6 @@
 typedef struct node { struct node *left; struct node *right; } node;
 typedef struct bintreenode { struct bintreenode* left; struct bintreenode* right;} bintreenode;
 
-void pull(node *A, node *B){ 
-  node *pulled = B->left;
-  B->left = pulled->right;
-  pulled->right = A->left;
-  A->left = pulled;
-}
-
-//P is the parent of the rotation point (we don't store parent pointer, so we need it)
-void lrot(node* P){
-  node* W = P->left;
-  node* X = W->right;
-
-  //W->left remains same
-  //W->right becomes X->left
-  W->right = X->left;
-
-  //X->left becomes W
-  X->left=W;
-
-  //Parent node's new left child becomes X
-  P->left=X;
-  //X->right stays same same
-}
-
-//P is the parent of the rotation point (we don't store parent pointer, so we need it)
-void rrot(node* P){
-  node* X = P->left;
-  node* W = X->left;
-
-  //X->left becomes W->right
-  X->left=W->right;
-
-  //W->left remains same
-
-  //W->right becomes X
-  W->right = X;
-
-
-  //Parent node's new left child becomes W
-  P->left=W;
-  //X->right stays same same
-}
-
 // Has trailing zero for now
 void visit_bintree_rec(node* n){
   if (n == NULL){
